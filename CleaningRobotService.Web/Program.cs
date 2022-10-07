@@ -18,7 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DbContext>(options =>
+builder.Services.AddDbContext<ServiceDbContext>(options =>
     options
         .UseLazyLoadingProxies(true)
         .UseNpgsql(appConfiguration.DatabaseConnectionString)
@@ -45,13 +45,12 @@ app.Run();
 
 void RunEfMigrations()
 {
-    var logger = app.Services.GetRequiredService<ILogger>();
-    var database =
-        app.Services.GetRequiredService<ServiceDbContext>().Database;
+    using var scope = app.Services.CreateScope();
+    var database = scope.ServiceProvider.GetRequiredService<ServiceDbContext>().Database;
 
     database.SetCommandTimeout(TimeSpan.FromHours(6));
 
-    logger.LogInformation("Running database migrations.");
+    app.Logger.LogInformation("Running database migrations.");
     database.Migrate();
-    logger.LogInformation("Finished running database migrations.");
+    app.Logger.LogInformation("Finished running database migrations.");
 }

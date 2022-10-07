@@ -1,0 +1,27 @@
+version: "3.4"
+
+services:
+  postgres:
+    image: postgres:10.8-alpine
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: "admin"
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "1111:1111"
+    expose:
+      - "1111"
+    environment:
+      PGADMIN_LISTEN_PORT: "1111"
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    labels:
+      traefik.http.services.pgadmin.loadbalancer.server.port: 1111
+    depends_on:
+      - postgres

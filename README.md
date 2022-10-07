@@ -8,6 +8,8 @@
 
 - App__DatabaseConnectionString
 
+## Docker
+
 ## Migrations
 
 Migrations are handled by EntityFramework.
