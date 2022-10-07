@@ -7,9 +7,9 @@ namespace CleaningRobotService.Web.Controllers;
 [Route("[controller]")]
 public abstract class BaseController : Controller
 {
-    protected readonly DbContext Context;
+    protected readonly ServiceDbContext Context;
     
-    protected BaseController(DbContext context)
+    protected BaseController(ServiceDbContext context)
     {
         this.Context = context;
     }

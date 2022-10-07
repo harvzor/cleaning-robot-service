@@ -2,9 +2,9 @@ namespace CleaningRobotService.Web.Services;
 
 public abstract class BaseService
 {
-    protected readonly DbContext Context;
+    protected readonly ServiceDbContext Context;
     
-    protected BaseService(DbContext context)
+    protected BaseService(ServiceDbContext context)
     {
         this.Context = context;
     }

@@ -9,7 +9,7 @@ namespace CleaningRobotService.Web.Services;
 
 public class CommandRobotService : BaseService
 {
-    public CommandRobotService(DbContext context) : base(context)
+    public CommandRobotService(ServiceDbContext context) : base(context)
     {
     }
     
