@@ -21,5 +21,5 @@ public class ServiceDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
             .UseNpgsql()
-            .UseCamelCaseNamingConvention();
+            .UseLowerCaseNamingConvention();
 }
