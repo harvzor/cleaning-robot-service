@@ -1,24 +1,7 @@
+using CleaningRobotService.Web.Enums;
+using CleaningRobotService.Web.Structs;
+
 namespace CleaningRobotService.Web.Dtos.Input;
-
-/// <summary>
-/// A single location on a 2D plane the robot could be at.
-/// </summary>
-public struct Point
-{
-    public int X { get; set; }
-    public int Y { get; set; }
-}
-
-/// <summary>
-/// Cardinal directions the robot could take.
-/// </summary>
-public enum DirectionEnum
-{
-    North = 0,
-    East = 1,
-    South = 2,
-    West = 3,
-}
 
 public class Command
 {
@@ -39,9 +22,9 @@ public class CommandRobotPostDto
     /// Starting location of the robot.
     /// </summary>
     public Point Start { get; set; }
-    
+
     /// <summary>
     /// Actual commands the robot should follow.
     /// </summary>
-    public List<Command> Commands { get; set; }
+    public List<Command> Commands { get; set; } = new();
 }

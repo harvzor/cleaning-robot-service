@@ -5,5 +5,5 @@ namespace CleaningRobotService.Web;
 
 public class DbContext : Microsoft.EntityFrameworkCore.DbContext
 {
-    public virtual DbSet<Execution> Executions { get; set; }
+    public virtual DbSet<Execution> Executions => Set<Execution>();
 }
