@@ -45,8 +45,8 @@ If you have multiple instances of this service running at the same time, and the
   - technically done but my solution isn't global for all enums, it can easily be done by using Newtonsoft
     - https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/2293
     - https://stackoverflow.com/questions/72034017/net-6-addjsonoptions-with-camelcase-not-working
-- put timing code in a different method
-- make direction code more dry (with lambda?)
+- ~~put timing code in a different method~~
+- ~~make direction code more dry (with lambda?)~~
 - double check that Point comparison really works like a value type
 - ensure env vars are required
 - ~~make sure all paths begin with tibber-developer-test~~

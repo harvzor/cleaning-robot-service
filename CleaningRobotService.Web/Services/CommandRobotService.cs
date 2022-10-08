@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Enums;
 using CleaningRobotService.Web.Helpers;
@@ -18,54 +17,39 @@ public class CommandRobotService : BaseService
         Point currentPoint = startPoint;
 
         HashSet<Point> pointsVisited = new() { currentPoint, };
+        
+        void Step(int steps, Action action)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                action();
+                        
+                if (!pointsVisited.Contains(currentPoint))
+                    pointsVisited.Add(currentPoint);
+            }
+        }
 
         foreach (Command command in commands)
         {
             switch (command.Direction)
             {
                 case DirectionEnum.north:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
-                        currentPoint.Y++;
-                        
-                        if (!pointsVisited.Contains(currentPoint))
-                            pointsVisited.Add(currentPoint);
-                    }
-                    
+                    Step(steps: command.Steps, action: () => currentPoint.Y++);
                     break;
                 case DirectionEnum.east:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
-                        currentPoint.X++;
-                        
-                        if (!pointsVisited.Contains(currentPoint))
-                            pointsVisited.Add(currentPoint);
-                    }
-                    
+                    Step(steps: command.Steps, action: () => currentPoint.Y++);
                     break;
                 case DirectionEnum.south:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
-                        currentPoint.Y--;
-                        
-                        if (!pointsVisited.Contains(currentPoint))
-                            pointsVisited.Add(currentPoint);
-                    }
-                    
+                    Step(steps: command.Steps, action: () => currentPoint.Y++);
                     break;
                 case DirectionEnum.west:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
-                        currentPoint.X--;
-                        
-                        if (!pointsVisited.Contains(currentPoint))
-                            pointsVisited.Add(currentPoint);
-                    }
-                    
+                    Step(steps: command.Steps, action: () => currentPoint.Y++);
                     break;
                 default:
-                    // TODO: replace with a proper exception (don't use Exception!)
-                    throw new Exception("Command direction case not covered.");
+                    throw new ArgumentException(
+                        message: $"Command direction of {command.Direction} not covered.",
+                        paramName: nameof(commands)
+                    );
             }
         }
 
@@ -86,7 +70,7 @@ public class CommandRobotService : BaseService
         {
             TimeStamp = now,
             Commands = body.Commands.Count,
-            Result = result.Value,
+            Result = result!.Value,
             Duration = calculationTime,
         };
         
