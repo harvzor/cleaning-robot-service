@@ -11,6 +11,6 @@ public static class ExecutionMapper
         Commands = execution.Commands,
         Duration = execution.Duration,
         Result = execution.Result,
-        TimeStamp = execution.TimeStamp,
+        Timestamp = execution.TimeStamp,
     };
 }

@@ -5,7 +5,7 @@ public class CommandRobotDto
     public int Id { get; set; }
     
     /// <inheritdoc cref="Models.Execution.TimeStamp"/>
-    public DateTimeOffset TimeStamp { get; set; }
+    public DateTimeOffset Timestamp { get; set; }
     
     /// <inheritdoc cref="Models.Execution.Commands"/>
     public int Commands { get; set; }
