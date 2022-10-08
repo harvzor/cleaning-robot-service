@@ -13,7 +13,7 @@ public class CommandRobotService : BaseService
     {
     }
     
-    private int CalculateIndicesCleaned(Point startPoint, List<Command> commands, out float calculationTime)
+    public int CalculateIndicesCleaned(Point startPoint, List<Command> commands, out float calculationTime)
     {
         Stopwatch stopWatch = new();
         stopWatch.Start();

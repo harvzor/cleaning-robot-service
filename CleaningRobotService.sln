@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web", "CleaningRobotService.Web\CleaningRobotService.Web.csproj", "{FC00661B-5976-4C24-82D3-1BE798DE9C38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web.Tests", "CleaningRobotService.Web.Tests\CleaningRobotService.Web.Tests.csproj", "{F3555886-E5CB-44B6-B8B0-2DE011002815}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{FC00661B-5976-4C24-82D3-1BE798DE9C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC00661B-5976-4C24-82D3-1BE798DE9C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC00661B-5976-4C24-82D3-1BE798DE9C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3555886-E5CB-44B6-B8B0-2DE011002815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3555886-E5CB-44B6-B8B0-2DE011002815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3555886-E5CB-44B6-B8B0-2DE011002815}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3555886-E5CB-44B6-B8B0-2DE011002815}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
