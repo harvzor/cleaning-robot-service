@@ -26,7 +26,7 @@ public class CommandRobotService : BaseService
         {
             switch (command.Direction)
             {
-                case DirectionEnum.North:
+                case DirectionEnum.north:
                     for (int i = 0; i < command.Steps; i++)
                     {
                         currentPoint.Y++;
@@ -36,7 +36,7 @@ public class CommandRobotService : BaseService
                     }
                     
                     break;
-                case DirectionEnum.East:
+                case DirectionEnum.east:
                     for (int i = 0; i < command.Steps; i++)
                     {
                         currentPoint.X++;
@@ -46,7 +46,7 @@ public class CommandRobotService : BaseService
                     }
                     
                     break;
-                case DirectionEnum.South:
+                case DirectionEnum.south:
                     for (int i = 0; i < command.Steps; i++)
                     {
                         currentPoint.Y--;
@@ -56,7 +56,7 @@ public class CommandRobotService : BaseService
                     }
                     
                     break;
-                case DirectionEnum.West:
+                case DirectionEnum.west:
                     for (int i = 0; i < command.Steps; i++)
                     {
                         currentPoint.X--;
