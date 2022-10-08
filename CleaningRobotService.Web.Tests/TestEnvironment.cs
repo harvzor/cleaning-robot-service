@@ -33,7 +33,7 @@ public class TestEnvironment
             .Get<AppConfiguration>();
     }
     
-    public CommandRobotService GetCommandRombotService(ServiceDbContext? context = null)
+    public CommandRobotService GetCommandRobotService(ServiceDbContext? context = null)
     {
         context ??= this.CreateContext();
 

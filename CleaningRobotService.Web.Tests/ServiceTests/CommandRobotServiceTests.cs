@@ -14,7 +14,7 @@ public class CommandRobotServiceTests
     public CommandRobotServiceTests()
     {
         TestEnvironment testEnvironment = new();
-        this.CommandRobotService = testEnvironment.GetCommandRombotService();
+        this.CommandRobotService = testEnvironment.GetCommandRobotService();
     }
     
     [Fact]
@@ -40,8 +40,7 @@ public class CommandRobotServiceTests
                     Direction = DirectionEnum.north,
                     Steps = 1,
                 },
-            },
-            calculationTime: out float _
+            }
         );
         
         // Assert

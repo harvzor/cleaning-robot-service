@@ -13,11 +13,8 @@ public class CommandRobotService : BaseService
     {
     }
     
-    public int CalculateIndicesCleaned(Point startPoint, List<Command> commands, out float calculationTime)
+    public int CalculateIndicesCleaned(Point startPoint, List<Command> commands)
     {
-        Stopwatch stopWatch = new();
-        stopWatch.Start();
-        
         Point currentPoint = startPoint;
 
         HashSet<Point> pointsVisited = new() { currentPoint, };
@@ -71,9 +68,6 @@ public class CommandRobotService : BaseService
                     throw new Exception("Command direction case not covered.");
             }
         }
-        
-        stopWatch.Stop();
-        calculationTime = stopWatch.ElapsedMilliseconds * 1000;
 
         return pointsVisited.Count;
     }
@@ -81,14 +75,18 @@ public class CommandRobotService : BaseService
     public Execution CreateCommandRobot(CommandRobotPostDto body)
     {
         DateTimeOffset now = SystemDateTime.UtcNow;
+        int? result = null;
         
-        int result = this.CalculateIndicesCleaned(startPoint: body.Start, commands: body.Commands, out float calculationTime);
+        float calculationTime = MethodTimer.Measure(() =>
+        {
+            result = this.CalculateIndicesCleaned(startPoint: body.Start, commands: body.Commands);
+        });
 
         Execution execution = new()
         {
             TimeStamp = now,
             Commands = body.Commands.Count,
-            Result = result,
+            Result = result.Value,
             Duration = calculationTime,
         };
         
