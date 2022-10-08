@@ -39,7 +39,7 @@ If you have multiple instances of this service running at the same time, and the
 
 ## Todo
 
-- make sure API is camelcase
+- ~~make sure API is camelcase~~
 - ~~make sure db is stored camel case~~
 - ~~make sure enums are displayed in API as strings~~
   - technically done but my solution isn't global for all enums, it can easily be done by using Newtonsoft

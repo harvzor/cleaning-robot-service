@@ -14,7 +14,7 @@ public class Command
     /// <summary>
     /// How many steps to take.
     /// </summary>
-    public int Steps { get; set; }
+    public uint Steps { get; set; }
 }
 
 public class CommandRobotPostDto

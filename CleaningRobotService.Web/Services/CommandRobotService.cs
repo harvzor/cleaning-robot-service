@@ -18,7 +18,7 @@ public class CommandRobotService : BaseService
 
         HashSet<Point> pointsVisited = new() { currentPoint, };
         
-        void Step(int steps, Action action)
+        void Step(uint steps, Action action)
         {
             for (int i = 0; i < steps; i++)
             {
@@ -31,6 +31,9 @@ public class CommandRobotService : BaseService
 
         foreach (Command command in commands)
         {
+            if (command.Steps == 0)
+                continue;
+            
             switch (command.Direction)
             {
                 case DirectionEnum.north:
