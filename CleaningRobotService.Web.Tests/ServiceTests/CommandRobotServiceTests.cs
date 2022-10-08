@@ -47,4 +47,36 @@ public class CommandRobotServiceTests
 
         result.ShouldBe(4);
     }
+    
+    [Fact]
+    public void CalculateIndicesCleaned_EnsureSameStepCountedOnce()
+    {
+        // Arrange / Act
+        
+        int result = this.CommandRobotService.CalculateIndicesCleaned(
+            startPoint: new Point
+            {
+                X = 0,
+                Y = 0,
+            },
+            commands: new List<Command>()
+            {
+                new Command
+                {
+                    Direction = DirectionEnum.east,
+                    Steps = 1,
+                },
+                // Go back on itself.
+                new Command
+                {
+                    Direction = DirectionEnum.west,
+                    Steps = 1,
+                },
+            }
+        );
+        
+        // Assert
+
+        result.ShouldBe(2);
+    }
 }

@@ -47,7 +47,7 @@ If you have multiple instances of this service running at the same time, and the
     - https://stackoverflow.com/questions/72034017/net-6-addjsonoptions-with-camelcase-not-working
 - ~~put timing code in a different method~~
 - ~~make direction code more dry (with lambda?)~~
-- double check that Point comparison really works like a value type
+- ~~double check that Point comparison really works like a value type~~
 - ensure env vars are required
 - ~~make sure all paths begin with tibber-developer-test~~
 

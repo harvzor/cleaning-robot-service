@@ -37,13 +37,13 @@ public class CommandRobotService : BaseService
                     Step(steps: command.Steps, action: () => currentPoint.Y++);
                     break;
                 case DirectionEnum.east:
-                    Step(steps: command.Steps, action: () => currentPoint.Y++);
+                    Step(steps: command.Steps, action: () => currentPoint.X++);
                     break;
                 case DirectionEnum.south:
-                    Step(steps: command.Steps, action: () => currentPoint.Y++);
+                    Step(steps: command.Steps, action: () => currentPoint.Y--);
                     break;
                 case DirectionEnum.west:
-                    Step(steps: command.Steps, action: () => currentPoint.Y++);
+                    Step(steps: command.Steps, action: () => currentPoint.X--);
                     break;
                 default:
                     throw new ArgumentException(
