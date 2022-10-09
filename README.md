@@ -46,7 +46,15 @@ The robot covers 4 coordinates on its route.
 
 ## Docker
 
+### Run dependencies
+
+```
+docker compose up -d postgres
+```
+
 ### Running
+
+This will also run any dependencies such as Postgres if you haven't already separately ran that service. You can comment out the `depends_on` section in the compose file if need be.
 
 ```
 docker compose up runtime 
@@ -102,6 +110,16 @@ This ORM isn't the fastest ([being about twice as slow as Dapper](https://github
 Downsides:
 
 - special features in specific databases can sometimes be hard to use
+
+### Tests use a real instance of Postgres
+
+While running database queries against a real instance of Postgres will somewhat slow down the tests, this is the best way to simulate real conditions in a unit test.
+
+You can use an in memory database, but it doesn't act the same way as a real database.
+
+https://learn.microsoft.com/en-us/ef/core/testing/#involving-the-database-or-not
+
+> The in-memory provider will not behave like your real database in many important ways. Some features cannot be tested with it at all (e.g. transactions, raw SQL..), while other features may behave differently than your production database (e.g. case-sensitivity in queries). While in-memory can work for simple, constrained query scenarios, it is highly limited and we discourage its use.
 
 ### Separating out DTOs (data transfer objects) from database models
 
