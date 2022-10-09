@@ -1,4 +1,5 @@
 using CleaningRobotService.Web.Services;
+using CleaningRobotService.Web.Tests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -8,34 +9,16 @@ public class TestEnvironment
 {
     private readonly DbContextOptions<ServiceDbContext> DbContextOptions;
     private readonly AppConfiguration AppConfiguration;
+    private readonly DatabaseFixture DatabaseFixture;
     
-    public TestEnvironment()
+    public TestEnvironment(DatabaseFixture databaseFixture)
     {
-        this.AppConfiguration = this.LoadConfiguration();
-
-        this.DbContextOptions = new DbContextOptionsBuilder<ServiceDbContext>()
-            .UseLazyLoadingProxies(true)
-            .UseNpgsql(this.AppConfiguration.DatabaseConnectionString)
-            //.UseInMemoryDatabase(databaseName: databaseName) // Can't use in memory db because it does not support array properties (Guid[]).
-            .Options;
-    }
-    
-    private ServiceDbContext CreateContext() => new(this.DbContextOptions);
-    
-    private AppConfiguration LoadConfiguration()
-    {
-        return new ConfigurationBuilder()
-            .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", false)
-            .AddEnvironmentVariables()
-            .Build()
-            .GetSection("App")
-            .Get<AppConfiguration>();
+        this.DatabaseFixture = databaseFixture;
     }
     
     public CommandRobotService GetCommandRobotService(ServiceDbContext? context = null)
     {
-        context ??= this.CreateContext();
+        context ??= this.DatabaseFixture.CreateContext();
 
         return new CommandRobotService(context: context);
     }

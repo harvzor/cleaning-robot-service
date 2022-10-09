@@ -50,6 +50,11 @@ If you have multiple instances of this service running at the same time, and the
 - ~~double check that Point comparison really works like a value type~~
 - ensure env vars are required
 - ~~make sure all paths begin with tibber-developer-test~~
+- improve docs
+- test db
+- create dockerfile for building service
+- test performance with larger dataset
+- fix preciseness issue between Postgres and .NET https://stackoverflow.com/questions/51103606/storing-datetime-in-postgresql-without-loosing-precision
 
 ## Design decisions
 
@@ -69,10 +74,22 @@ Both of these classes are almost identical, but they're separate because the API
 
 Mapping between the DTOs and db models is manually done. AutoMapper could be used instead, but I'm not a fan of how AutoMapper magically does this, and this can cause runtime errors rather than issues being caught at compile time.
 
-## Could do
+## If I had more time I would...
 
 ### Publish events to a queue
 
 ### Make the API more RESTful
 
 CommandController - this takes in commands and stores them in the db, it returns a CommandDto, and only accepts GET and POST
+
+### Fix global enum in API support
+
+Internally enums should be used to reduce coding/spelling mistakes. Externally, we want strings to be sent to the API.
+
+### Implement auth
+
+Right now, anyone can command the robot.
+
+### Run commands in the background
+
+Commands would need to be stored.

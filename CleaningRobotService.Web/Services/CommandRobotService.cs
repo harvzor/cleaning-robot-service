@@ -12,7 +12,7 @@ public class CommandRobotService : BaseService
     {
     }
     
-    public int CalculateIndicesCleaned(Point startPoint, List<Command> commands)
+    public static int CalculateIndicesVisited(Point startPoint, List<Command> commands)
     {
         Point currentPoint = startPoint;
 
@@ -29,11 +29,9 @@ public class CommandRobotService : BaseService
             }
         }
 
-        foreach (Command command in commands)
+        // For loops are supposed to be faster but I'm not gonna sacrifice readability for performance.
+        foreach (var command in commands.Where(command => command.Steps != 0))
         {
-            if (command.Steps == 0)
-                continue;
-            
             switch (command.Direction)
             {
                 case DirectionEnum.north:
@@ -66,7 +64,7 @@ public class CommandRobotService : BaseService
         
         float calculationTime = MethodTimer.Measure(() =>
         {
-            result = this.CalculateIndicesCleaned(startPoint: body.Start, commands: body.Commands);
+            result = CalculateIndicesVisited(startPoint: body.Start, commands: body.Commands);
         });
 
         Execution execution = new()
