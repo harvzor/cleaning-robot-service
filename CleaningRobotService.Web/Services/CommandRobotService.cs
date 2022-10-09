@@ -62,7 +62,7 @@ public class CommandRobotService : BaseService
         DateTimeOffset now = SystemDateTime.UtcNow;
         int? result = null;
         
-        float calculationTime = MethodTimer.Measure(() =>
+        double calculationTime = MethodTimer.Measure(() =>
         {
             result = CalculateIndicesVisited(startPoint: body.Start, commands: body.Commands);
         });

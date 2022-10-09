@@ -9,13 +9,15 @@ public class MethodTimer
     /// </summary>
     /// <param name="action"></param>
     /// <returns></returns>
-    public static float Measure(Action action)
+    public static double Measure(Action action)
     {
         Stopwatch stopWatch = new();
         stopWatch.Start();
         
         action();
+
+        stopWatch.Stop();
         
-        return stopWatch.ElapsedMilliseconds * 1000;
+        return stopWatch.Elapsed.TotalSeconds;
     }
 }

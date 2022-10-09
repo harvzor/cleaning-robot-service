@@ -14,5 +14,5 @@ public class CommandRobotDto
     public int Result { get; set; }
     
     /// <inheritdoc cref="Models.Execution.Duration"/>
-    public float Duration { get; set; }
+    public double Duration { get; set; }
 }

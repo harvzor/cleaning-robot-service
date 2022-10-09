@@ -51,10 +51,11 @@ If you have multiple instances of this service running at the same time, and the
 - ensure env vars are required
 - ~~make sure all paths begin with tibber-developer-test~~
 - improve docs
-- test db
+- ~~test db~~
 - create dockerfile for building service
 - test performance with larger dataset
 - fix preciseness issue between Postgres and .NET https://stackoverflow.com/questions/51103606/storing-datetime-in-postgresql-without-loosing-precision
+- make use of transactions in db tests to ensure db remains clean between different tests?
 
 ## Design decisions
 

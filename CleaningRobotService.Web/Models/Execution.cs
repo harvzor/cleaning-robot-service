@@ -30,5 +30,5 @@ public class Execution
     /// How long it took to calculate the <see cref="Result"/>.
     /// </summary>
     /// <remarks>I would normally go with <see cref="TimeSpan"/> for time but the task says "in seconds".</remarks>
-    public float Duration { get; set; }
+    public double Duration { get; set; }
 }

@@ -11,7 +11,7 @@ public class CommandRobotController : BaseController
 {
     private readonly CommandRobotService CommandRobotService;
     
-    protected CommandRobotController(ServiceDbContext context) : base(context)
+    public CommandRobotController(ServiceDbContext context) : base(context)
     {
         this.CommandRobotService = new CommandRobotService(context: context);
     }
