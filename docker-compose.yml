@@ -1,6 +1,28 @@
 version: "3.4"
 
 services:
+  runtime:
+    image: ${local_image}
+    build:
+      context: .
+      target: runtime
+    environment:
+      App__DatabaseConnectionString: "Host=postgres;Port=5432;Database=cleaning-robot-service;Username=admin;Password=password;PersistSecurityInfo=true"
+    ports:
+      - "5000:80"
+    depends_on:
+      - postgres
+  
+  test:
+    build:
+      context: .
+      target: build
+    command: dotnet test --no-build
+    environment:
+      App__DatabaseConnectionString: "Host=postgres;Port=5432;Database=cleaning-robot-service-tests;Username=admin;Password=password;PersistSecurityInfo=true"
+    depends_on:
+      - postgres
+  
   postgres:
     image: postgres:10.8-alpine
     environment:

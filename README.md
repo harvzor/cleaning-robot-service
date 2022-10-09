@@ -10,6 +10,18 @@
 
 ## Docker
 
+### Running
+
+```
+docker compose up runtime 
+```
+
+### Testing
+
+```
+docker compose up test 
+```
+
 ## Migrations
 
 Migrations are handled by EntityFramework.
@@ -48,14 +60,12 @@ If you have multiple instances of this service running at the same time, and the
 - ~~put timing code in a different method~~
 - ~~make direction code more dry (with lambda?)~~
 - ~~double check that Point comparison really works like a value type~~
-- ensure env vars are required
 - ~~make sure all paths begin with tibber-developer-test~~
 - improve docs
 - ~~test db~~
-- create dockerfile for building service
+- ~~create dockerfile for building service~~
 - test performance with larger dataset
-- fix preciseness issue between Postgres and .NET https://stackoverflow.com/questions/51103606/storing-datetime-in-postgresql-without-loosing-precision
-- make use of transactions in db tests to ensure db remains clean between different tests?
+- change CommandRobotService to only deal with the database and create an object which is the actual robot
 
 ## Design decisions
 
@@ -94,3 +104,17 @@ Right now, anyone can command the robot.
 ### Run commands in the background
 
 Commands would need to be stored.
+
+## Make use of transactions in db tests to ensure db remains clean between different tests?
+
+## Fix preciseness issue between Postgres and .NET
+
+https://stackoverflow.com/questions/51103606/storing-datetime-in-postgresql-without-loosing-precision
+
+## Decorate Swagger API with docs from XML
+
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0&tabs=visual-studio#xml-comments
+
+## Ensure env vars are required
+
+Running the application without properly setting up env vars can cause issues. This can happen quite often when a developer forgets to add new env vars to the production environment after testing a feature on a staging env and releasing. The application should fail to start if env vars are incorrectly configured. Systems like Kubernetes can also be configured to only take down older instances of services once the new instance has correctly started. This can avoid bad releases.
