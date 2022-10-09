@@ -179,6 +179,10 @@ Running the application without properly setting up env vars can cause issues. T
 
 https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-6.0
 
+### Add some CI to build images and deploy to a container library
+
+Personally I like Drone CI but Travis CI is okay too.
+
 ## Todo
 
 - ~~make sure API is camelcase~~
