@@ -1,12 +1,48 @@
 # Cleaning Robot Service
 
+## About
+
+> This service simulates a robot moving around a space.
+
+Given this input:
+
+```json
+{
+  "start": {
+    "x": 10,
+    "y": 22
+  },
+  "commands": [
+    {
+      "direction": "east",
+      "steps": 2
+    },
+    {
+      "direction": "north",
+      "steps": 1
+    }
+  ]
+}
+```
+
+The robot should move like this:
+
+![Visual example path](.github/visual-example-path.png)
+
+The robot covers 4 coordinates on its route.
+
 ## Assumptions
 
-- `/tibber-developer-test/enter-path` surely means to replace `/enter-path` with an appropriate resource name? I decided the resource would be called "CommandRobot". Though this API doesn't look RESTful at all.
+- `/tibber-developer-test/enter-path` surely means to replace `/enter-path` with an appropriate resource name? I decided the resource would be called "CommandRobot".
+
+## Requirements
+
+- Postgres 10.8
+- DotNet 6.0
 
 ## Env vars
 
-- App__DatabaseConnectionString
+- `App__DatabaseConnectionString` - configure the Postgres connection string
 
 ## Docker
 
@@ -49,24 +85,6 @@ If you have multiple instances of this service running at the same time, and the
 - ensure that migrations don't take too long to run (which would stop so many errors in production from occurring)
 - or your database changes should not break existing code (this may require multiple releases of migrations)
 
-## Todo
-
-- ~~make sure API is camelcase~~
-- ~~make sure db is stored camel case~~
-- ~~make sure enums are displayed in API as strings~~
-  - technically done but my solution isn't global for all enums, it can easily be done by using Newtonsoft
-    - https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/2293
-    - https://stackoverflow.com/questions/72034017/net-6-addjsonoptions-with-camelcase-not-working
-- ~~put timing code in a different method~~
-- ~~make direction code more dry (with lambda?)~~
-- ~~double check that Point comparison really works like a value type~~
-- ~~make sure all paths begin with tibber-developer-test~~
-- improve docs
-- ~~test db~~
-- ~~create dockerfile for building service~~
-- test performance with larger dataset
-- change CommandRobotService to only deal with the database and create an object which is the actual robot
-
 ## Design decisions
 
 ### Controllers and Services
@@ -75,7 +93,15 @@ Services should contain the actual business logic. Controllers are the interacti
 
 ### Using EntityFramework
 
-It's not the fastest but comes with all the features I need.
+This ORM isn't the fastest ([being about twice as slow as Dapper](https://github.com/DapperLib/Dapper#performance)) but has some nice features:
+
+- handles migrations
+- no need to write SQL (and I love LINQ to SQL), so if your models update, the generated SQL updates too
+- code is fairly agnostic about which db is really being used
+
+Downsides:
+
+- special features in specific databases can sometimes be hard to use
 
 ### Separating out DTOs (data transfer objects) from database models
 
@@ -87,34 +113,65 @@ Mapping between the DTOs and db models is manually done. AutoMapper could be use
 
 ## If I had more time I would...
 
-### Publish events to a queue
-
 ### Make the API more RESTful
 
-CommandController - this takes in commands and stores them in the db, it returns a CommandDto, and only accepts GET and POST
+I would make the CommandController store the Commands directly in the database. I would then have another controller where the Executions could be retrieved from.
+
+Benefits:
+
+- Commands can be replayed and Executions could be fixed (currently if there's a bug, there's no way to know which Commands were actually run).
+- Executions could be run asynchronously. In the real world, the robot would move quite slowly so the task of it moving around could take a long time.
+
+### Publish events to a queue
+
+Since this service would likely be deployed to system of microservices, it could be that other services need to be aware of Executions, so I would publish them to a queue to other services could asynchronously consume any events.
+
+I'd also add a Uuid column to the `executions` table which would be published instead of the integer ID.
 
 ### Fix global enum in API support
 
 Internally enums should be used to reduce coding/spelling mistakes. Externally, we want strings to be sent to the API.
 
+I used `[JsonConverter(typeof(JsonStringEnumConverter))]` on the `DirectionEum` to ensure strings are used in the API but this should be set globally.
+
+- https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/2293
+- https://stackoverflow.com/questions/72034017/net-6-addjsonoptions-with-camelcase-not-working
+
 ### Implement auth
 
 Right now, anyone can command the robot.
 
-### Run commands in the background
+### Make use of transactions in db tests to ensure db remains clean between different tests?
 
-Commands would need to be stored.
+Currently, each test which interacts with the database actually makes changes. This means if some tests ran in parallel, they could run into each other.
 
-## Make use of transactions in db tests to ensure db remains clean between different tests?
-
-## Fix preciseness issue between Postgres and .NET
+### Fix preciseness issue between Postgres and .NET
 
 https://stackoverflow.com/questions/51103606/storing-datetime-in-postgresql-without-loosing-precision
 
-## Decorate Swagger API with docs from XML
+### Decorate Swagger API with docs from XML
 
 https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0&tabs=visual-studio#xml-comments
 
-## Ensure env vars are required
+### Ensure env vars are required
 
 Running the application without properly setting up env vars can cause issues. This can happen quite often when a developer forgets to add new env vars to the production environment after testing a feature on a staging env and releasing. The application should fail to start if env vars are incorrectly configured. Systems like Kubernetes can also be configured to only take down older instances of services once the new instance has correctly started. This can avoid bad releases.
+
+### Use Filters to create a consistent and useful error message when exceptions occur
+
+https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-6.0
+
+## Todo
+
+- ~~make sure API is camelcase~~
+- ~~make sure db is stored camel case~~
+- ~~make sure enums are displayed in API as strings~~
+- ~~put timing code in a different method~~
+- ~~make direction code more dry (with lambda?)~~
+- ~~double check that Point comparison really works like a value type~~
+- ~~make sure all paths begin with tibber-developer-test~~
+- ~~improve docs~~
+- ~~test db~~
+- ~~create dockerfile for building service~~
+- test performance with larger dataset
+- change CommandRobotService to only deal with the database and create an object which is the actual robot
