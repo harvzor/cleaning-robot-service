@@ -123,8 +123,9 @@ public class CommandRobotServiceTests
 
         using (ServiceDbContext context = _databaseFixture.CreateContext())
         {
-            Execution storedExecution = context.Executions.Find(execution.Id);
-            
+            Execution? storedExecution = context.Executions.Find(execution.Id);
+
+            storedExecution.ShouldNotBeNull();
             storedExecution.Commands.ShouldBe(1);
             storedExecution.Result.ShouldBe(2);
             storedExecution.TimeStamp.DateTime
