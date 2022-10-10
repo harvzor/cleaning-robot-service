@@ -23,70 +23,7 @@ public class CommandRobotServiceTests
         _testEnvironment = new TestEnvironment(databaseFixture: _databaseFixture);
         _commandRobotService = _testEnvironment.GetCommandRobotService();
     }
-    
-    [Fact]
-    public void CalculateIndicesCleanedTest()
-    {
-        // Arrange / Act
-        
-        int result = CommandRobotService.CalculateIndicesVisited(
-            startPoint: new Point
-            {
-                X = 10,
-                Y = 22,
-            },
-            commands: new List<Command>()
-            {
-                new Command
-                {
-                    Direction = DirectionEnum.east,
-                    Steps = 2,
-                },
-                new Command
-                {
-                    Direction = DirectionEnum.north,
-                    Steps = 1,
-                },
-            }
-        );
-        
-        // Assert
 
-        result.ShouldBe(4);
-    }
-    
-    [Fact]
-    public void CalculateIndicesCleaned_EnsureSameStepCountedOnce()
-    {
-        // Arrange / Act
-        
-        int result = CommandRobotService.CalculateIndicesVisited(
-            startPoint: new Point
-            {
-                X = 0,
-                Y = 0,
-            },
-            commands: new List<Command>()
-            {
-                new Command
-                {
-                    Direction = DirectionEnum.east,
-                    Steps = 1,
-                },
-                // Go back on itself.
-                new Command
-                {
-                    Direction = DirectionEnum.west,
-                    Steps = 1,
-                },
-            }
-        );
-        
-        // Assert
-
-        result.ShouldBe(2);
-    }
-    
     /// <summary>
     /// Test that <see cref="Execution"/>s are stored in the db.
     /// </summary>
