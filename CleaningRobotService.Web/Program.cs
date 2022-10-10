@@ -3,63 +3,80 @@ using CleaningRobotService.Web;
 using CleaningRobotService.Web.Filters;
 using Microsoft.EntityFrameworkCore;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+WebApplication
+    .CreateBuilder(args)
+    .RegisterServices()
+    .Build()
+    .SetupMiddleware()
+    .Run();
 
-builder.Services.AddOptions<AppConfiguration>()
-    .BindConfiguration("App")
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
-
-AppConfiguration appConfiguration = builder.Configuration
-    .GetSection("App")
-    .Get<AppConfiguration>();
-
-// Add services to the container.
-
-builder.Services
-    .AddControllers()
-    .AddJsonOptions(options =>
+static class SetupServices
+{
+    public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder builder)
     {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+        builder.Services.AddOptions<AppConfiguration>()
+            .BindConfiguration("App")
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+        AppConfiguration appConfiguration = builder.Configuration
+            .GetSection("App")
+            .Get<AppConfiguration>();
 
-builder.Services.AddSwaggerGen(c =>
+        // Add services to the container.
+
+        builder.Services
+            .AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.DocumentFilter<LowercaseDocumentFilter>();
+        });
+
+        builder.Services.AddDbContext<ServiceDbContext>(options =>
+            options
+                .UseLazyLoadingProxies()
+                .UseNpgsql(appConfiguration.DatabaseConnectionString)
+        );
+        
+        return builder;
+    }
+}
+
+static class SetupMiddlewarePipeline
 {
-    c.DocumentFilter<LowercaseDocumentFilter>();
-});
+    public static WebApplication SetupMiddleware(this WebApplication app)
+    {
+        app.RunEfMigrations();
+        
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-builder.Services.AddDbContext<ServiceDbContext>(options =>
-    options
-        .UseLazyLoadingProxies()
-        .UseNpgsql(appConfiguration.DatabaseConnectionString)
-);
+        app.UseHttpsRedirection();
 
-WebApplication app = builder.Build();
+        app.UseAuthorization();
 
-RunEfMigrations();
+        app.MapControllers();
+        
+        return app;
+    }
+    
+    private static void RunEfMigrations(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var database = scope.ServiceProvider.GetRequiredService<ServiceDbContext>().Database;
 
-app.UseSwagger();
-app.UseSwaggerUI();
+        database.SetCommandTimeout(TimeSpan.FromHours(6));
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
-
-void RunEfMigrations()
-{
-    using var scope = app.Services.CreateScope();
-    var database = scope.ServiceProvider.GetRequiredService<ServiceDbContext>().Database;
-
-    database.SetCommandTimeout(TimeSpan.FromHours(6));
-
-    app.Logger.LogInformation("Running database migrations.");
-    database.Migrate();
-    app.Logger.LogInformation("Finished running database migrations.");
+        app.Logger.LogInformation("Running database migrations.");
+        database.Migrate();
+        app.Logger.LogInformation("Finished running database migrations.");
+    }
 }
