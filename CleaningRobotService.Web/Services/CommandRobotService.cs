@@ -75,9 +75,9 @@ public class CommandRobotService : BaseService
             Duration = calculationTime,
         };
         
-        base.Context.Executions.Add(execution);
+        Context.Executions.Add(execution);
 
-        base.Context.SaveChanges();
+        Context.SaveChanges();
 
         return execution;
     }

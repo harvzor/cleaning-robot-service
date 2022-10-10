@@ -6,12 +6,12 @@ namespace CleaningRobotService.Web.Helpers;
 public static class SystemDateTime
 {
     [ThreadStatic]
-    private static DateTime? FixedDateTime;
+    private static DateTime? _fixedDateTime;
 
     public static DateTime UtcNow
     {
-        get => FixedDateTime ?? DateTime.UtcNow;
-        set => FixedDateTime = value;
+        get => _fixedDateTime ?? DateTime.UtcNow;
+        set => _fixedDateTime = value;
     }
 
     /// <summary>

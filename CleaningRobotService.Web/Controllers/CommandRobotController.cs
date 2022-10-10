@@ -9,11 +9,11 @@ namespace CleaningRobotService.Web.Controllers;
 
 public class CommandRobotController : BaseController
 {
-    private readonly CommandRobotService CommandRobotService;
+    private readonly CommandRobotService _commandRobotService;
     
     public CommandRobotController(ServiceDbContext context) : base(context)
     {
-        this.CommandRobotService = new CommandRobotService(context: context);
+        _commandRobotService = new CommandRobotService(context: context);
     }
 
     [HttpPost]
@@ -21,7 +21,7 @@ public class CommandRobotController : BaseController
     [ProducesDefaultResponseType]
     public ActionResult<CommandRobotDto> CreateCommandRobot([FromBody] CommandRobotPostDto body)
     {
-        Execution execution = this.CommandRobotService.CreateCommandRobot(body: body);
+        Execution execution = _commandRobotService.CreateCommandRobot(body: body);
         
         return Ok(execution.ToDto());
     }

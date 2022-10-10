@@ -13,15 +13,15 @@ namespace CleaningRobotService.Web.Tests.ServiceTests;
 [Collection(nameof(DefaultFixtureCollection))]
 public class CommandRobotServiceTests
 {
-    private readonly CommandRobotService CommandRobotService;
-    private readonly DatabaseFixture DatabaseFixture;
-    private readonly TestEnvironment TestEnvironment;
+    private readonly CommandRobotService _commandRobotService;
+    private readonly DatabaseFixture _databaseFixture;
+    private readonly TestEnvironment _testEnvironment;
 
     public CommandRobotServiceTests(DatabaseFixture databaseFixture)
     {
-        this.DatabaseFixture = databaseFixture;
-        this.TestEnvironment = new TestEnvironment(databaseFixture: this.DatabaseFixture);
-        this.CommandRobotService = this.TestEnvironment.GetCommandRobotService();
+        _databaseFixture = databaseFixture;
+        _testEnvironment = new TestEnvironment(databaseFixture: _databaseFixture);
+        _commandRobotService = _testEnvironment.GetCommandRobotService();
     }
     
     [Fact]
@@ -117,11 +117,11 @@ public class CommandRobotServiceTests
         
         // Act
         
-        Execution execution = CommandRobotService.CreateCommandRobot(body: commandRobotPostDto);
+        Execution execution = _commandRobotService.CreateCommandRobot(body: commandRobotPostDto);
         
         // Assert
 
-        using (ServiceDbContext context = this.DatabaseFixture.CreateContext())
+        using (ServiceDbContext context = _databaseFixture.CreateContext())
         {
             Execution storedExecution = context.Executions.Find(execution.Id);
             

@@ -5,86 +5,87 @@ using Npgsql;
 
 namespace CleaningRobotService.Web.Tests.Fixtures;
 
-    public class DatabaseFixture : IDisposable
+// ReSharper disable once ClassNeverInstantiated.Global
+// This is used in a ICollectionFixture, probably instantiated by DI.
+public class DatabaseFixture : IDisposable
+{
+    private static readonly object Lock = new();
+    private static bool _databaseInitialized;
+
+    private readonly DbConnection _connection;
+    private readonly DbContextOptions<ServiceDbContext> _dbContextOptions;
+
+    public DatabaseFixture()
     {
-        private static readonly object Lock = new();
-        private static bool DatabaseInitialized;
+        AppConfiguration appConfiguration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", false)
+            .AddEnvironmentVariables()
+            .Build()
+            .GetSection("App")
+            .Get<AppConfiguration>();
 
-        private readonly AppConfiguration AppConfiguration;
-        private readonly DbConnection Connection;
-        private readonly DbContextOptions<ServiceDbContext> DbContextOptions;
+        _connection = new NpgsqlConnection(appConfiguration.DatabaseConnectionString);
 
-        public DatabaseFixture()
+        _dbContextOptions = new DbContextOptionsBuilder<ServiceDbContext>()
+            .UseLazyLoadingProxies()
+            .UseNpgsql(appConfiguration.DatabaseConnectionString)
+            //.UseInMemoryDatabase(databaseName: databaseName) // Can't use in memory db because it does not support array properties (Guid[]).
+            .Options;
+
+        CreateDatabase();
+
+        _connection.Open();
+    }
+
+    public ServiceDbContext CreateContext()
+    {
+        ServiceDbContext context = new(_dbContextOptions);
+
+        return context;
+    }
+
+    public ServiceDbContext CreateContext(DbTransaction transaction)
+    {
+        ServiceDbContext context = new(_dbContextOptions);
+        context.Database.UseTransaction(transaction);
+
+        return context;
+    }
+
+    public DbTransaction BeginTransaction()
+    {
+        return _connection.BeginTransaction();
+    }
+
+    private void CreateDatabase()
+    {
+        lock (Lock)
         {
-            this.AppConfiguration = new ConfigurationBuilder()
-                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false)
-                .AddEnvironmentVariables()
-                .Build()
-                .GetSection("App")
-                .Get<AppConfiguration>();
-
-            this.Connection = new NpgsqlConnection(this.AppConfiguration.DatabaseConnectionString);
-
-            this.DbContextOptions = new DbContextOptionsBuilder<ServiceDbContext>()
-                .UseLazyLoadingProxies(true)
-                .UseNpgsql(this.AppConfiguration.DatabaseConnectionString)
-                //.UseInMemoryDatabase(databaseName: databaseName) // Can't use in memory db because it does not support array properties (Guid[]).
-                .Options;
-
-            this.CreateDatabase();
-
-            this.Connection.Open();
-        }
-
-        public ServiceDbContext CreateContext()
-        {
-            ServiceDbContext context = new(DbContextOptions);
-
-            return context;
-        }
-
-        public ServiceDbContext CreateContext(DbTransaction transaction)
-        {
-            ServiceDbContext context = new(DbContextOptions);
-            context.Database.UseTransaction(transaction);
-
-            return context;
-        }
-
-        public DbTransaction BeginTransaction()
-        {
-            return Connection.BeginTransaction();
-        }
-
-        private void CreateDatabase()
-        {
-            lock (Lock)
+            if (!_databaseInitialized)
             {
-                if (!DatabaseInitialized)
+                using (ServiceDbContext context = new(_dbContextOptions))
                 {
-                    using (ServiceDbContext context = new(this.DbContextOptions))
-                    {
-                        context.Database.EnsureDeleted();
-                        context.Database.Migrate();
+                    context.Database.EnsureDeleted();
+                    context.Database.Migrate();
 
-                        context.SaveChanges();
-                    }
-
-                    DatabaseInitialized = true;
+                    context.SaveChanges();
                 }
+
+                _databaseInitialized = true;
             }
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-                Connection.Close();
-        }
     }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+            _connection.Close();
+    }
+}

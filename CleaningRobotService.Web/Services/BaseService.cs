@@ -6,6 +6,6 @@ public abstract class BaseService
     
     protected BaseService(ServiceDbContext context)
     {
-        this.Context = context;
+        Context = context;
     }
 }

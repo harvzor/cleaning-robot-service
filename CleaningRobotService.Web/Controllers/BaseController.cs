@@ -11,6 +11,6 @@ public abstract class BaseController : Controller
     
     protected BaseController(ServiceDbContext context)
     {
-        this.Context = context;
+        Context = context;
     }
 }

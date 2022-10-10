@@ -1,24 +1,20 @@
 using CleaningRobotService.Web.Services;
 using CleaningRobotService.Web.Tests.Fixtures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace CleaningRobotService.Web.Tests;
 
 public class TestEnvironment
 {
-    private readonly DbContextOptions<ServiceDbContext> DbContextOptions;
-    private readonly AppConfiguration AppConfiguration;
-    private readonly DatabaseFixture DatabaseFixture;
+    private readonly DatabaseFixture _databaseFixture;
     
     public TestEnvironment(DatabaseFixture databaseFixture)
     {
-        this.DatabaseFixture = databaseFixture;
+        _databaseFixture = databaseFixture;
     }
     
     public CommandRobotService GetCommandRobotService(ServiceDbContext? context = null)
     {
-        context ??= this.DatabaseFixture.CreateContext();
+        context ??= _databaseFixture.CreateContext();
 
         return new CommandRobotService(context: context);
     }
