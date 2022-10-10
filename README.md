@@ -146,15 +146,6 @@ Since this service would likely be deployed to system of microservices, it could
 
 I'd also add a Uuid column to the `executions` table which would be published instead of the integer ID.
 
-### Fix global enum in API support
-
-Internally enums should be used to reduce coding/spelling mistakes. Externally, we want strings to be sent to the API.
-
-I used `[JsonConverter(typeof(JsonStringEnumConverter))]` on the `DirectionEum` to ensure strings are used in the API but this should be set globally.
-
-- https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/2293
-- https://stackoverflow.com/questions/72034017/net-6-addjsonoptions-with-camelcase-not-working
-
 ### Implement auth
 
 Right now, anyone can command the robot.
