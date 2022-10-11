@@ -2,13 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 WORKDIR /build
 
+# Currently no way to use a glob pattern to get all csproj files:
+# https://stackoverflow.com/questions/51372791/is-there-a-more-elegant-way-to-copy-specific-files-using-docker-copy-to-the-work
 COPY ./CleaningRobotService.Web/CleaningRobotService.Web.csproj ./CleaningRobotService.Web/
 COPY ./CleaningRobotService.Web.Benchmarks/CleaningRobotService.Web.Benchmarks.csproj ./CleaningRobotService.Web.Benchmarks/
 COPY ./CleaningRobotService.Web.Tests/CleaningRobotService.Web.Tests.csproj ./CleaningRobotService.Web.Tests/
 COPY ./CleaningRobotService.sln ./
 #COPY ./NuGet.Config ./
 
-RUN ls
 RUN dotnet restore
 
 COPY . .

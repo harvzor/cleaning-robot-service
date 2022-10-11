@@ -63,13 +63,13 @@ docker compose up runtime
 ### Testing
 
 ```
-docker compose up test 
+docker compose run --rm test
 ```
 
 ### Benchmarking
 
 ```
-docker compose up benchmark
+docker compose run --rm benchmark
 ```
 
 ## Benchmarking
