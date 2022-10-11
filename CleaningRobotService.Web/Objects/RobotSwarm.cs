@@ -14,7 +14,7 @@ public class RobotSwarm : IRobot
 {
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
-    private readonly int _chunkCommands = 1000;
+    private readonly int _chunkCommands;
 
     public RobotSwarm(int chunkCommands = 1000)
     {
@@ -23,10 +23,11 @@ public class RobotSwarm : IRobot
 
     public IEnumerable<Point> CalculatePointsVisited()
     {
-        IEnumerable<Command[]> commandChunks = Commands
-            .Chunk(_chunkCommands);
+        List<Command[]> commandChunks = Commands
+            .Chunk(_chunkCommands)
+            .ToList();
 
-        Dictionary<long, IEnumerable<Point>> results = new(commandChunks.Count());
+        List<Point>[] results = new List<Point>[commandChunks.Count];
         
         Parallel.ForEach(commandChunks, (commands, _, index) =>
         {
@@ -40,15 +41,13 @@ public class RobotSwarm : IRobot
                 Commands = commands,
             };
 
-            results.Add(index, robot.CalculatePointsVisited());
+            results[index] = robot.CalculatePointsVisited().ToList();
         });
         
         HashSet<Point> pointsVisited = new() { StartPoint, };
 
         Point lastPosition = StartPoint;
-        foreach (IEnumerable<Point> points in results
-             .OrderBy(x => x.Key)
-             .Select(x => x.Value))
+        foreach (List<Point> points in results)
         {
             foreach (Point point in points)
             {

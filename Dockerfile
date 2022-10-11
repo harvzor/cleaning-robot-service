@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 WORKDIR /build
 
 COPY ./CleaningRobotService.Web/CleaningRobotService.Web.csproj ./CleaningRobotService.Web/
+COPY ./CleaningRobotService.Web.Benchmarks/CleaningRobotService.Web.Benchmarks.csproj ./CleaningRobotService.Web.Benchmarks/
 COPY ./CleaningRobotService.Web.Tests/CleaningRobotService.Web.Tests.csproj ./CleaningRobotService.Web.Tests/
 COPY ./CleaningRobotService.sln ./
 #COPY ./NuGet.Config ./

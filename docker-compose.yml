@@ -22,6 +22,14 @@ services:
       App__DatabaseConnectionString: "Host=postgres;Port=5432;Database=cleaning-robot-service-tests;Username=admin;Password=password;PersistSecurityInfo=true"
     depends_on:
       - postgres
+        
+  benchmark:
+    build:
+      context: .
+      target: build
+    command: dotnet run --configuration Release --project CleaningRobotService.Web.Benchmarks
+    depends_on:
+      - postgres
   
   postgres:
     image: postgres:10.8-alpine
