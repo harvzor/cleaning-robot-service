@@ -22,4 +22,8 @@ public struct Point
             Y = Y + otherPoint.Y,
         };
     }
+    
+    public static bool operator ==(Point p1, Point p2) => p1.Equals(p2);
+    
+    public static bool operator !=(Point p1, Point p2) => !p1.Equals(p2);
 }

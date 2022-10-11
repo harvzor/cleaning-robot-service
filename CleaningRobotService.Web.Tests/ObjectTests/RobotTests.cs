@@ -16,4 +16,10 @@ public class RobotTests : BaseRobotTests
     {
         CalculatePointsVisited_EnsureSameStepCountedOnce(new Robot());
     }
+    
+    [Fact]
+    public void Robot_CalculatePointsVisited_Loop()
+    {
+        CalculatePointsVisitedTest_Loop(new Robot());
+    }
 }
