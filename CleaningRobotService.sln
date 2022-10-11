@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web.Tests", "CleaningRobotService.Web.Tests\CleaningRobotService.Web.Tests.csproj", "{F3555886-E5CB-44B6-B8B0-2DE011002815}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web.Benchmarks", "CleaningRobotService.Web.Benchmarks\CleaningRobotService.Web.Benchmarks.csproj", "{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{F3555886-E5CB-44B6-B8B0-2DE011002815}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3555886-E5CB-44B6-B8B0-2DE011002815}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3555886-E5CB-44B6-B8B0-2DE011002815}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

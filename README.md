@@ -66,6 +66,25 @@ docker compose up runtime
 docker compose up test 
 ```
 
+### Benchmarking
+
+```
+docker compose up benchmark
+```
+
+## Benchmarking
+
+```
+dotnet run --configuration Release --project CleaningRobotService.Web.Benchmarks
+
+|                                 Method |     Mean |     Error |    StdDev | Ratio | RatioSD |
+|--------------------------------------- |---------:|----------:|----------:|------:|--------:|
+|           Robot_CalculatePointsVisited | 3.791 ms | 0.0898 ms | 0.0594 ms |  1.00 |    0.00 |
+| RobotSwarm_CalculatePointsVisited_1000 | 2.155 ms | 0.0374 ms | 0.0223 ms |  0.57 |    0.01 |
+|  RobotSwarm_CalculatePointsVisited_500 | 1.904 ms | 0.0521 ms | 0.0344 ms |  0.50 |    0.01 |
+|  RobotSwarm_CalculatePointsVisited_100 | 2.089 ms | 0.1383 ms | 0.0915 ms |  0.55 |    0.03 |
+```
+
 ## Migrations
 
 Migrations are handled by EntityFramework.

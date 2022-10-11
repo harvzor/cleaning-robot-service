@@ -1,5 +1,6 @@
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Helpers;
+using CleaningRobotService.Web.Interfaces;
 using CleaningRobotService.Web.Models;
 using CleaningRobotService.Web.Objects;
 
@@ -16,11 +17,20 @@ public class CommandRobotService : BaseService
         DateTimeOffset now = SystemDateTime.UtcNow;
         int? result = null;
 
-        Robot robot = new(startPoint: body.Start);
+        IRobot robot = new Robot
+        {
+            StartPoint = body.Start,
+            Commands = body.Commands,
+        };
+        // IRobot robot = new RobotSwarm
+        // {
+        //     StartPoint = body.Start,
+        //     Commands = body.Commands,
+        // };
         
         double calculationTime = MethodTimer.Measure(() =>
         {
-            result = robot.CalculateIndicesVisited(commands: body.Commands);
+            result = robot.CalculatePointsVisited().Count();
         });
 
         Execution execution = new()
