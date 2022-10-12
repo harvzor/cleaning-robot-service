@@ -35,6 +35,7 @@ public class PointTests
     [Theory]
     [InlineData(1, 3, 2, true)] // Point is in middle of line.
     [InlineData(2, 3, 1, false)] // Point is before line.
+    [InlineData(1, 1, 1, true)] // Line is just a point.
     public void PointOnLine(int lineP1X, int lineP2X, int p3X, bool shouldBeOnLine)
     {
         // Arrange

@@ -17,7 +17,7 @@ public class CommandRobotService : BaseService
         DateTimeOffset now = SystemDateTime.UtcNow;
         int? result = null;
 
-        RobotRough robot = new()
+        RobotFast robot = new()
         {
             StartPoint = body.Start,
             Commands = body.Commands,
