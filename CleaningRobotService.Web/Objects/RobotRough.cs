@@ -50,47 +50,87 @@ public class RobotRough
                         paramName: nameof(Commands)
                     );
             }
+
+            Point end = _currentPoint;
+
+            bool shouldBeSwapped = command.Direction is DirectionEnum.east or DirectionEnum.west
+                ? Point.IsMoreEast(start, end)
+                : Point.IsMoreNorth(start, end);
             
-            // Normalise new StartEnd so the end point is more positive than the start.
-            // Check for any _startEnds where this new StartEnd starts or ends between.
-            // If there are any, replace its start and end with the new start or end, if they are greater.
-            
-            _startEnds.Add(new StartEnd
+            // Normalise new StartEnd so the EndPoint is more positive than the StartPoint.
+            StartEnd startEnd = new()
             {
-                StartPoint = start,
+                StartPoint = shouldBeSwapped ? end : start,
                 Direction = command.Direction,
-                EndPoint = _currentPoint,
-            });
+                EndPoint = shouldBeSwapped ? start : end,
+            };
+
+            bool replaced = false;
+            
+            // Check for any _startEnds where this new startEnd starts or ends between.
+            // TODO: must be a way to make code in statement into method (DRY it up).
+            if (command.Direction is DirectionEnum.east or DirectionEnum.west)
+            {
+                StartEnd? matchingStartEndIfStartOrEndIsOnLine = _startEnds
+                    // Where the Y coordinate is the same.
+                    .Where(x => x.StartPoint.Y == startEnd.StartPoint.Y)
+                    // And the new startEnd starts or ends along any other in _startEnds.
+                    .Where(x
+                        => Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.StartPoint)
+                           || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.EndPoint)
+                    )
+                    .FirstOrDefault();
+
+                if (matchingStartEndIfStartOrEndIsOnLine != null)
+                {
+                    replaced = true;
+                    // If the new StartPoint is more west than the old StartPoint, swap them.
+                    if (Point.IsMoreWest(p1: matchingStartEndIfStartOrEndIsOnLine.StartPoint, p2: startEnd.StartPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.StartPoint = startEnd.StartPoint;
+                    
+                    // If the new EndPoint is more east than the old EndPoint, swap them.
+                    if (Point.IsMoreEast(p1: matchingStartEndIfStartOrEndIsOnLine.EndPoint, p2: startEnd.EndPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.EndPoint = startEnd.EndPoint;
+                }
+            }
+            else
+            {
+                StartEnd? matchingStartEndIfStartOrEndIsOnLine = _startEnds
+                    // Where the Y coordinate is the same.
+                    .Where(x => x.StartPoint.X == startEnd.StartPoint.X)
+                    // And the new startEnd starts or ends along any other in _startEnds.
+                    .Where(x
+                        => Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.StartPoint)
+                        || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.EndPoint)
+                    )
+                    .FirstOrDefault();
+
+                if (matchingStartEndIfStartOrEndIsOnLine != null)
+                {
+                    replaced = true;
+                    // If the new StartPoint is more north than the old StartPoint, swap them.
+                    if (Point.IsMoreNorth(p1: matchingStartEndIfStartOrEndIsOnLine.StartPoint, p2: startEnd.StartPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.StartPoint = startEnd.StartPoint;
+                    
+                    // If the new EndPoint is more south than the old EndPoint, swap them.
+                    if (Point.IsMoreSouth(p1: matchingStartEndIfStartOrEndIsOnLine.EndPoint, p2: startEnd.EndPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.EndPoint = startEnd.EndPoint;
+                }
+            }
+            
+            // If the new startEnd didn't overlap any other startEnds, then just add it.
+            if (!replaced)
+                _startEnds.Add(startEnd);
         }
     }
 
-    public int CalculatePointsVisited()
+    public int CalculateNumberOfPointsVisited()
     {
         CalculateStartEnds();
 
-        // Remove overlapping points.
-
-        List<StartEnd> xGroup = _startEnds
-            .Where(startEnd => startEnd.Direction is DirectionEnum.east or DirectionEnum.west)
-            .ToList();
-        
-        List<StartEnd> yGroup = _startEnds
-            .Where(startEnd => startEnd.Direction is DirectionEnum.north or DirectionEnum.south)
-            .ToList();
-        
-        // Where Y values are the same.
-        List<IGrouping<int, StartEnd>> xGroupGroupedBySameY = xGroup
-            .GroupBy(x => x.StartPoint.Y)
-            .ToList();
-        
-        // Simplify overlapping into less paths.
-        List<StartEnd> xGroupSimplified = new();
-        foreach (IGrouping<int, StartEnd> group in xGroupGroupedBySameY)
-        {
-            
-        }
-        
         return _startEnds
-            .Sum(startEnd => Point.GetDistance(startEnd.StartPoint, startEnd.EndPoint));
+            .Sum(startEnd => Point.GetDistance(startEnd.StartPoint, startEnd.EndPoint))
+            // Add one because the distance between 2 points doesn't include the initial point.
+            + 1;
     }
 }
