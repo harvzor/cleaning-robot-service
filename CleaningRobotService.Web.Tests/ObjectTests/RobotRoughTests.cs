@@ -48,6 +48,54 @@ public class RobotRoughTests
     }
     
     [Fact]
+    public void CalculatePointsVisitedTest_Square()
+    {
+        // Arrange
+
+        RobotRough robot = new()
+        {
+            StartPoint = new Point
+            {
+                X = 0,
+                Y = 0,
+            },
+            Commands = new List<Command>()
+            {
+                new Command
+                {
+                    Direction = DirectionEnum.north,
+                    Steps = 1,
+                },
+                new Command
+                {
+                    Direction = DirectionEnum.east,
+                    Steps = 1,
+                },
+                new Command
+                {
+                    Direction = DirectionEnum.south,
+                    Steps = 1,
+                },
+                // Duplicate point.
+                new Command
+                {
+                    Direction = DirectionEnum.west,
+                    Steps = 1,
+                },
+            }
+        };
+
+        // Act
+
+        int numberOfPointsVisited = robot
+            .CalculateNumberOfPointsVisited();
+        
+        // Assert
+
+        numberOfPointsVisited.ShouldBe(4);
+    }
+    
+    [Fact]
     public void CalculatePointsVisited_EnsureSameStepCountedOnce()
     {
         // Arrange

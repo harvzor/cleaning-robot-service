@@ -61,7 +61,10 @@ public class RobotRough
             StartEnd startEnd = new()
             {
                 StartPoint = shouldBeSwapped ? end : start,
-                Direction = command.Direction,
+                // I think the direction should only be north or east given that it's normalised.
+                Direction = command.Direction is DirectionEnum.north or DirectionEnum.south
+                    ? DirectionEnum.north
+                    : DirectionEnum.east,
                 EndPoint = shouldBeSwapped ? start : end,
             };
 
@@ -72,12 +75,13 @@ public class RobotRough
             if (command.Direction is DirectionEnum.east or DirectionEnum.west)
             {
                 StartEnd? matchingStartEndIfStartOrEndIsOnLine = _startEnds
+                    .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
                     // Where the Y coordinate is the same.
                     .Where(x => x.StartPoint.Y == startEnd.StartPoint.Y)
                     // And the new startEnd starts or ends along any other in _startEnds.
                     .Where(x
                         => Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.StartPoint)
-                           || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.EndPoint)
+                        || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.EndPoint)
                     )
                     .FirstOrDefault();
 
@@ -85,17 +89,18 @@ public class RobotRough
                 {
                     replaced = true;
                     // If the new StartPoint is more west than the old StartPoint, swap them.
-                    if (Point.IsMoreWest(p1: matchingStartEndIfStartOrEndIsOnLine.StartPoint, p2: startEnd.StartPoint))
+                    if (Point.IsMoreWest(p1: startEnd.StartPoint, p2: matchingStartEndIfStartOrEndIsOnLine.StartPoint))
                         matchingStartEndIfStartOrEndIsOnLine.StartPoint = startEnd.StartPoint;
                     
                     // If the new EndPoint is more east than the old EndPoint, swap them.
-                    if (Point.IsMoreEast(p1: matchingStartEndIfStartOrEndIsOnLine.EndPoint, p2: startEnd.EndPoint))
+                    if (Point.IsMoreEast(p1: startEnd.EndPoint, p2: matchingStartEndIfStartOrEndIsOnLine.EndPoint))
                         matchingStartEndIfStartOrEndIsOnLine.EndPoint = startEnd.EndPoint;
                 }
             }
             else
             {
                 StartEnd? matchingStartEndIfStartOrEndIsOnLine = _startEnds
+                    .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
                     // Where the Y coordinate is the same.
                     .Where(x => x.StartPoint.X == startEnd.StartPoint.X)
                     // And the new startEnd starts or ends along any other in _startEnds.
@@ -127,10 +132,29 @@ public class RobotRough
     public int CalculateNumberOfPointsVisited()
     {
         CalculateStartEnds();
+        
+        // return _startEnds
+        //     .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
+        //     .Sum(startEnd
+        //         => Point.GetDistance(startEnd.StartPoint, startEnd.EndPoint)
+        //         // Add one because the distance between 2 points doesn't include the initial point.
+        //         + 1
+        // );
 
-        return _startEnds
-            .Sum(startEnd => Point.GetDistance(startEnd.StartPoint, startEnd.EndPoint))
-            // Add one because the distance between 2 points doesn't include the initial point.
-            + 1;
+        int distances = _startEnds
+            .Sum(startEnd
+                => Point.GetDistance(startEnd.StartPoint, startEnd.EndPoint)
+                // Add one because the distance between 2 points doesn't include the initial point.
+                // + (startEnd.Direction is DirectionEnum.west or DirectionEnum.east ? 1 : 0)
+            );
+        
+        int numberOfMatchingStartPoints= _startEnds
+            .GroupBy(x => x.StartPoint)
+            .Where(group => group.Count() > 1)
+            .Count();
+        
+        numberOfMatchingStartPoints = 0;
+        
+        return distances + numberOfMatchingStartPoints;
     }
 }
