@@ -19,19 +19,49 @@ public class Robot : IRobot
     private class Result
     {
         public Point StartPoint;
-        public Command Command;
+        public Command? Command;
         public Point EndPoint;
     }
     
-    private void Step(uint steps, Action action)
+    private void CalculateCommand(Command command)
     {
-        for (int i = 0; i < steps; i++)
-        {
-            action();
+        List<Point> potentiallyNewPointsVisited = Enumerable.Range(0, (int)command.Steps)
+            .Select(_ =>
+            {
+                switch (command.Direction)
+                {
+                    case DirectionEnum.north:
+                        _currentPoint.Y++;
+                        break;
+                    case DirectionEnum.east:
+                        _currentPoint.X++;
+                        break;
+                    case DirectionEnum.south:
+                        _currentPoint.Y--;
+                        break;
+                    case DirectionEnum.west:
+                        _currentPoint.X--;
+                        break;
+                    default:
+                        throw new ArgumentException(
+                            message: $"Command direction of {command.Direction} not covered.",
+                            paramName: nameof(Commands)
+                        );
+                }
 
-            if (!_pointsVisited.Contains(_currentPoint))
-                _pointsVisited.Add(_currentPoint);
-        }
+                return _currentPoint;
+            })
+            .ToList();
+        
+        _pointsVisited.UnionWith(potentiallyNewPointsVisited);
+        
+        // for (int i = 0; i < steps; i++)
+        // {
+        //     action();
+        //
+        //     if (!_pointsVisited.Contains(_currentPoint))
+        //         _pointsVisited.Add(_currentPoint);
+        // }
     }
 
     private void CalculatePointVisited(Command command)
@@ -49,27 +79,8 @@ public class Robot : IRobot
             _currentPoint = cachedResult.EndPoint;
             return;
         }
-        
-        switch (command.Direction)
-        {
-            case DirectionEnum.north:
-                Step(steps: command.Steps, action: () => _currentPoint.Y++);
-                break;
-            case DirectionEnum.east:
-                Step(steps: command.Steps, action: () => _currentPoint.X++);
-                break;
-            case DirectionEnum.south:
-                Step(steps: command.Steps, action: () => _currentPoint.Y--);
-                break;
-            case DirectionEnum.west:
-                Step(steps: command.Steps, action: () => _currentPoint.X--);
-                break;
-            default:
-                throw new ArgumentException(
-                    message: $"Command direction of {command.Direction} not covered.",
-                    paramName: nameof(Commands)
-                );
-        }
+
+        CalculateCommand(command: command);
         
         _cachedResults.Add(new Result
         {
