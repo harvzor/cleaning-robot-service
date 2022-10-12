@@ -23,6 +23,11 @@ public struct Point
         };
     }
     
+    public static int GetDistance(Point p1, Point p2)
+    {
+        return (int)Math.Sqrt(Math.Pow((p2.X - p1.X), 2) + Math.Pow((p2.Y - p1.Y), 2));
+    }
+    
     public static bool operator ==(Point p1, Point p2) => p1.Equals(p2);
     
     public static bool operator !=(Point p1, Point p2) => !p1.Equals(p2);
