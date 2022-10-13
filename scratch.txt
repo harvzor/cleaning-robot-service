@@ -58,7 +58,8 @@ north 2,  east 2, south 2,    east 2, north 2, east 2
 [4,2] -> [6,2] east 2
 # there are gaps between all of these
 
-999985000
+999985000 estimated
+999985001 answer?
 
 ## Proposed solution
 

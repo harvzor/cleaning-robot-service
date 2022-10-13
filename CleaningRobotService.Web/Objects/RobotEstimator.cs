@@ -166,6 +166,51 @@ public class RobotEstimator
         }
     }
 
+    private void ShiftEastLines()
+    {
+        List<Line> northLines = _lines
+            .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
+            .ToList();
+        
+        List<Line> eastLines = _lines
+            .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
+            .ToList();
+
+        int i = 0;
+        foreach (Line eastLine in eastLines) // ToList again because I am removing items from the original array.
+        {
+            while (northLines.Any(northLine
+                => eastLine.StartPoint == northLine.StartPoint
+                || eastLine.StartPoint == northLine.EndPoint)
+            )
+            {
+                if (eastLine.StartPoint == eastLine.EndPoint)
+                {
+                    _lines.Remove(eastLine);
+                    break;
+                }
+                
+                eastLine.StartPoint.X += 1;
+            }
+            
+            while (northLines.Any(northLine
+                => eastLine.EndPoint == northLine.EndPoint
+                || eastLine.EndPoint == northLine.StartPoint)
+            )
+            {
+                if (eastLine.StartPoint == eastLine.EndPoint)
+                {
+                    _lines.Remove(eastLine);
+                    break;
+                }
+                
+                eastLine.EndPoint.X -= 1;
+            }
+
+            i++;
+        }
+    }
+
     public int CalculateNumberOfPointsVisited()
     {
         HashSet<Point> points = new();
@@ -187,49 +232,73 @@ public class RobotEstimator
         // Brute force but don't store every point.
         // Since the east lines might overlap the north lines, count the points on the north lines,
         // then find the none overlapping east points and count them too.
+        // {
+        //     List<Line> northLines = _lines
+        //         .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
+        //         .ToList();
+        //
+        //     List<Line> eastLines = _lines
+        //         .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
+        //         .ToList();
+        //
+        //     int northCounts = northLines
+        //         .Sum(line
+        //             => Point.GetDistance(line.StartPoint, line.EndPoint)
+        //                // Add one because the distance between 2 points doesn't include the initial point.
+        //                + 1
+        //         );
+        //
+        //     int eastsCount = 0;
+        //     if (northLines.Any())
+        //     {
+        //         foreach (Line eastLine in eastLines)
+        //         {
+        //             List<Point> newPoints = eastLine.CalculatePoints();
+        //
+        //             // Using a line intersect method to figure out where two lines cross may be faster.
+        //             foreach (Point point in newPoints)
+        //             {
+        //                 if (!northLines.Any(northLine => northLine.IsPointOnLine(point)))
+        //                 {
+        //                     eastsCount++;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     else
+        //     {
+        //         eastsCount = eastLines
+        //             .Sum(line
+        //                 => Point.GetDistance(line.StartPoint, line.EndPoint)
+        //                    // Add one because the distance between 2 points doesn't include the initial point.
+        //                    + 1
+        //             );
+        //     }
+        //
+        //     return northCounts + eastsCount;
+        // }
+
+        // Normal count.
+        // After ensuring no east line starts where north line ends.
         {
-            List<Line> northLines = _lines
+            ShiftEastLines();
+        
+            int northCounts = _lines
                 .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
-                .ToList();
-
-            List<Line> eastLines = _lines
-                .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
-                .ToList();
-
-            int northCounts = northLines
                 .Sum(line
                     => Point.GetDistance(line.StartPoint, line.EndPoint)
                        // Add one because the distance between 2 points doesn't include the initial point.
                        + 1
                 );
-
-            int eastsCount = 0;
-            if (northLines.Any())
-            {
-                foreach (Line eastLine in eastLines)
-                {
-                    List<Point> newPoints = eastLine.CalculatePoints();
-
-                    // Using a line intersect method to figure out where two lines cross may be faster.
-                    foreach (Point point in newPoints)
-                    {
-                        if (!northLines.Any(northLine => northLine.IsPointOnLine(point)))
-                        {
-                            eastsCount++;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                eastsCount = eastLines
-                    .Sum(line
-                        => Point.GetDistance(line.StartPoint, line.EndPoint)
-                           // Add one because the distance between 2 points doesn't include the initial point.
-                           + 1
-                    );
-            }
-
+            
+            int eastsCount =_lines
+                .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
+                .Sum(line
+                    => Point.GetDistance(line.StartPoint, line.EndPoint)
+                       // Add one because the distance between 2 points doesn't include the initial point.
+                       + 1
+                );
+        
             return northCounts + eastsCount;
         }
 
