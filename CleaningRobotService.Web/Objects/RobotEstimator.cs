@@ -21,36 +21,6 @@ public class RobotEstimator
         public Point EndPoint;
         public DirectionEnum Direction;
 
-        public IEnumerable<Point> CalculatePointsYielded()
-        {
-            Point currentPoint = StartPoint;
-
-            yield return currentPoint;
-            
-            while (currentPoint != EndPoint)
-            {
-                switch (Direction)
-                {
-                    case DirectionEnum.north:
-                        currentPoint.Y += 1;
-                        break;
-                    case DirectionEnum.east:
-                        currentPoint.X += 1;
-                        break;
-                    case DirectionEnum.south:
-                        currentPoint.Y -= 1;
-                        break;
-                    case DirectionEnum.west:
-                        currentPoint.X -= 1;
-                        break;
-                    default:
-                        throw new Exception("Command direction of {command.Direction} not covered.");
-                }
-
-                yield return currentPoint;
-            }
-        }
-        
         public List<Point> CalculatePoints()
         {
             Point currentPoint = StartPoint;
@@ -206,60 +176,38 @@ public class RobotEstimator
             .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
             .ToList();
 
-        foreach (Line eastLine in eastLines)
+        int i = 0;
+        foreach (Line eastLine in eastLines) // ToList again because I am removing items from the original array.
         {
-            // If the start/end is moved, then we know it's on an unused point.
-            bool startMoved = false;
-            bool endMoved = false;
-            
-            foreach (Point point in eastLine.CalculatePointsYielded())
+            while (northLines.Any(northLine
+                => eastLine.StartPoint == northLine.StartPoint
+                || eastLine.StartPoint == northLine.EndPoint)
+            )
             {
-                // Move the start point to an used 
-                if (!northLines.Any(northLine => point == northLine.StartPoint || point == northLine.EndPoint))
+                if (eastLine.StartPoint == eastLine.EndPoint)
                 {
-                    eastLine.StartPoint = point;
-                    startMoved = true;
+                    _lines.Remove(eastLine);
+                    break;
                 }
                 
-                if (!northLines.Any(northLine => point == northLine.EndPoint || point == northLine.StartPoint))
-                {
-                    eastLine.EndPoint = point;
-                    startMoved = true;
-                }
-            }
-
-            if (!startMoved && !endMoved)
-            {
-                _lines.Remove(eastLine);
+                eastLine.StartPoint.X += 1;
             }
             
-            // while (northLines.Any(northLine
-            //     => eastLine.StartPoint == northLine.StartPoint
-            //     || eastLine.StartPoint == northLine.EndPoint)
-            // )
-            // {
-            //     if (eastLine.StartPoint == eastLine.EndPoint)
-            //     {
-            //         _lines.Remove(eastLine);
-            //         break;
-            //     }
-            //     
-            //     eastLine.StartPoint.X += 1;
-            // }
-            //
-            // while (northLines.Any(northLine
-            //     => eastLine.EndPoint == northLine.EndPoint
-            //     || eastLine.EndPoint == northLine.StartPoint)
-            // )
-            // {
-            //     if (eastLine.StartPoint == eastLine.EndPoint)
-            //     {
-            //         _lines.Remove(eastLine);
-            //         break;
-            //     }
-            //     
-            //     eastLine.EndPoint.X -= 1;
-            // }
+            while (northLines.Any(northLine
+                => eastLine.EndPoint == northLine.EndPoint
+                || eastLine.EndPoint == northLine.StartPoint)
+            )
+            {
+                if (eastLine.StartPoint == eastLine.EndPoint)
+                {
+                    _lines.Remove(eastLine);
+                    break;
+                }
+                
+                eastLine.EndPoint.X -= 1;
+            }
+
+            i++;
         }
     }
 
