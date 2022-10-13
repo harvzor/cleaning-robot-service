@@ -13,11 +13,12 @@ public class RobotFast
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
     private Point _currentPoint;
-    private readonly List<StartEnd> _startEnds = new();
+    private readonly List<Line> _lines = new();
     
-    private class StartEnd
+    private class Line
     {
         public Point StartPoint;
+        public DirectionEnum Direction;
         public Point EndPoint;
     }
 
@@ -25,115 +26,74 @@ public class RobotFast
     {
         _currentPoint = StartPoint;
 
-        foreach (var command in Commands.Where(command => command.Steps != 0))
+        foreach (Command command in Commands.Where(command => command.Steps != 0))
         {
             Point start = _currentPoint;
 
-            List<Point> pointsVisitedByThisCommand = new();
-            switch (command.Direction)
+            for (int i = 0; i < command.Steps; i++)
             {
-                case DirectionEnum.north:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
+                switch (command.Direction)
+                {
+                    case DirectionEnum.north:
                         _currentPoint.Y += 1;
-                        pointsVisitedByThisCommand.Add(_currentPoint);
-                    }
-                    break;
-                case DirectionEnum.east:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
+                        break;
+                    case DirectionEnum.east:
                         _currentPoint.X += 1;
-                        pointsVisitedByThisCommand.Add(_currentPoint);
-                    }
-                    break;
-                case DirectionEnum.south:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
+                        break;
+                    case DirectionEnum.south:
                         _currentPoint.Y -= 1;
-                        pointsVisitedByThisCommand.Add(_currentPoint);
-                    }
-                    break;
-                case DirectionEnum.west:
-                    for (int i = 0; i < command.Steps; i++)
-                    {
+                        break;
+                    case DirectionEnum.west:
                         _currentPoint.X -= 1;
-                        pointsVisitedByThisCommand.Add(_currentPoint);
-                    }
-                    break;
-                default:
-                    throw new ArgumentException(
-                        message: $"Command direction of {command.Direction} not covered.",
-                        paramName: nameof(Commands)
-                    );
-            }
-
-            Point end = _currentPoint;
-
-            List<Point> pointsWhichAreNotAlreadyThere = pointsVisitedByThisCommand
-                .Where(point =>
-                {
-                    return _startEnds
-                        .All(startEnd
-                            => !Point.PointOnLine(startEnd.StartPoint, startEnd.EndPoint, point)
+                        break;
+                    default:
+                        throw new ArgumentException(
+                            message: $"Command direction of {command.Direction} not covered.",
+                            paramName: nameof(Commands)
                         );
-                })
-                .ToList();
+                }
+
+                // If we're at the very start, this point can't already be counted for.
+                if (start == StartPoint && i == 0)
+                    continue;
+                
+                // If we're at the start of a new command, but not the first command, this point must already be counted for.
+                if (i == 0)
+                {
+                    start = _currentPoint;
+                    continue;
+                }
+
+                bool pointAlreadyAccountedFor = _lines
+                    .Any(savedLine
+                        => Point.PointOnLine(savedLine.StartPoint, savedLine.EndPoint, _currentPoint)
+                    );
             
-            if (pointsVisitedByThisCommand.Count == pointsWhichAreNotAlreadyThere.Count)
-            {
-                StartEnd startEnd = new()
+                // on each point step, check if it intersects another line
+                //   if it does, close up the line and step again
+                //   repeat (set start to null)
+                if (pointAlreadyAccountedFor)
                 {
-                    StartPoint = start,
-                    EndPoint = end,
-                };
-                
-                _startEnds.Add(startEnd);
-            }
-            else
-            {
-                foreach (Point point in pointsWhichAreNotAlreadyThere)
-                {
-                    StartEnd startEnd = new()
+                    if (start != _currentPoint)
                     {
-                        StartPoint = point,
-                        EndPoint = point,
-                    };
-                
-                    _startEnds.Add(startEnd);
+                        _lines.Add(new Line()
+                        {
+                            StartPoint = start,
+                            Direction = command.Direction,
+                            EndPoint = _currentPoint,
+                        });
+                    }
+                    
+                    start = _currentPoint;
                 }
             }
 
-            // if (pointsWhichAreNotAlreadyThere.Count == 0)
-            // {
-            //     return;
-            // }
-            //
-            // if (pointsWhichAreNotAlreadyThere.Count == points.Count)
-            // {
-            //     StartEnd startEnd = new()
-            //     {
-            //         StartPoint = start,
-            //         Direction = command.Direction,
-            //         EndPoint = end,
-            //     };
-            //
-            //     _startEnds.Add(startEnd);
-            // }
-            // else if (pointsWhichAreNotAlreadyThere.Count == 1)
-            // {
-            //     StartEnd startEnd = new()
-            //     {
-            //         StartPoint = pointsWhichAreNotAlreadyThere.First(),
-            //         Direction = command.Direction,
-            //         EndPoint = pointsWhichAreNotAlreadyThere.First(),
-            //     };
-            //
-            //     _startEnds.Add(startEnd);
-            // }
-            // else
-            // {
-            //     foreach
-            // }
+            _lines.Add(new Line()
+            {
+                StartPoint = start,
+                Direction = command.Direction,
+                EndPoint = _currentPoint,
+            });
         }
     }
 
@@ -141,7 +101,7 @@ public class RobotFast
     {
         CalculateStartEnds();
 
-        return _startEnds
+        return _lines
            .Sum(startEnd
                    =>
                {
