@@ -59,3 +59,10 @@ north 2,  east 2, south 2,    east 2, north 2, east 2
 # there are gaps between all of these
 
 999985000
+
+## Proposed solution
+
+- calculate every command into a start and end point (a Line) - O(n)
+- loop over all Lines and check to see if they intersect any other lines - O(n^2)
+    - if this Line intersects, shorten/cut it until it doesn't
+- loop over all Lines and calculate the distance travelled - O(n)
