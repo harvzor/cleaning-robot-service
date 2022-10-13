@@ -8,14 +8,14 @@ using Xunit;
 
 namespace CleaningRobotService.Web.Tests.ObjectTests;
 
-public class RobotFastTests
+public class RobotEstimatorTests
 {
     [Fact]
     public void CalculatePointsVisitedTest()
     {
         // Arrange
 
-        RobotFast robot = new()
+        RobotEstimator robot = new()
         {
             StartPoint = new Point
             {
@@ -52,7 +52,7 @@ public class RobotFastTests
     {
         // Arrange
 
-        RobotFast robot = new()
+        RobotEstimator robot = new()
         {
             StartPoint = new Point
             {
@@ -77,7 +77,7 @@ public class RobotFastTests
     {
         // Arrange
 
-        RobotFast robot = new()
+        RobotEstimator robot = new()
         {
             StartPoint = new Point
             {
@@ -125,7 +125,7 @@ public class RobotFastTests
     {
         // Arrange
 
-        RobotFast robot = new()
+        RobotEstimator robot = new()
         {
             StartPoint = new Point
             {
@@ -162,7 +162,7 @@ public class RobotFastTests
     {
         // Arrange
 
-        RobotFast robot = new()
+        RobotEstimator robot = new()
         {
             StartPoint = new Point
             {
@@ -217,7 +217,7 @@ public class RobotFastTests
     {
         // Arrange
 
-        RobotFast robot = new()
+        RobotEstimator robot = new()
         {
             StartPoint = new Point
             {

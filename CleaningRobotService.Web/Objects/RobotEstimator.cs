@@ -13,16 +13,48 @@ public class RobotEstimator
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
     private Point _currentPoint;
-    private readonly List<StartEnd> _startEnds = new();
+    private readonly List<Line> _lines = new();
     
-    private class StartEnd
+    private class Line
     {
         public Point StartPoint;
         public Point EndPoint;
         public DirectionEnum Direction;
+
+        public List<Point> CalculatePoints()
+        {
+            Point currentPoint = StartPoint;
+
+            List<Point> points = new(Point.GetDistance(StartPoint, EndPoint) + 1) { currentPoint, };
+
+            while (currentPoint != EndPoint)
+            {
+                switch (Direction)
+                {
+                    case DirectionEnum.north:
+                        currentPoint.Y += 1;
+                        break;
+                    case DirectionEnum.east:
+                        currentPoint.X += 1;
+                        break;
+                    case DirectionEnum.south:
+                        currentPoint.Y -= 1;
+                        break;
+                    case DirectionEnum.west:
+                        currentPoint.X -= 1;
+                        break;
+                    default:
+                        throw new Exception("Command direction of {command.Direction} not covered.");
+                }
+
+                points.Add(currentPoint);
+            }
+
+            return points;
+        }
     }
 
-    public void CalculateStartEnds()
+    private void CalculateLines()
     {
         _currentPoint = StartPoint;
 
@@ -58,7 +90,7 @@ public class RobotEstimator
                 : Point.IsMoreNorth(start, end);
             
             // Normalise new StartEnd so the EndPoint is more positive than the StartPoint.
-            StartEnd startEnd = new()
+            Line line = new()
             {
                 StartPoint = shouldBeSwapped ? end : start,
                 // I think the direction should only be north or east given that it's normalised.
@@ -74,14 +106,14 @@ public class RobotEstimator
             // TODO: must be a way to make code in statement into method (DRY it up).
             if (command.Direction is DirectionEnum.east or DirectionEnum.west)
             {
-                StartEnd? matchingStartEndIfStartOrEndIsOnLine = _startEnds
+                Line? matchingStartEndIfStartOrEndIsOnLine = _lines
                     .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
                     // Where the Y coordinate is the same.
-                    .Where(x => x.StartPoint.Y == startEnd.StartPoint.Y)
+                    .Where(x => x.StartPoint.Y == line.StartPoint.Y)
                     // And the new startEnd starts or ends along any other in _startEnds.
                     .Where(x
-                        => Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.StartPoint)
-                        || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.EndPoint)
+                        => Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: line.StartPoint)
+                        || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: line.EndPoint)
                     )
                     .FirstOrDefault();
 
@@ -89,24 +121,24 @@ public class RobotEstimator
                 {
                     replaced = true;
                     // If the new StartPoint is more west than the old StartPoint, swap them.
-                    if (Point.IsMoreWest(p1: startEnd.StartPoint, p2: matchingStartEndIfStartOrEndIsOnLine.StartPoint))
-                        matchingStartEndIfStartOrEndIsOnLine.StartPoint = startEnd.StartPoint;
+                    if (Point.IsMoreWest(p1: line.StartPoint, p2: matchingStartEndIfStartOrEndIsOnLine.StartPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.StartPoint = line.StartPoint;
                     
                     // If the new EndPoint is more east than the old EndPoint, swap them.
-                    if (Point.IsMoreEast(p1: startEnd.EndPoint, p2: matchingStartEndIfStartOrEndIsOnLine.EndPoint))
-                        matchingStartEndIfStartOrEndIsOnLine.EndPoint = startEnd.EndPoint;
+                    if (Point.IsMoreEast(p1: line.EndPoint, p2: matchingStartEndIfStartOrEndIsOnLine.EndPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.EndPoint = line.EndPoint;
                 }
             }
             else
             {
-                StartEnd? matchingStartEndIfStartOrEndIsOnLine = _startEnds
+                Line? matchingStartEndIfStartOrEndIsOnLine = _lines
                     .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
                     // Where the Y coordinate is the same.
-                    .Where(x => x.StartPoint.X == startEnd.StartPoint.X)
+                    .Where(x => x.StartPoint.X == line.StartPoint.X)
                     // And the new startEnd starts or ends along any other in _startEnds.
                     .Where(x
-                        => Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.StartPoint)
-                        || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: startEnd.EndPoint)
+                        => Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: line.StartPoint)
+                        || Point.PointOnLine(pt1: x.StartPoint, pt2: x.EndPoint, pt: line.EndPoint)
                     )
                     .FirstOrDefault();
 
@@ -114,25 +146,37 @@ public class RobotEstimator
                 {
                     replaced = true;
                     // If the new StartPoint is more north than the old StartPoint, swap them.
-                    if (Point.IsMoreNorth(p1: matchingStartEndIfStartOrEndIsOnLine.StartPoint, p2: startEnd.StartPoint))
-                        matchingStartEndIfStartOrEndIsOnLine.StartPoint = startEnd.StartPoint;
+                    if (Point.IsMoreNorth(p1: matchingStartEndIfStartOrEndIsOnLine.StartPoint, p2: line.StartPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.StartPoint = line.StartPoint;
                     
                     // If the new EndPoint is more south than the old EndPoint, swap them.
-                    if (Point.IsMoreSouth(p1: matchingStartEndIfStartOrEndIsOnLine.EndPoint, p2: startEnd.EndPoint))
-                        matchingStartEndIfStartOrEndIsOnLine.EndPoint = startEnd.EndPoint;
+                    if (Point.IsMoreSouth(p1: matchingStartEndIfStartOrEndIsOnLine.EndPoint, p2: line.EndPoint))
+                        matchingStartEndIfStartOrEndIsOnLine.EndPoint = line.EndPoint;
                 }
             }
             
             // If the new startEnd didn't overlap any other startEnds, then just add it.
             if (!replaced)
-                _startEnds.Add(startEnd);
+                _lines.Add(line);
         }
     }
 
     public int CalculateNumberOfPointsVisited()
     {
-        CalculateStartEnds();
+        HashSet<Point> points = new();
         
+        CalculateLines();
+
+        // And brute force the rest.
+        foreach (Line line in _lines)
+        {
+            List<Point> newPoints = line.CalculatePoints();
+
+            points.UnionWith(newPoints);
+        }
+
+        return points.Count;
+
         // return _startEnds
         //     .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
         //     .Sum(startEnd
@@ -141,20 +185,20 @@ public class RobotEstimator
         //         + 1
         // );
 
-        int distances = _startEnds
-            .Sum(startEnd
-                => Point.GetDistance(startEnd.StartPoint, startEnd.EndPoint)
-                // Add one because the distance between 2 points doesn't include the initial point.
-                // + (startEnd.Direction is DirectionEnum.west or DirectionEnum.east ? 1 : 0)
-            );
-        
-        int numberOfMatchingStartPoints= _startEnds
-            .GroupBy(x => x.StartPoint)
-            .Where(group => group.Count() > 1)
-            .Count();
-        
-        numberOfMatchingStartPoints = 0;
-        
-        return distances + numberOfMatchingStartPoints;
+        // int distances = _startEnds
+        //     .Sum(startEnd
+        //         => Point.GetDistance(startEnd.StartPoint, startEnd.EndPoint)
+        //         // Add one because the distance between 2 points doesn't include the initial point.
+        //         // + (startEnd.Direction is DirectionEnum.west or DirectionEnum.east ? 1 : 0)
+        //     );
+        //
+        // int numberOfMatchingStartPoints= _startEnds
+        //     .GroupBy(x => x.StartPoint)
+        //     .Where(group => group.Count() > 1)
+        //     .Count();
+        //
+        // numberOfMatchingStartPoints = 0;
+        //
+        // return distances + numberOfMatchingStartPoints;
     }
 }
