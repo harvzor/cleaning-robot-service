@@ -8,7 +8,7 @@ namespace CleaningRobotService.Web.Objects;
 /// <summary>
 /// Simulated robot which cleans the office.
 /// </summary>
-public class RobotEstimator
+public class RobotLineCombiner
 {
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
@@ -176,8 +176,7 @@ public class RobotEstimator
             .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
             .ToList();
 
-        int i = 0;
-        foreach (Line eastLine in eastLines) // ToList again because I am removing items from the original array.
+        foreach (Line eastLine in eastLines)
         {
             while (northLines.Any(northLine
                 => eastLine.StartPoint == northLine.StartPoint
@@ -206,8 +205,6 @@ public class RobotEstimator
                 
                 eastLine.EndPoint.X -= 1;
             }
-
-            i++;
         }
     }
 
@@ -279,7 +276,7 @@ public class RobotEstimator
         // }
 
         // Normal count.
-        // After ensuring no east line starts where north line ends.
+        // After ensuring no east line starts or ends where north line starts or ends.
         {
             ShiftEastLines();
         
