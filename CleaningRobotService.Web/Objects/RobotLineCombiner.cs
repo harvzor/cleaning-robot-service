@@ -210,7 +210,8 @@ public class RobotLineCombiner
 
     public int CalculateNumberOfPointsVisited()
     {
-        HashSet<Point> points = new();
+        if (!Commands.Any())
+            return 1;
         
         CalculateLines();
 
