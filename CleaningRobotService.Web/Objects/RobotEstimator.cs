@@ -52,6 +52,11 @@ public class RobotEstimator
 
             return points;
         }
+
+        public bool IsPointOnLine(Point point)
+        {
+            return Point.PointOnLine(StartPoint, EndPoint, point);
+        }
     }
 
     private void CalculateLines()
@@ -168,14 +173,65 @@ public class RobotEstimator
         CalculateLines();
 
         // And brute force the rest.
-        foreach (Line line in _lines)
+        // {
+        //     foreach (Line line in _lines)
+        //     {
+        //         List<Point> newPoints = line.CalculatePoints();
+        //
+        //         points.UnionWith(newPoints);
+        //     }
+        //
+        //     return points.Count;
+        // }
+
+        // Brute force but don't store every point.
+        // Since the east lines might overlap the north lines, count the points on the north lines,
+        // then find the none overlapping east points and count them too.
         {
-            List<Point> newPoints = line.CalculatePoints();
+            List<Line> northLines = _lines
+                .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
+                .ToList();
 
-            points.UnionWith(newPoints);
+            List<Line> eastLines = _lines
+                .Where(x => x.Direction is DirectionEnum.east or DirectionEnum.west)
+                .ToList();
+
+            int northCounts = northLines
+                .Sum(line
+                    => Point.GetDistance(line.StartPoint, line.EndPoint)
+                       // Add one because the distance between 2 points doesn't include the initial point.
+                       + 1
+                );
+
+            int eastsCount = 0;
+            if (northLines.Any())
+            {
+                foreach (Line eastLine in eastLines)
+                {
+                    List<Point> newPoints = eastLine.CalculatePoints();
+
+                    // Using a line intersect method to figure out where two lines cross may be faster.
+                    foreach (Point point in newPoints)
+                    {
+                        if (!northLines.Any(northLine => northLine.IsPointOnLine(point)))
+                        {
+                            eastsCount++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                eastsCount = eastLines
+                    .Sum(line
+                        => Point.GetDistance(line.StartPoint, line.EndPoint)
+                           // Add one because the distance between 2 points doesn't include the initial point.
+                           + 1
+                    );
+            }
+
+            return northCounts + eastsCount;
         }
-
-        return points.Count;
 
         // return _startEnds
         //     .Where(x => x.Direction is DirectionEnum.north or DirectionEnum.south)
