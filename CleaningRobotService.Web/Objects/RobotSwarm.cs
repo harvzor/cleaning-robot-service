@@ -14,7 +14,11 @@ public class RobotSwarm : IRobot
 {
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
-    private readonly int _chunkCommands;
+    private readonly int _chunkCommands = 1000;
+    
+    public RobotSwarm()
+    {
+    }
 
     public RobotSwarm(int chunkCommands = 1000)
     {

@@ -3,14 +3,18 @@ using CleaningRobotService.Web.Enums;
 using CleaningRobotService.Web.Interfaces;
 using CleaningRobotService.Web.Structs;
 using Shouldly;
+using Xunit;
 
 namespace CleaningRobotService.Web.Tests.ObjectTests;
 
-public abstract class BaseRobotTests
+public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
 {
-    protected void CalculatePointsVisitedTest(IRobot robot)
+    [Fact]
+    protected void CalculatePointsVisitedTest()
     {
         // Arrange
+
+        IRobot robot = new TRobot();
 
         robot.StartPoint = new Point
         {
@@ -46,9 +50,12 @@ public abstract class BaseRobotTests
         pointsVisited.ShouldContain(new Point(x: 12, y: 23));
     }
     
-    protected void CalculatePointsVisited_SupportsNegativePoints(IRobot robot)
+    [Fact]
+    protected void CalculatePointsVisited_SupportsNegativePoints()
     {
         // Arrange
+        
+        IRobot robot = new TRobot();
 
         robot.StartPoint = new Point
         {
@@ -84,9 +91,12 @@ public abstract class BaseRobotTests
         pointsVisited.ShouldContain(new Point(x: -1, y: -1));
     }
     
-    protected void CalculatePointsVisited_EnsureSameStepCountedOnce(IRobot robot)
+    [Fact]
+    protected void CalculatePointsVisited_EnsureSameStepCountedOnce()
     {
         // Arrange
+        
+        IRobot robot = new TRobot();
 
         robot.StartPoint = new Point
         {
