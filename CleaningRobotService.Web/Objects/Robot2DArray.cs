@@ -16,12 +16,9 @@ public class Robot2DArray : IRobot
     public IEnumerable<Point> CalculatePointsVisited()
     {
         Point currentPoint = StartPoint;
-        // Will allocate ~5GB of data?
-        // const int squareWidth = 200000; // Array dimensions exceeded supported range
-        const int squareWidth = 500;
-        bool[,] pointsVisited = new bool[squareWidth, squareWidth];
+        Grid grid = new();
 
-        pointsVisited[squareWidth / 2 + StartPoint.X, squareWidth / 2 + StartPoint.Y] = true;
+        grid.AddPoint(point: StartPoint);
 
         void Step(uint steps, Action action)
         {
@@ -29,7 +26,7 @@ public class Robot2DArray : IRobot
             {
                 action();
 
-                pointsVisited[squareWidth / 2 + currentPoint.X, squareWidth / 2 + currentPoint.Y] = true;
+                grid.AddPoint(currentPoint);
             }
         }
 
@@ -58,19 +55,6 @@ public class Robot2DArray : IRobot
             }
         }
 
-        for (int x = 0; x < squareWidth; x++)
-        {
-            for (int y = 0; y < squareWidth; y++)
-            {
-                if (pointsVisited[x, y])
-                {
-                    yield return new Point
-                    {
-                        X = x - squareWidth / 2,
-                        Y = y - squareWidth / 2,
-                    };
-                }
-            }
-        }
+        return grid.GetPoints();
     }
 }
