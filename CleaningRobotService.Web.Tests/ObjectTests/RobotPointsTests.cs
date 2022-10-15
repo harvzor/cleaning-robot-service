@@ -8,12 +8,12 @@ public class RobotTests : BaseRobotTests
     [Fact]
     public void Robot_CalculatePointsVisited()
     {
-        CalculatePointsVisitedTest(new Robot());
+        CalculatePointsVisitedTest(new RobotPoints());
     }
     
     [Fact]
     public void Robot_CalculatePointsVisited_EnsureSameStepCountedOnce()
     {
-        CalculatePointsVisited_EnsureSameStepCountedOnce(new Robot());
+        CalculatePointsVisited_EnsureSameStepCountedOnce(new RobotPoints());
     }
 }

@@ -8,7 +8,7 @@ using CleaningRobotService.Web.Structs;
 namespace CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
 
 [SimpleJob(warmupCount: 3, targetCount: 10)]
-public class RobotVsSwarmBenchmarks
+public class RobotBenchmarks
 {
     private List<Command> _commands = new();
     
@@ -37,28 +37,34 @@ public class RobotVsSwarmBenchmarks
     }
     
     [Benchmark(Baseline = true)]
-    public void Robot_CalculatePointsVisited()
+    public void RobotPoints_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new Robot());
+        CalculatePointsVisited(new RobotPoints());
     }
     
     [Benchmark]
-    public void RobotSwarm_CalculatePointsVisited_1000()
+    public void Robot2DArray_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new RobotSwarm(chunkCommands: 1000));
+        CalculatePointsVisited(new Robot2DArray());
     }
     
-    [Benchmark]
-    public void RobotSwarm_CalculatePointsVisited_500()
-    {
-        CalculatePointsVisited(new RobotSwarm(chunkCommands: 500));
-    }
-    
-    [Benchmark]
-    public void RobotSwarm_CalculatePointsVisited_100()
-    {
-        CalculatePointsVisited(new RobotSwarm(chunkCommands: 500));
-    }
+    // [Benchmark]
+    // public void RobotSwarm_CalculatePointsVisited_1000()
+    // {
+    //     CalculatePointsVisited(new RobotSwarm(chunkCommands: 1000));
+    // }
+    //
+    // [Benchmark]
+    // public void RobotSwarm_CalculatePointsVisited_500()
+    // {
+    //     CalculatePointsVisited(new RobotSwarm(chunkCommands: 500));
+    // }
+    //
+    // [Benchmark]
+    // public void RobotSwarm_CalculatePointsVisited_100()
+    // {
+    //     CalculatePointsVisited(new RobotSwarm(chunkCommands: 500));
+    // }
     
     private void CalculatePointsVisited(IRobot robot)
     {

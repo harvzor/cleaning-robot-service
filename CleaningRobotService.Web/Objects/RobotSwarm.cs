@@ -31,7 +31,7 @@ public class RobotSwarm : IRobot
         
         Parallel.ForEach(commandChunks, (commands, _, index) =>
         {
-            Robot robot = new()
+            RobotPoints robotPoints = new()
             {
                 StartPoint = new Point
                 {
@@ -41,7 +41,7 @@ public class RobotSwarm : IRobot
                 Commands = commands,
             };
 
-            results[index] = robot.CalculatePointsVisited().ToList();
+            results[index] = robotPoints.CalculatePointsVisited().ToList();
         });
         
         HashSet<Point> pointsVisited = new() { StartPoint, };

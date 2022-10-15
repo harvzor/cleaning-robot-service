@@ -40,10 +40,48 @@ public abstract class BaseRobotTests
         // Assert
 
         pointsVisited.Count().ShouldBe(4);
-        pointsVisited[0].ShouldBe(new Point(x: 10, y: 22));
-        pointsVisited[1].ShouldBe(new Point(x: 11, y: 22));
-        pointsVisited[2].ShouldBe(new Point(x: 12, y: 22));
-        pointsVisited[3].ShouldBe(new Point(x: 12, y: 23));
+        pointsVisited.ShouldContain(new Point(x: 10, y: 22));
+        pointsVisited.ShouldContain(new Point(x: 11, y: 22));
+        pointsVisited.ShouldContain(new Point(x: 12, y: 22));
+        pointsVisited.ShouldContain(new Point(x: 12, y: 23));
+    }
+    
+    protected void CalculatePointsVisited_SupportsNegativePoints(IRobot robot)
+    {
+        // Arrange
+
+        robot.StartPoint = new Point
+        {
+            X = 0,
+            Y = 0,
+        };
+        robot.Commands = new List<Command>()
+        {
+            new Command
+            {
+                Direction = DirectionEnum.west,
+                Steps = 1,
+            },
+            // Go back on itself.
+            new Command
+            {
+                Direction = DirectionEnum.south,
+                Steps = 1,
+            },
+        };
+        
+        // Act
+
+        Point[] pointsVisited = robot
+            .CalculatePointsVisited()
+            .ToArray();
+
+        // Assert
+
+        pointsVisited.Count().ShouldBe(3);
+        pointsVisited.ShouldContain(new Point(x: 0, y: 0));
+        pointsVisited.ShouldContain(new Point(x: -1, y: 0));
+        pointsVisited.ShouldContain(new Point(x: -1, y: -1));
     }
     
     protected void CalculatePointsVisited_EnsureSameStepCountedOnce(IRobot robot)
@@ -79,7 +117,7 @@ public abstract class BaseRobotTests
         // Assert
 
         pointsVisited.Count().ShouldBe(2);
-        pointsVisited[0].ShouldBe(new Point(x: 0, y: 0));
-        pointsVisited[1].ShouldBe(new Point(x: 1, y: 0));
+        pointsVisited.ShouldContain(new Point(x: 0, y: 0));
+        pointsVisited.ShouldContain(new Point(x: 1, y: 0));
     }
 }

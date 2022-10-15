@@ -8,7 +8,7 @@ namespace CleaningRobotService.Web.Objects;
 /// <summary>
 /// Simulated robot which cleans the office.
 /// </summary>
-public class Robot : IRobot
+public class RobotPoints : IRobot
 {
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
