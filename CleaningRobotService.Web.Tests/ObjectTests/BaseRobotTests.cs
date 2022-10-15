@@ -130,4 +130,54 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
         pointsVisited.ShouldContain(new Point(x: 0, y: 0));
         pointsVisited.ShouldContain(new Point(x: 1, y: 0));
     }
+    
+    [Fact]
+    protected void CalculatePointsVisitedTest_Loop()
+    {
+        // Arrange
+        
+        IRobot robot = new TRobot();
+
+        robot.StartPoint = new Point
+        {
+            X = 0,
+            Y = 0,
+        };
+        
+        List<Command> commands = new();
+
+        uint steps = 1000;
+
+        int directionInt = 0;
+        for (int i = 0; i < 1000; i++)
+        {
+            DirectionEnum direction = (DirectionEnum)directionInt;
+            directionInt++;
+
+            if (directionInt == 4)
+                directionInt = 0;
+
+            commands.Add(new Command
+            {
+                Direction = direction,
+                Steps = steps,
+            });
+        }
+
+        robot.Commands = commands;
+        
+        // Act
+
+        Point[] pointsVisited = robot
+            .CalculatePointsVisited()
+            .ToArray();
+        
+        // Assert
+
+        pointsVisited.Count().ShouldBe(4000);
+        // pointsVisited[0].ShouldBe(new Point(x: 0, y: 0)); // Start.
+        // pointsVisited[1].ShouldBe(new Point(x: 0, y: (int)steps)); // North.
+        // pointsVisited[2].ShouldBe(new Point(x: (int)steps, y: (int)steps)); // East
+        // pointsVisited[3].ShouldBe(new Point(x: (int)steps, y: 0)); // South
+    }
 }
