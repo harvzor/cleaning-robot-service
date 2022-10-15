@@ -1,9 +1,9 @@
+using System.Drawing;
 using BenchmarkDotNet.Attributes;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Enums;
 using CleaningRobotService.Web.Interfaces;
 using CleaningRobotService.Web.Objects;
-using CleaningRobotService.Web.Structs;
 
 namespace CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
 

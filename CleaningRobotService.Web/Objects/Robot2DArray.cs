@@ -1,7 +1,7 @@
+using System.Drawing;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Enums;
 using CleaningRobotService.Web.Interfaces;
-using CleaningRobotService.Web.Structs;
 
 namespace CleaningRobotService.Web.Objects;
 

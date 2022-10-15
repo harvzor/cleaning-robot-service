@@ -1,5 +1,5 @@
+using System.Drawing;
 using CleaningRobotService.Web.Enums;
-using CleaningRobotService.Web.Structs;
 
 namespace CleaningRobotService.Web.Dtos.Input;
 

@@ -1,5 +1,5 @@
+using System.Drawing;
 using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Structs;
 
 namespace CleaningRobotService.Web.Interfaces;
 

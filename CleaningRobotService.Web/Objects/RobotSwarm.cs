@@ -1,6 +1,6 @@
+using System.Drawing;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Interfaces;
-using CleaningRobotService.Web.Structs;
 
 namespace CleaningRobotService.Web.Objects;
 
@@ -55,13 +55,13 @@ public class RobotSwarm : IRobot
         {
             foreach (Point point in points)
             {
-                Point translatedPoint = point.Combine(lastPosition);
+                point.Offset(lastPosition);
 
-                if (!pointsVisited.Contains(translatedPoint))
-                    pointsVisited.Add(translatedPoint);
+                if (!pointsVisited.Contains(point))
+                    pointsVisited.Add(point);
             }
 
-            lastPosition = points.Last().Combine(lastPosition);
+            lastPosition = points.Last();
         }
 
         return pointsVisited;

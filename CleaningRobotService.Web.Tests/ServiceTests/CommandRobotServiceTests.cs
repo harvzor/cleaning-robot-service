@@ -1,9 +1,9 @@
+using System.Drawing;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Enums;
 using CleaningRobotService.Web.Helpers;
 using CleaningRobotService.Web.Models;
 using CleaningRobotService.Web.Services;
-using CleaningRobotService.Web.Structs;
 using CleaningRobotService.Web.Tests.Fixtures;
 using Shouldly;
 using Xunit;
