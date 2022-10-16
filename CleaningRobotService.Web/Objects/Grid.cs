@@ -27,16 +27,45 @@ public class Grid
         _gridOffset = gridOffset;
     }
 
+    /// <summary>
+    /// Resize the grid so it accommodates the supplied <param name="x"></param> and <param name="y"></param> values.
+    /// </summary>#
+    private void Resize(int x, int y)
+    {
+        // This code allocates more memory?
+        // {
+        //     int rowsToAdd = y - _pointsVisited.Count + 1;
+        //     if (rowsToAdd > 0)
+        //     {
+        //         IEnumerable<List<bool>> newRowRange = Enumerable.Range(0, rowsToAdd)
+        //             .Select(_ => new List<bool>());
+        //
+        //         _pointsVisited.AddRange(newRowRange);
+        //     }
+        //
+        //     int columnsToAdd = x - _pointsVisited[y].Count + 1;
+        //     if (columnsToAdd > 0)
+        //     {
+        //         IEnumerable<bool> newColumnRange = Enumerable.Range(0, columnsToAdd)
+        //             .Select(_ => false);
+        //
+        //         _pointsVisited[y].AddRange(newColumnRange);
+        //     }
+        // }
+
+        while (_pointsVisited.Count <= y)
+            _pointsVisited.Add(new List<bool>());
+        
+        while (_pointsVisited[y].Count <= x)
+            _pointsVisited[y].Add(false);
+    }
+
     public void AddPoint(Point point)
     {
         int offsetX = point.X - _gridWidth * _gridOffset.X;
         int offsetY = point.Y - _gridWidth * _gridOffset.Y;
 
-        while (_pointsVisited.Count <= offsetY)
-            _pointsVisited.Add(new List<bool>());
-        
-        while (_pointsVisited[offsetY].Count <= offsetX)
-            _pointsVisited[offsetY].Add(false);
+        Resize(x: offsetX, y: offsetY);
 
         if (!_pointsVisited[offsetY][offsetX])
         {
