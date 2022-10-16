@@ -44,12 +44,18 @@ public class RobotBenchmarks
     }
     
     [Benchmark]
-    [Arguments(500)]
-    [Arguments(10000)]
-    public void RobotGrid_CalculatePointsVisited(int gridWidth)
+    public void RobotPointsImproved_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
+        CalculatePointsVisited(new RobotPointsImproved());
     }
+    
+    // [Benchmark]
+    // [Arguments(500)]
+    // [Arguments(10000)]
+    // public void RobotGrid_CalculatePointsVisited(int gridWidth)
+    // {
+    //     CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
+    // }
     
     // [Benchmark]
     // public void RobotSwarm_CalculatePointsVisited_1000()
