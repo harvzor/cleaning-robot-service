@@ -5,7 +5,7 @@ namespace CleaningRobotService.Web.Objects;
 public class Grids
 {
     private readonly int _gridWidth;
-    private readonly List<Grid> _grids = new();
+    private readonly Dictionary<Point ,Grid> _grids = new();
     
     public Grids(int gridWidth = 500)
     {
@@ -28,15 +28,13 @@ public class Grids
         int gridColumnIndex = CalculateGridNumber(xOrY: point.X, gridWidth: _gridWidth);
         int gridRowIndex = CalculateGridNumber(xOrY: point.Y, gridWidth: _gridWidth);
 
-        Grid? matchingGrid = _grids
-            .Where(x => x.GridOffset.X == gridColumnIndex && x.GridOffset.Y == gridRowIndex)
-            .FirstOrDefault();
+        Point gridOffset = new Point(x: gridColumnIndex, y: gridRowIndex);
 
-        if (matchingGrid == null)
+        if (!_grids.TryGetValue(gridOffset, out Grid? matchingGrid))
         {
-            matchingGrid = new Grid(gridWidth: _gridWidth, gridOffset: new Point(x: gridColumnIndex, y: gridRowIndex));
-
-            _grids.Add(matchingGrid);
+            matchingGrid = new Grid(gridWidth: _gridWidth, gridOffset: gridOffset);
+            
+            _grids.Add(gridOffset, matchingGrid);
         }
 
         matchingGrid.AddPoint(point);
@@ -44,7 +42,7 @@ public class Grids
     
     public IEnumerable<Point> GetPoints()
     {
-        foreach (Grid grid in _grids)
+        foreach (Grid grid in _grids.Values)
         {
             foreach (Point point in grid.GetPoints())
             {
