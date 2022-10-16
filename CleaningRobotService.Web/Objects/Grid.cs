@@ -9,7 +9,7 @@ namespace CleaningRobotService.Web.Objects;
 public class Grid
 {
     private readonly int _gridWidth;
-    private readonly List<List<bool>> _pointsVisited = new();
+    private readonly List<List<bool>> _pointsVisited;
     private readonly Point _gridOffset;
     private int _count = 0;
     
@@ -25,6 +25,7 @@ public class Grid
     {
         _gridWidth = gridWidth;
         _gridOffset = gridOffset;
+        _pointsVisited = new List<List<bool>>(_gridWidth);
     }
 
     /// <summary>
@@ -54,7 +55,7 @@ public class Grid
         // }
 
         while (_pointsVisited.Count <= y)
-            _pointsVisited.Add(new List<bool>());
+            _pointsVisited.Add(new List<bool>(_gridWidth));
         
         while (_pointsVisited[y].Count <= x)
             _pointsVisited[y].Add(false);
