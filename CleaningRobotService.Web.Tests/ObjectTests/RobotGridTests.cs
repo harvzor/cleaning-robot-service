@@ -3,6 +3,6 @@ using Xunit;
 
 namespace CleaningRobotService.Web.Tests.ObjectTests;
 
-public class Robot2DArrayTests : BaseRobotTests<Robot2DArray>
+public class RobotGridTests : BaseRobotTests<RobotGrid>
 {
 }

@@ -43,9 +43,9 @@ public class RobotBenchmarks
     }
     
     [Benchmark]
-    public void Robot2DArray_CalculatePointsVisited()
+    public void RobotGrid_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new Robot2DArray());
+        CalculatePointsVisited(new RobotGrid());
     }
     
     // [Benchmark]
