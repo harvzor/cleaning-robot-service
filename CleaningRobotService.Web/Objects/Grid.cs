@@ -6,6 +6,7 @@ namespace CleaningRobotService.Web.Objects;
 /// A 2D square grid of points which have been visited at least once.
 /// </summary>
 // TODO: implement IEnumerable?
+// TODO: make sure the memory is freed once it goes out of scope?
 public class Grid
 {
     private readonly int _gridWidth;
@@ -61,6 +62,7 @@ public class Grid
             _pointsVisited[y].Add(false);
     }
 
+    // TODO: Add AddPoints method so resizing happens less often.
     public void AddPoint(Point point)
     {
         int offsetX = point.X - _gridWidth * _gridOffset.X;
