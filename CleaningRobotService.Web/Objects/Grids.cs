@@ -11,8 +11,6 @@ public class Grids
     {
         _gridWidth = gridWidth;
     }
-    
-    private float GridWidthHalf => (float)_gridWidth / 2;
 
     private int CalculateGridNumber(int xOrY)
     {
@@ -20,13 +18,13 @@ public class Grids
         // (1 - (1 % _gridWidth)) / _gridWidth = 0
         // Example: xOrY = 501, _gridWidth = 500
         // (501 - (501 % _gridWidth)) / _gridWidth = 1
-        // return (xOrY - (xOrY % _gridWidth)) / _gridWidth;
+        return (xOrY - (xOrY % _gridWidth)) / _gridWidth;
         
         // Example: xOrY = 1, _gridWidth = 3
         // (1 - (1 % _gridWidthHalf)) / _gridWidthHalf = 0
         // Example: xOrY = 2, _gridWidth = 3
         // (2 - (2 % _gridWidthHalf)) / _gridWidthHalf = 1
-        return (int)Math.Round((xOrY - (xOrY % GridWidthHalf)) / GridWidthHalf);
+        // return (int)Math.Round((xOrY - (xOrY % GridWidthHalf)) / GridWidthHalf);
     }
     
     public void AddPoint(Point point)
@@ -42,8 +40,8 @@ public class Grids
         
         Point offsetPoint = new Point
         {
-            X = (int)Math.Round(point.X % GridWidthHalf),
-            Y = (int)Math.Round(point.Y % GridWidthHalf),
+            X = point.X % _gridWidth,
+            Y = point.Y % _gridWidth,
         };
 
         _grids[gridRowIndex][gridColumnIndex].AddPoint(offsetPoint);
@@ -61,8 +59,8 @@ public class Grids
                 {
                     Point offsetPoint = new Point
                     {
-                        X = point.X + (int)Math.Round(columnIndex * GridWidthHalf),
-                        Y = point.Y + (int)Math.Round(rowIndex * GridWidthHalf),
+                        X = point.X + columnIndex * _gridWidth,
+                        Y = point.Y + rowIndex * _gridWidth,
                     };
 
                     yield return offsetPoint;

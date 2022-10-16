@@ -12,12 +12,10 @@ public class Grid
         _gridWidth = gridWidth;
         _pointsVisited = new bool[gridWidth, gridWidth];
     }
-    
-    private int GridWidthHalf => (int)Math.Round((float)_gridWidth / 2);
 
     public void AddPoint(Point point)
     {
-        _pointsVisited[GridWidthHalf + point.X, GridWidthHalf + point.Y] = true;
+        _pointsVisited[point.X, point.Y] = true;
     }
 
     public IEnumerable<Point> GetPoints()
@@ -30,8 +28,8 @@ public class Grid
                 {
                     yield return new Point
                     {
-                        X = x - _gridWidth / 2,
-                        Y = y - _gridWidth / 2,
+                        X = x,
+                        Y = y,
                     };
                 }
             }

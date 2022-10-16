@@ -14,12 +14,10 @@ public class GridsTests
 
         Grids grids = new Grids(gridWidth: 3);
         
-        /*
-             -1  0  1
-           1 [ ][ ][ ]
-           0 [ ][ ][ ]
-          -1 [ ][ ][ ]
-        */
+        //     0  1  2
+        //  0 [ ][ ][ ]
+        //  1 [ ][ ][ ]
+        //  2 [ ][ ][ ]
 
         Point[] pointsToAdd =
         {
@@ -48,18 +46,16 @@ public class GridsTests
 
         Grids grids = new Grids(gridWidth: 3);
         
-        /*
-             -1  0  1
-           1 [ ][ ][ ]
-           0 [ ][ ][ ]
-          -1 [ ][ ][ ]
-        */
+        //     0  1  2
+        //  0 [ ][ ][ ]
+        //  1 [ ][ ][ ]
+        //  2 [ ][ ][ ]
 
         Point[] pointsToAdd =
         {
             new Point(x: 0, y: 0),
-            new Point(x: 2, y: 0), // Outside the range of a single grid.
-            // new Point(x: -2, y: 0), // Outside the range of a single grid.
+            new Point(x: 3, y: 0), // Requires an extra grid to the right.
+            // new Point(x: -1, y: 0), // Requires an extra grid to the left.
         };
 
         // Act
@@ -84,17 +80,16 @@ public class GridsTests
 
         Grids grids = new Grids(gridWidth: 3);
         
-        /*
-             -1  0  1
-           1 [ ][ ][ ]
-           0 [ ][ ][ ]
-          -1 [ ][ ][ ]
-        */
+        //     0  1  2
+        //  0 [ ][ ][ ]
+        //  1 [ ][ ][ ]
+        //  2 [ ][ ][ ]
 
         Point[] pointsToAdd =
         {
             new Point(x: 0, y: 0),
-            new Point(x: 0, y: 2), // Outside the range of a single grid.
+            new Point(x: 0, y: 3), // Requires an extra grid added under.
+            // new Point(x: 0, y: -1), // Requires an extra grid added above.
         };
 
         // Act

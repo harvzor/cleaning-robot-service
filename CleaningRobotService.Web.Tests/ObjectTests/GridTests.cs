@@ -14,18 +14,18 @@ public class GridTests
 
         Grid grid = new Grid(gridWidth: 5);
         
-        //    -2 -1  0  1  2
-        //  2 [ ][ ][ ][ ][ ]
-        //  1 [ ][ ][ ][ ][ ]
+        //     0  1  2  3  4
         //  0 [ ][ ][ ][ ][ ]
-        // -1 [ ][ ][ ][ ][ ]
-        // -2 [ ][ ][ ][ ][ ]
+        //  1 [ ][ ][ ][ ][ ]
+        //  2 [ ][ ][ ][ ][ ]
+        //  3 [ ][ ][ ][ ][ ]
+        //  4 [ ][ ][ ][ ][ ]
 
         Point[] pointsToAdd =
         {
             new Point(x: 0, y: 0),
             new Point(x: 2, y: 2),
-            new Point(x: -2, y: -2),
+            new Point(x: 4, y: 4),
         };
 
         // Act
