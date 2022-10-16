@@ -5,7 +5,7 @@ using Xunit;
 
 namespace CleaningRobotService.Web.Tests.ObjectTests;
 
-public class GridsTests
+public class GridExpandableTests
 {
     [Theory]
     [InlineData(0, 1, 0)]
@@ -16,7 +16,7 @@ public class GridsTests
     [InlineData(-1, 3, -1)]
     public void Grids_CalculateGridNumber(int xOrY, int gridWidth, int expectedGridNumber)
     {
-        Grids.CalculateGridNumber(xOrY: xOrY, gridWidth: gridWidth).ShouldBe(expectedGridNumber);
+        GridExpandable.CalculateGridNumber(xOrY: xOrY, gridWidth: gridWidth).ShouldBe(expectedGridNumber);
     }
     
     [Fact]
@@ -24,7 +24,7 @@ public class GridsTests
     {
         // Arrange
 
-        Grids grids = new Grids(gridWidth: 3);
+        GridExpandable gridExpandable = new GridExpandable(gridWidth: 3);
         
         //     0  1  2
         //  0 [ ][ ][ ]
@@ -39,9 +39,9 @@ public class GridsTests
         // Act
         
         foreach (Point pointToAdd in pointsToAdd)
-            grids.AddPoint(pointToAdd);
+            gridExpandable.AddPoint(pointToAdd);
         
-        Point[] points = grids.GetPoints().ToArray();
+        Point[] points = gridExpandable.GetPoints().ToArray();
         
         // Assert
 
@@ -56,7 +56,7 @@ public class GridsTests
     {
         // Arrange
 
-        Grids grids = new Grids(gridWidth: 3);
+        GridExpandable gridExpandable = new GridExpandable(gridWidth: 3);
         
         //     0  1  2
         //  0 [ ][ ][ ]
@@ -73,9 +73,9 @@ public class GridsTests
         // Act
         
         foreach (Point pointToAdd in pointsToAdd)
-            grids.AddPoint(pointToAdd);
+            gridExpandable.AddPoint(pointToAdd);
         
-        Point[] points = grids.GetPoints().ToArray();
+        Point[] points = gridExpandable.GetPoints().ToArray();
         
         // Assert
 
@@ -90,7 +90,7 @@ public class GridsTests
     {
         // Arrange
 
-        Grids grids = new Grids(gridWidth: 3);
+        GridExpandable gridExpandable = new GridExpandable(gridWidth: 3);
         
         //     0  1  2
         //  0 [ ][ ][ ]
@@ -107,9 +107,9 @@ public class GridsTests
         // Act
         
         foreach (Point pointToAdd in pointsToAdd)
-            grids.AddPoint(pointToAdd);
+            gridExpandable.AddPoint(pointToAdd);
         
-        Point[] points = grids.GetPoints().ToArray();
+        Point[] points = gridExpandable.GetPoints().ToArray();
         
         // Assert
 

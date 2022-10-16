@@ -2,12 +2,17 @@ using System.Drawing;
 
 namespace CleaningRobotService.Web.Objects;
 
-public class Grids
+/// <summary>
+/// A 2D square grid of points which have been visited at least once. Similar to <see cref="Grid"/> but you can add
+/// any Point without worrying about <see cref="Grid"/> size constraints..
+/// </summary>
+// TODO: implement IEnumerable?
+public class GridExpandable
 {
     private readonly int _gridWidth;
     private readonly Dictionary<Point ,Grid> _grids = new();
     
-    public Grids(int gridWidth = 500)
+    public GridExpandable(int gridWidth = 500)
     {
         _gridWidth = gridWidth;
     }
