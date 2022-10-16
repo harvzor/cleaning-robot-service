@@ -16,9 +16,9 @@ public class Robot2DArray : IRobot
     public IEnumerable<Point> CalculatePointsVisited()
     {
         Point currentPoint = StartPoint;
-        Grid grid = new();
+        Grids grids = new();
 
-        grid.AddPoint(point: StartPoint);
+        grids.AddPoint(point: StartPoint);
 
         void Step(uint steps, Action action)
         {
@@ -26,7 +26,7 @@ public class Robot2DArray : IRobot
             {
                 action();
 
-                grid.AddPoint(currentPoint);
+                grids.AddPoint(currentPoint);
             }
         }
 
@@ -55,6 +55,6 @@ public class Robot2DArray : IRobot
             }
         }
 
-        return grid.GetPoints();
+        return grids.GetPoints();
     }
 }
