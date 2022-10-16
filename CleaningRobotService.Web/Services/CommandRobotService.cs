@@ -17,8 +17,8 @@ public class CommandRobotService : BaseService
         DateTimeOffset now = SystemDateTime.UtcNow;
         int? result = null;
 
-        IRobot robot = new RobotPoints
-        // IRobot robot = new RobotGrid
+        // IRobot robot = new RobotPoints
+        IRobot robot = new RobotGrid
         // IRobot robot = new RobotSwarm
         {
             StartPoint = body.Start,
@@ -27,6 +27,7 @@ public class CommandRobotService : BaseService
         
         double calculationTime = MethodTimer.Measure(() =>
         {
+            robot.CalculatePointsVisited();
             result = robot.CountPointsVisited();
         });
 

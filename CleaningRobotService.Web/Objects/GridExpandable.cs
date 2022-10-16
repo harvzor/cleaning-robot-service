@@ -12,7 +12,7 @@ public class GridExpandable
     private readonly int _gridWidth;
     private readonly Dictionary<Point, Grid> _grids = new();
     
-    public GridExpandable(int gridWidth = 500)
+    public GridExpandable(int gridWidth = 30)
     {
         _gridWidth = gridWidth;
     }
