@@ -27,7 +27,7 @@ public class CommandRobotService : BaseService
         
         double calculationTime = MethodTimer.Measure(() =>
         {
-            result = robot.CalculatePointsVisited().Count();
+            result = robot.CountPointsVisited();
         });
 
         Execution execution = new()

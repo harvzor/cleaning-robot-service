@@ -10,7 +10,7 @@ namespace CleaningRobotService.Web.Objects;
 public class GridExpandable
 {
     private readonly int _gridWidth;
-    private readonly Dictionary<Point ,Grid> _grids = new();
+    private readonly Dictionary<Point, Grid> _grids = new();
     
     public GridExpandable(int gridWidth = 500)
     {
@@ -49,10 +49,21 @@ public class GridExpandable
     {
         foreach (Grid grid in _grids.Values)
         {
+            // Super slow, even though GetPoints yields internally, it seems to get the whole collection in this foreach?
             foreach (Point point in grid.GetPoints())
             {
                 yield return point;
             }
         }
+    }
+    
+    public int Count()
+    {
+        int count = 0;
+        
+        foreach (Grid grid in _grids.Values)
+            count += grid.Count();
+
+        return count;
     }
 }

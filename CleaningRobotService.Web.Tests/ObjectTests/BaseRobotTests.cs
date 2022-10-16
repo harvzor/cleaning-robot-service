@@ -36,14 +36,17 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
         };
         
         // Act
+        
+        robot.CalculatePointsVisited();
 
         Point[] pointsVisited = robot
-            .CalculatePointsVisited()
+            .GetPointsVisited()
             .ToArray();
         
         // Assert
 
-        pointsVisited.Count().ShouldBe(4);
+        robot.CountPointsVisited().ShouldBe(pointsVisited.Length);
+        pointsVisited.Length.ShouldBe(4);
         pointsVisited.ShouldContain(new Point(x: 10, y: 22));
         pointsVisited.ShouldContain(new Point(x: 11, y: 22));
         pointsVisited.ShouldContain(new Point(x: 12, y: 22));
@@ -78,14 +81,17 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
         };
         
         // Act
+        
+        robot.CalculatePointsVisited();
 
         Point[] pointsVisited = robot
-            .CalculatePointsVisited()
+            .GetPointsVisited()
             .ToArray();
 
         // Assert
 
-        pointsVisited.Count().ShouldBe(3);
+        robot.CountPointsVisited().ShouldBe(pointsVisited.Length);
+        pointsVisited.Length.ShouldBe(3);
         pointsVisited.ShouldContain(new Point(x: 0, y: 0));
         pointsVisited.ShouldContain(new Point(x: -1, y: 0));
         pointsVisited.ShouldContain(new Point(x: -1, y: -1));
@@ -119,14 +125,17 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
         };
         
         // Act
+        
+        robot.CalculatePointsVisited();
 
         Point[] pointsVisited = robot
-            .CalculatePointsVisited()
+            .GetPointsVisited()
             .ToArray();
-
+        
         // Assert
 
-        pointsVisited.Count().ShouldBe(2);
+        robot.CountPointsVisited().ShouldBe(pointsVisited.Length);
+        pointsVisited.Length.ShouldBe(2);
         pointsVisited.ShouldContain(new Point(x: 0, y: 0));
         pointsVisited.ShouldContain(new Point(x: 1, y: 0));
     }
@@ -167,14 +176,17 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
         robot.Commands = commands;
         
         // Act
+        
+        robot.CalculatePointsVisited();
 
         Point[] pointsVisited = robot
-            .CalculatePointsVisited()
+            .GetPointsVisited()
             .ToArray();
         
         // Assert
 
-        pointsVisited.Count().ShouldBe(4000);
+        robot.CountPointsVisited().ShouldBe(pointsVisited.Length);
+        pointsVisited.Length.ShouldBe(4000);
         // pointsVisited[0].ShouldBe(new Point(x: 0, y: 0)); // Start.
         // pointsVisited[1].ShouldBe(new Point(x: 0, y: (int)steps)); // North.
         // pointsVisited[2].ShouldBe(new Point(x: (int)steps, y: (int)steps)); // East

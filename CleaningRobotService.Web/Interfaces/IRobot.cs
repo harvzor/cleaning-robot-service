@@ -7,5 +7,7 @@ public interface IRobot
 {
     Point StartPoint { get; set; }
     IEnumerable<Command> Commands { get; set; }
-    IEnumerable<Point> CalculatePointsVisited();
+    void CalculatePointsVisited();
+    IEnumerable<Point> GetPointsVisited();
+    int CountPointsVisited();
 }

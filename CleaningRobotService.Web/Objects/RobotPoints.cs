@@ -10,17 +10,22 @@ namespace CleaningRobotService.Web.Objects;
 /// </summary>
 public class RobotPoints : IRobot
 {
+    private int _count = 0;
+    private readonly HashSet<Point> _pointsVisited = new();
+    
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
 
-    public IEnumerable<Point> CalculatePointsVisited()
+    public void CalculatePointsVisited()
     {
+        _pointsVisited.Add(StartPoint);
+        
         Point currentPoint = StartPoint;
-        HashSet<Point> pointsVisited = new() { StartPoint, };
 
         void AddPoint()
         {
-            pointsVisited.Add(currentPoint);
+            if (_pointsVisited.Add(currentPoint))
+                _count++;
         }
 
         foreach (Command command in Commands.Where(command => command.Steps != 0))
@@ -53,7 +58,9 @@ public class RobotPoints : IRobot
                 }
             }
         }
-
-        return pointsVisited;
     }
+
+    public IEnumerable<Point> GetPointsVisited() =>  _pointsVisited;
+
+    public int CountPointsVisited() => _count;
 }

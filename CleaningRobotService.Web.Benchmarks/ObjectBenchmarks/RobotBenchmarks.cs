@@ -44,18 +44,13 @@ public class RobotBenchmarks
     }
     
     [Benchmark]
-    public void RobotPointsImproved_CalculatePointsVisited()
-    {
-        CalculatePointsVisited(new RobotPoints());
-    }
-    
-    // [Benchmark]
     // [Arguments(500)]
     // [Arguments(10000)]
-    // public void RobotGrid_CalculatePointsVisited(int gridWidth)
-    // {
-    //     CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
-    // }
+    public void RobotGrid_CalculatePointsVisited(/* int gridWidth */)
+    {
+        // CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
+        CalculatePointsVisited(new RobotGrid());
+    }
     
     // [Benchmark]
     // public void RobotSwarm_CalculatePointsVisited_1000()
@@ -86,5 +81,7 @@ public class RobotBenchmarks
         robot.Commands = _commands;
 
         robot.CalculatePointsVisited();
+
+        robot.CountPointsVisited();
     }
 }

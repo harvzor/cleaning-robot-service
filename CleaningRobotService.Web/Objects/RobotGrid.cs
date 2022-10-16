@@ -24,7 +24,7 @@ public class RobotGrid : IRobot
         _gridExpandable = new GridExpandable(gridWidth: gridWidth);
     }
 
-    public IEnumerable<Point> CalculatePointsVisited()
+    public void CalculatePointsVisited()
     {
         Point currentPoint = StartPoint;
 
@@ -65,7 +65,12 @@ public class RobotGrid : IRobot
                 }
             }
         }
+    }
 
+    public IEnumerable<Point> GetPointsVisited()
+    {
         return _gridExpandable.GetPoints();
     }
+
+    public int CountPointsVisited() => _gridExpandable.Count();
 }

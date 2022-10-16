@@ -11,6 +11,7 @@ public class Grid
     private readonly int _gridWidth;
     private readonly bool[,] _pointsVisited;
     private readonly Point _gridOffset;
+    private int _count = 0;
     
     /// <param name="gridWidth">
     /// The width and height of the grid.
@@ -31,7 +32,12 @@ public class Grid
     {
         int offsetX = point.X - _gridWidth * _gridOffset.X;
         int offsetY = point.Y - _gridWidth * _gridOffset.Y;
-        _pointsVisited[offsetX, offsetY] = true;
+
+        if (!_pointsVisited[offsetX, offsetY])
+        {
+            _pointsVisited[offsetX, offsetY] = true;
+            _count++;
+        }
     }
 
     public IEnumerable<Point> GetPoints()
@@ -51,4 +57,6 @@ public class Grid
             }
         }
     }
+
+    public int Count() => _count;
 }
