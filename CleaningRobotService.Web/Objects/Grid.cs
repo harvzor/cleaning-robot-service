@@ -6,16 +6,20 @@ public class Grid
 {
     private readonly int _gridWidth;
     private readonly bool[,] _pointsVisited;
+    public readonly Point GridOffset;
 
-    public Grid(int gridWidth = 500)
+    public Grid(int gridWidth = 500, Point gridOffset = new())
     {
         _gridWidth = gridWidth;
         _pointsVisited = new bool[gridWidth, gridWidth];
+        GridOffset = gridOffset;
     }
 
     public void AddPoint(Point point)
     {
-        _pointsVisited[point.X, point.Y] = true;
+        int offsetX = point.X - _gridWidth * GridOffset.X;
+        int offsetY = point.Y - _gridWidth * GridOffset.Y;
+        _pointsVisited[offsetX, offsetY] = true;
     }
 
     public IEnumerable<Point> GetPoints()
@@ -28,8 +32,8 @@ public class Grid
                 {
                     yield return new Point
                     {
-                        X = x,
-                        Y = y,
+                        X = x + _gridWidth * GridOffset.X,
+                        Y = y + _gridWidth * GridOffset.Y,
                     };
                 }
             }

@@ -5,71 +5,51 @@ namespace CleaningRobotService.Web.Objects;
 public class Grids
 {
     private readonly int _gridWidth;
-    private readonly List<List<Grid>> _grids = new();
+    private readonly List<Grid> _grids = new();
     
     public Grids(int gridWidth = 500)
     {
         _gridWidth = gridWidth;
     }
 
-    private int CalculateGridNumber(int xOrY)
+    public static int CalculateGridNumber(int xOrY, int gridWidth)
     {
-        // Example: xOrY = 1, _gridWidth = 500
-        // (1 - (1 % _gridWidth)) / _gridWidth = 0
-        // Example: xOrY = 501, _gridWidth = 500
-        // (501 - (501 % _gridWidth)) / _gridWidth = 1
-        return (xOrY - (xOrY % _gridWidth)) / _gridWidth;
-        
-        // Example: xOrY = 1, _gridWidth = 3
-        // (1 - (1 % _gridWidthHalf)) / _gridWidthHalf = 0
-        // Example: xOrY = 2, _gridWidth = 3
-        // (2 - (2 % _gridWidthHalf)) / _gridWidthHalf = 1
-        // return (int)Math.Round((xOrY - (xOrY % GridWidthHalf)) / GridWidthHalf);
+        // I'm sure there's a proper formula for this using modulo?
+        int divide = xOrY / gridWidth;
+
+        if (xOrY < 0 && gridWidth > 1)
+            return divide - 1;
+
+        return divide;
     }
     
     public void AddPoint(Point point)
     {
-        int gridColumnIndex = CalculateGridNumber(point.X);
-        int gridRowIndex = CalculateGridNumber(point.Y);
-        
-        while (_grids.Count <= gridRowIndex)
-            _grids.Add(new List<Grid>());
+        int gridColumnIndex = CalculateGridNumber(xOrY: point.X, gridWidth: _gridWidth);
+        int gridRowIndex = CalculateGridNumber(xOrY: point.Y, gridWidth: _gridWidth);
 
-        while (_grids[gridRowIndex].Count <= gridColumnIndex)
-            _grids[gridRowIndex].Add(new Grid(gridWidth: _gridWidth));
-        
-        Point offsetPoint = new Point
+        Grid? matchingGrid = _grids
+            .Where(x => x.GridOffset.X == gridColumnIndex && x.GridOffset.Y == gridRowIndex)
+            .FirstOrDefault();
+
+        if (matchingGrid == null)
         {
-            X = point.X % _gridWidth,
-            Y = point.Y % _gridWidth,
-        };
+            matchingGrid = new Grid(gridWidth: _gridWidth, gridOffset: new Point(x: gridColumnIndex, y: gridRowIndex));
 
-        _grids[gridRowIndex][gridColumnIndex].AddPoint(offsetPoint);
+            _grids.Add(matchingGrid);
+        }
+
+        matchingGrid.AddPoint(point);
     }
     
     public IEnumerable<Point> GetPoints()
     {
-        int rowIndex = 0;
-        foreach (List<Grid> row in _grids)
+        foreach (Grid grid in _grids)
         {
-            int columnIndex = 0;
-            foreach (Grid grid in row)
+            foreach (Point point in grid.GetPoints())
             {
-                foreach (Point point in grid.GetPoints())
-                {
-                    Point offsetPoint = new Point
-                    {
-                        X = point.X + columnIndex * _gridWidth,
-                        Y = point.Y + rowIndex * _gridWidth,
-                    };
-
-                    yield return offsetPoint;
-                }
-
-                columnIndex++;
+                yield return point;
             }
-
-            rowIndex++;
         }
     }
 }
