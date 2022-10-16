@@ -192,4 +192,76 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
         // pointsVisited[2].ShouldBe(new Point(x: (int)steps, y: (int)steps)); // East
         // pointsVisited[3].ShouldBe(new Point(x: (int)steps, y: 0)); // South
     }
+    
+    [Fact]
+    protected void CalculatePointsVisitedTest_SpiralIn()
+    {
+        // Arrange
+        
+        IRobot robot = new TRobot();
+
+        robot.StartPoint = new Point
+        {
+            X = 0,
+            Y = 0,
+        };
+        
+        List<Command> commands = new();
+        int width = 10;
+        
+        // [4][4][4][4][4]
+        // [4][3][2][2][4]
+        // [4][3][1][2][4]
+        // [4][3][1][2][4]
+        // [x][3][3][3][4]
+        
+        // dir   s i d doc
+        // ---------------
+        // north 4 0 0  0
+        // east  4 1 1  1
+        // south 4 2 2  1
+        // west  3 3 3  2
+        // north 3 4 0  2
+        // east  2 5 1  3
+        // south 2 6 2  3
+        // west  1 7 3  4
+        // north 1 8 0  4
+
+        int directionInt = 0;
+        int directionOddCount = 0;
+        for (int i = 0; i < width * 2; i++)
+        {
+            if (directionInt == 1 || directionInt == 3)
+                directionOddCount++;
+            
+            DirectionEnum direction = (DirectionEnum)directionInt;
+            directionInt++;
+
+            if (directionInt == 4)
+                directionInt = 0;
+
+            commands.Add(new Command
+            {
+                Direction = direction,
+                Steps = i == 0
+                    ? (uint)(width - 1)
+                    : (uint)(width - directionOddCount),
+            });
+        }
+        
+        robot.Commands = commands;
+        
+        // Act
+        
+        robot.CalculatePointsVisited();
+
+        Point[] pointsVisited = robot
+            .GetPointsVisited()
+            .ToArray();
+        
+        // Assert
+
+        robot.CountPointsVisited().ShouldBe(pointsVisited.Length);
+        pointsVisited.Length.ShouldBe(width * width);
+    }
 }

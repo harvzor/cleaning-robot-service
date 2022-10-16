@@ -12,9 +12,8 @@ namespace CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
 public class RobotBenchmarks
 {
     private List<Command> _commands = new();
-    
-    [GlobalSetup]
-    public void GlobalSetup()
+
+    private List<Command> GenerateCommands_LoopCommands()
     {
         List<Command> commands = new();
 
@@ -34,9 +33,74 @@ public class RobotBenchmarks
             });
         }
 
-        _commands = commands;
+        return commands;
     }
     
+    private List<Command> GenerateCommands_LoopOffset()
+    {
+        List<Command> commands = new();
+
+        int directionInt = 0;
+        for (int i = 0; i < 10000; i++)
+        {
+            DirectionEnum direction = (DirectionEnum)directionInt;
+            directionInt++;
+
+            if (directionInt == 4)
+                directionInt = 0;
+
+            commands.Add(new Command
+            {
+                Direction = direction,
+                // Step one less south/west so the robot goes in circles but slightly up right each command loop.
+                Steps = (uint)(direction is DirectionEnum.south or DirectionEnum.west
+                    ? 2
+                    : 3
+                ),
+            });
+        }
+
+        return commands;
+    }
+    
+    private List<Command> GenerateCommands_SpiralIn()
+    {
+        List<Command> commands = new();
+
+        int width = 500;
+        int directionInt = 0;
+        int directionOddCount = 0;
+        for (int i = 0; i < width * 2; i++)
+        {
+            if (directionInt == 1 || directionInt == 3)
+                directionOddCount++;
+            
+            DirectionEnum direction = (DirectionEnum)directionInt;
+            directionInt++;
+
+            if (directionInt == 4)
+                directionInt = 0;
+
+            commands.Add(new Command
+            {
+                Direction = direction,
+                Steps = i == 0
+                    ? (uint)(width - 1)
+                    : (uint)(width - directionOddCount),
+            });
+        }
+
+        return commands;
+    }
+    
+    [GlobalSetup]
+    public void GlobalSetup()
+    {
+        // _commands = GenerateCommands_LoopCommands();
+        // _commands = GenerateCommands_LoopOffset();
+        _commands = GenerateCommands_SpiralIn();
+    }
+
     [Benchmark(Baseline = true)]
     public void RobotPoints_CalculatePointsVisited()
     {
@@ -44,13 +108,36 @@ public class RobotBenchmarks
     }
     
     [Benchmark]
-    // [Arguments(500)]
-    // [Arguments(10000)]
-    public void RobotGrid_CalculatePointsVisited(/* int gridWidth */)
+    public void RobotGrid_CalculatePointsVisited()
     {
-        // CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
         CalculatePointsVisited(new RobotGrid());
     }
+    
+    [Benchmark]
+    public void RobotGrid_CalculatePointsVisited_10()
+    {
+        CalculatePointsVisited(new RobotGrid(gridWidth: 10));
+    }
+    
+    [Benchmark]
+    public void RobotGrid_CalculatePointsVisited_30()
+    {
+        CalculatePointsVisited(new RobotGrid(gridWidth: 30));
+    }
+    
+    [Benchmark]
+    public void RobotGrid_CalculatePointsVisited_100()
+    {
+        CalculatePointsVisited(new RobotGrid(gridWidth: 100));
+    }
+    
+    // [Benchmark]
+    // [Arguments(30)]
+    // [Arguments(500)]
+    // public void RobotGrid_CalculatePointsVisited(int gridWidth)
+    // {
+    //     CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
+    // }
     
     // [Benchmark]
     // public void RobotSwarm_CalculatePointsVisited_1000()
