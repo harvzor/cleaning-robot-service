@@ -30,38 +30,39 @@ public class RobotGrid : IRobot
 
         _gridExpandable.AddPoint(point: StartPoint);
 
-        void Step(uint steps, Action action)
+        void AddPoint()
         {
-            for (int i = 0; i < steps; i++)
-            {
-                action();
-
-                _gridExpandable.AddPoint(currentPoint);
-            }
+            _gridExpandable.AddPoint(currentPoint);
         }
 
-        // For loops are supposed to be faster but I'm not gonna sacrifice readability for performance.
-        foreach (var command in Commands.Where(command => command.Steps != 0))
+        foreach (Command command in Commands.Where(command => command.Steps != 0))
         {
-            switch (command.Direction)
+            for (int i = 0; i < command.Steps; i++)
             {
-                case DirectionEnum.north:
-                    Step(steps: command.Steps, action: () => currentPoint.Y++);
-                    break;
-                case DirectionEnum.east:
-                    Step(steps: command.Steps, action: () => currentPoint.X++);
-                    break;
-                case DirectionEnum.south:
-                    Step(steps: command.Steps, action: () => currentPoint.Y--);
-                    break;
-                case DirectionEnum.west:
-                    Step(steps: command.Steps, action: () => currentPoint.X--);
-                    break;
-                default:
-                    throw new ArgumentException(
-                        message: $"Command direction of {command.Direction} not covered.",
-                        paramName: nameof(Commands)
-                    );
+                switch (command.Direction)
+                {
+                    case DirectionEnum.north:
+                        currentPoint.Y++;
+                        AddPoint();
+                        break;
+                    case DirectionEnum.east:
+                        currentPoint.X++;
+                        AddPoint();
+                        break;
+                    case DirectionEnum.south:
+                        currentPoint.Y--;
+                        AddPoint();
+                        break;
+                    case DirectionEnum.west:
+                        currentPoint.X--;
+                        AddPoint();
+                        break;
+                    default:
+                        throw new ArgumentException(
+                            message: $"Command direction of {command.Direction} not covered.",
+                            paramName: nameof(Commands)
+                        );
+                }
             }
         }
 
