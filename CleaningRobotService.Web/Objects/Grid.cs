@@ -12,10 +12,12 @@ public class Grid
         _gridWidth = gridWidth;
         _pointsVisited = new bool[gridWidth, gridWidth];
     }
+    
+    private int GridWidthHalf => (int)Math.Round((float)_gridWidth / 2);
 
     public void AddPoint(Point point)
     {
-        _pointsVisited[_gridWidth / 2 + point.X, _gridWidth / 2 + point.Y] = true;
+        _pointsVisited[GridWidthHalf + point.X, GridWidthHalf + point.Y] = true;
     }
 
     public IEnumerable<Point> GetPoints()

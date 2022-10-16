@@ -5,13 +5,14 @@ namespace CleaningRobotService.Web.Objects;
 public class Grids
 {
     private readonly int _gridWidth;
-    private float GridWidthHalf => (float)_gridWidth / 2;
     private readonly List<List<Grid>> _grids = new();
     
     public Grids(int gridWidth = 500)
     {
         _gridWidth = gridWidth;
     }
+    
+    private float GridWidthHalf => (float)_gridWidth / 2;
 
     private int CalculateGridNumber(int xOrY)
     {
