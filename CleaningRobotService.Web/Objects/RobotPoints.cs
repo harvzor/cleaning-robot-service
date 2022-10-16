@@ -18,8 +18,6 @@ public class RobotPoints : IRobot
 
     public void CalculatePointsVisited()
     {
-        _pointsVisited.Add(StartPoint);
-        
         Point currentPoint = StartPoint;
 
         void AddPoint()
@@ -27,6 +25,8 @@ public class RobotPoints : IRobot
             if (_pointsVisited.Add(currentPoint))
                 _count++;
         }
+        
+        AddPoint();
 
         foreach (Command command in Commands.Where(command => command.Steps != 0))
         {
