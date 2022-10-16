@@ -8,6 +8,7 @@ using CleaningRobotService.Web.Objects;
 namespace CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
 
 [SimpleJob(warmupCount: 3, targetCount: 10)]
+[MemoryDiagnoser(displayGenColumns: false)]
 public class RobotBenchmarks
 {
     private List<Command> _commands = new();
@@ -18,7 +19,7 @@ public class RobotBenchmarks
         List<Command> commands = new();
 
         int directionInt = 0;
-        for (int i = 0; i < 4000; i++)
+        for (int i = 0; i < 10000; i++)
         {
             DirectionEnum direction = (DirectionEnum)directionInt;
             directionInt++;
@@ -43,9 +44,11 @@ public class RobotBenchmarks
     }
     
     [Benchmark]
-    public void RobotGrid_CalculatePointsVisited()
+    [Arguments(500)]
+    [Arguments(10000)]
+    public void RobotGrid_CalculatePointsVisited(int gridWidth)
     {
-        CalculatePointsVisited(new RobotGrid());
+        CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
     }
     
     // [Benchmark]

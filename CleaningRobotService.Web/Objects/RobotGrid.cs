@@ -10,15 +10,25 @@ namespace CleaningRobotService.Web.Objects;
 /// </summary>
 public class RobotGrid : IRobot
 {
+    private readonly GridExpandable _gridExpandable;
     public Point StartPoint { get; set; }
     public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
+
+    public RobotGrid()
+    {
+        _gridExpandable = new GridExpandable();
+    }
+    
+    public RobotGrid(int gridWidth)
+    {
+        _gridExpandable = new GridExpandable(gridWidth: gridWidth);
+    }
 
     public IEnumerable<Point> CalculatePointsVisited()
     {
         Point currentPoint = StartPoint;
-        GridExpandable gridExpandable = new();
 
-        gridExpandable.AddPoint(point: StartPoint);
+        _gridExpandable.AddPoint(point: StartPoint);
 
         void Step(uint steps, Action action)
         {
@@ -26,7 +36,7 @@ public class RobotGrid : IRobot
             {
                 action();
 
-                gridExpandable.AddPoint(currentPoint);
+                _gridExpandable.AddPoint(currentPoint);
             }
         }
 
@@ -55,6 +65,6 @@ public class RobotGrid : IRobot
             }
         }
 
-        return gridExpandable.GetPoints();
+        return _gridExpandable.GetPoints();
     }
 }
