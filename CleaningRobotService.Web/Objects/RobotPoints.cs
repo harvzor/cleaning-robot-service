@@ -20,12 +20,10 @@ public class RobotPoints : IRobot
 
         void AddPoint()
         {
-            if (!pointsVisited.Contains(currentPoint))
-                pointsVisited.Add(currentPoint);
+            pointsVisited.Add(currentPoint);
         }
 
-        // For loops are supposed to be faster but I'm not gonna sacrifice readability for performance.
-        foreach (var command in Commands.Where(command => command.Steps != 0))
+        foreach (Command command in Commands.Where(command => command.Steps != 0))
         {
             for (int i = 0; i < command.Steps; i++)
             {

@@ -46,7 +46,7 @@ public class RobotBenchmarks
     [Benchmark]
     public void RobotPointsImproved_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new RobotPointsImproved());
+        CalculatePointsVisited(new RobotPoints());
     }
     
     // [Benchmark]
