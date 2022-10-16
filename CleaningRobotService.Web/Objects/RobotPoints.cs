@@ -11,6 +11,7 @@ namespace CleaningRobotService.Web.Objects;
 public class RobotPoints : IRobot
 {
     private int _count = 0;
+    // https://stackoverflow.com/questions/24855615/hashset-memory-overhead
     private readonly HashSet<Point> _pointsVisited = new();
     
     public Point StartPoint { get; set; }

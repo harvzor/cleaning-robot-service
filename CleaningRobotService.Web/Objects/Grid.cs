@@ -9,7 +9,7 @@ namespace CleaningRobotService.Web.Objects;
 public class Grid
 {
     private readonly int _gridWidth;
-    private readonly bool[,] _pointsVisited;
+    private readonly List<List<bool>> _pointsVisited = new();
     private readonly Point _gridOffset;
     private int _count = 0;
     
@@ -24,7 +24,6 @@ public class Grid
     public Grid(int gridWidth = 500, Point gridOffset = new())
     {
         _gridWidth = gridWidth;
-        _pointsVisited = new bool[gridWidth, gridWidth];
         _gridOffset = gridOffset;
     }
 
@@ -33,25 +32,31 @@ public class Grid
         int offsetX = point.X - _gridWidth * _gridOffset.X;
         int offsetY = point.Y - _gridWidth * _gridOffset.Y;
 
-        if (!_pointsVisited[offsetX, offsetY])
+        while (_pointsVisited.Count <= offsetY)
+            _pointsVisited.Add(new List<bool>());
+        
+        while (_pointsVisited[offsetY].Count <= offsetX)
+            _pointsVisited[offsetY].Add(false);
+
+        if (!_pointsVisited[offsetY][offsetX])
         {
-            _pointsVisited[offsetX, offsetY] = true;
+            _pointsVisited[offsetY][offsetX] = true;
             _count++;
         }
     }
 
     public IEnumerable<Point> GetPoints()
     {
-        for (int x = 0; x < _gridWidth; x++)
+        for (int rowNumber = 0; rowNumber < _pointsVisited.Count; rowNumber++)
         {
-            for (int y = 0; y < _gridWidth; y++)
+            for (int columnNumber = 0; columnNumber < _pointsVisited[rowNumber].Count; columnNumber++)
             {
-                if (_pointsVisited[x, y])
+                if (_pointsVisited[rowNumber][columnNumber])
                 {
                     yield return new Point
                     {
-                        X = x + _gridWidth * _gridOffset.X,
-                        Y = y + _gridWidth * _gridOffset.Y,
+                        X = columnNumber + _gridWidth * _gridOffset.X,
+                        Y = rowNumber + _gridWidth * _gridOffset.Y,
                     };
                 }
             }
