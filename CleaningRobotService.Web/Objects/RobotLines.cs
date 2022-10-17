@@ -68,18 +68,24 @@ public class RobotLines : IRobot
 
         void AddPoint()
         {
-            bool pointAlreadyOnLine = _lines
-                .Any(line
+            bool pointAlreadyOnLine = false;
+            foreach (var line in _lines)
+            {
+                if (
                     // Check the x coordinate is between the 2 lines.
-                    => (line.Start.X < line.End.X
+                    (line.Start.X < line.End.X
                         ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
                         : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X)
                     // Check the y coordinate is between the 2 lines.
                     && (line.Start.Y < line.End.Y
                         ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
-                        : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y)
-                );
-            
+                        : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y))
+                {
+                    pointAlreadyOnLine = true;
+                    break;
+                }
+            }
+
             if (!pointAlreadyOnLine)
                 _count++;
         }
