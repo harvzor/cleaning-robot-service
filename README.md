@@ -31,10 +31,6 @@ The robot should move like this:
 
 The robot covers 4 coordinates on its route.
 
-## Assumptions
-
-- `/tibber-developer-test/enter-path` surely means to replace `/enter-path` with an appropriate resource name? I decided the resource would be called "CommandRobot".
-
 ## Requirements
 
 - Postgres 10.8
@@ -43,6 +39,129 @@ The robot covers 4 coordinates on its route.
 ## Env vars
 
 - `App__DatabaseConnectionString` - configure the Postgres connection string
+
+## Robot algorithms
+
+### Robot algorithms benchmarks
+
+**GenerateCommands_SpiralIn**
+
+> generates a perfect spiral which hits every point in a 500 width/height grid exactly once
+
+```
+|                               Method |      Mean |     Error |   StdDev | Ratio | RatioSD |   Allocated | Alloc Ratio |
+|------------------------------------- |----------:|----------:|---------:|------:|--------:|------------:|------------:|
+|   RobotPoints_CalculatePointsVisited |  47.82 ms |  2.970 ms | 1.965 ms |  1.00 |    0.00 | 12233.83 KB |       1.000 |
+|    RobotLines_CalculatePointsVisited | 648.68 ms | 12.627 ms | 7.514 ms | 13.55 |    0.62 |    20.53 KB |       0.002 |
+|  RobotGrid_CalculatePointsVisited_10 |  37.35 ms |  1.534 ms | 1.015 ms |  0.78 |    0.04 |  2398.87 KB |       0.196 |
+|  RobotGrid_CalculatePointsVisited_30 |  30.08 ms |  0.702 ms | 0.464 ms |  0.63 |    0.03 |   847.29 KB |       0.069 |
+| RobotGrid_CalculatePointsVisited_100 |  29.34 ms |  0.436 ms | 0.288 ms |  0.61 |    0.03 |   414.74 KB |       0.034 |
+| RobotGrid_CalculatePointsVisited_500 |  28.32 ms |  0.225 ms | 0.118 ms |  0.59 |    0.03 |   277.86 KB |       0.023 |
+```
+
+The `RobotGrid_CalculatePointsVisited_500` uses very little memory because it has a Grid size of 500, so the entire Grid is used.
+
+**GenerateCommands_LoopOffset**
+
+> moves in a loop which is offset by 1 point (north 3, east 3, south 2, west 2) x 10,000
+
+```
+|                               Method |       Mean |      Error |     StdDev |  Ratio | RatioSD |  Allocated | Alloc Ratio |
+|------------------------------------- |-----------:|-----------:|-----------:|-------:|--------:|-----------:|------------:|
+|   RobotPoints_CalculatePointsVisited |   3.028 ms |  0.1850 ms |  0.1224 ms |   1.00 |    0.00 |  657.47 KB |        1.00 |
+|    RobotLines_CalculatePointsVisited | 828.450 ms | 34.3731 ms | 22.7357 ms | 273.84 |    9.52 |  198.12 KB |        0.30 |
+|  RobotGrid_CalculatePointsVisited_10 |   4.306 ms |  0.2630 ms |  0.1740 ms |   1.43 |    0.11 |  580.72 KB |        0.88 |
+|  RobotGrid_CalculatePointsVisited_30 |   4.227 ms |  0.1495 ms |  0.0989 ms |   1.40 |    0.06 |  554.47 KB |        0.84 |
+| RobotGrid_CalculatePointsVisited_100 |   4.779 ms |  0.2059 ms |  0.1362 ms |   1.58 |    0.07 |  864.62 KB |        1.32 |
+| RobotGrid_CalculatePointsVisited_500 |   8.909 ms |  0.4659 ms |  0.3081 ms |   2.95 |    0.16 | 2809.36 KB |        4.27 |
+```
+
+### Different algorithm strategies
+
+I tried many different algorithms for calculating where the robot has been:
+
+#### RobotPoints
+
+Simple algorithm which stores each Point the robot has been at and stores it in a `HashSet<Point>`.
+
+Pros:
+
+- fast and simple with small datasets
+
+Cons:
+
+- memory usage is too high
+  - each point uses 16 bytes of memory (2 ints, 8 bytes each)
+  - if every possible point was visited and stored: 200,000² possible points * 16 bytes in a point = 640GB
+  - HashSet requires an extra 12 bytes for each item in the collection so the actual memory usage would be even higher
+
+#### RobotLines
+
+Rather than  storing each Point, each path is stored as a Line which has a Start and End Point. Each Point the Robot then visits can be checked to see if it's on any other Line.
+
+Pros:
+
+- uses very little memory
+  - each Line requires 2 Points which requires 32 bytes of memory
+  - if there are 10,000 commands, there should be 10,000 Lines, which would use 0.32MB of memory (not including collection overhead)
+
+Cons:
+
+- very slow speed
+  - each Point has to be compared against each Line
+
+Improvements?
+
+- maybe `List<Line>` is not the best data structure for comparisons
+
+#### RobotGrid
+
+Rather than storing where the Robot has been using a Point, create a 2D array called a `Grid` which stores booleans and uses the index of the columns/rows to know the X and Y coordinates.
+
+This Grid has a width of 3:
+
+```
+   0  1  2
+0 [ ][ ][ ]
+1 [ ][ ][ ]
+2 [ ][ ][ ]
+```
+
+If the Robot starts at [0,0], goes to [2,0], then [2,2], the data structure would look like this:
+
+```
+   0  1  2
+0 [x][x][x]
+1 [ ][ ][x]
+2 [ ][ ][x]
+```
+
+However, objects in C# cannot have a size larger than ~2GB. To have a Grid which could store every Point on it, I would need at least 5GB of memory to store the booleans alone (200,000² bits).
+
+Therefore, I can use multiple Grids, lined up in rows and columns. These Grids can be added as needed to avoid unnecessary memory usage.
+
+If the Robot starts at [0,0], goes to [5,0], and my Grid size is 3, 2 Grids will be used:
+
+```
+   0  1  2      0  1  2
+0 [x][x][x]  0 [x][x][ ]
+1 [ ][ ][ ]  1 [ ][ ][ ]
+2 [ ][ ][ ]  2 [ ][ ][ ]
+```
+
+Each Grid can then store its offset.
+
+Pros:
+
+- tends to use less memory with large datasets
+- reasonably fast
+
+Cons:
+
+- data structure unable to store the order of the points visited
+- a good Grid width needs to be used to reduce memory usage
+  - in my tests, I found a width of 30 to fit well
+- still wastes memory for storing unvisited points
 
 ## Docker
 
@@ -76,13 +195,6 @@ docker compose run --rm benchmark
 
 ```
 dotnet run --configuration Release --project CleaningRobotService.Web.Benchmarks
-
-|                                 Method |     Mean |     Error |    StdDev | Ratio | RatioSD |
-|--------------------------------------- |---------:|----------:|----------:|------:|--------:|
-|           Robot_CalculatePointsVisited | 3.791 ms | 0.0898 ms | 0.0594 ms |  1.00 |    0.00 |
-| RobotSwarm_CalculatePointsVisited_1000 | 2.155 ms | 0.0374 ms | 0.0223 ms |  0.57 |    0.01 |
-|  RobotSwarm_CalculatePointsVisited_500 | 1.904 ms | 0.0521 ms | 0.0344 ms |  0.50 |    0.01 |
-|  RobotSwarm_CalculatePointsVisited_100 | 2.089 ms | 0.1383 ms | 0.0915 ms |  0.55 |    0.03 |
 ```
 
 ## Migrations
@@ -205,5 +317,5 @@ Personally I like Drone CI but Travis CI is okay too.
 - ~~improve docs~~
 - ~~test db~~
 - ~~create dockerfile for building service~~
-- test performance with larger dataset
-- change CommandRobotService to only deal with the database and create an object which is the actual robot
+- ~~test performance with larger dataset~~
+- ~~change CommandRobotService to only deal with the database and create an object which is the actual robot~~

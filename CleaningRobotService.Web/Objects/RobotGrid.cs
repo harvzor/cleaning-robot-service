@@ -8,6 +8,9 @@ namespace CleaningRobotService.Web.Objects;
 /// <summary>
 /// Simulated robot which cleans the office.
 /// </summary>
+/// <remarks>
+/// <see cref="GetPointsVisited"/> will return the Points unordered.
+/// </remarks>
 public class RobotGrid : IRobot
 {
     private readonly GridExpandable _gridExpandable;

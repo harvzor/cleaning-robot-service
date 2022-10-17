@@ -18,7 +18,8 @@ public class CommandRobotService : BaseService
         int? result = null;
 
         // IRobot robot = new RobotPoints
-        IRobot robot = new RobotGrid
+        IRobot robot = new RobotLines
+        // IRobot robot = new RobotGrid
         // IRobot robot = new RobotSwarm
         {
             StartPoint = body.Start,
