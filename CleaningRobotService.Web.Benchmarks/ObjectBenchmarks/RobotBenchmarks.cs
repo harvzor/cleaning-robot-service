@@ -108,28 +108,34 @@ public class RobotBenchmarks
     }
     
     [Benchmark]
-    public void RobotGrid_CalculatePointsVisited()
+    public void RobotLines_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new RobotGrid());
+        CalculatePointsVisited(new RobotLines());
     }
     
-    [Benchmark]
-    public void RobotGrid_CalculatePointsVisited_10()
-    {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 10));
-    }
+    // [Benchmark]
+    // public void RobotGrid_CalculatePointsVisited()
+    // {
+    //     CalculatePointsVisited(new RobotGrid());
+    // }
     
-    [Benchmark]
-    public void RobotGrid_CalculatePointsVisited_30()
-    {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 30));
-    }
-    
-    [Benchmark]
-    public void RobotGrid_CalculatePointsVisited_100()
-    {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 100));
-    }
+    // [Benchmark]
+    // public void RobotGrid_CalculatePointsVisited_10()
+    // {
+    //     CalculatePointsVisited(new RobotGrid(gridWidth: 10));
+    // }
+    //
+    // [Benchmark]
+    // public void RobotGrid_CalculatePointsVisited_30()
+    // {
+    //     CalculatePointsVisited(new RobotGrid(gridWidth: 30));
+    // }
+    //
+    // [Benchmark]
+    // public void RobotGrid_CalculatePointsVisited_100()
+    // {
+    //     CalculatePointsVisited(new RobotGrid(gridWidth: 100));
+    // }
     
     // [Benchmark]
     // [Arguments(30)]
