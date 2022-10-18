@@ -1,5 +1,5 @@
 using System.Drawing;
-using CleaningRobotService.Web.Objects;
+using CleaningRobotService.Common.Objects;
 using Shouldly;
 using Xunit;
 

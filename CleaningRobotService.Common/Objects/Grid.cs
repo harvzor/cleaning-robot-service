@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace CleaningRobotService.Web.Objects;
+namespace CleaningRobotService.Common.Objects;
 
 /// <summary>
 /// A 2D square grid of points which have been visited at least once.

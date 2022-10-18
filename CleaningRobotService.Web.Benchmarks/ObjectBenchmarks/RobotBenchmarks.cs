@@ -1,9 +1,10 @@
 using System.Drawing;
 using BenchmarkDotNet.Attributes;
+using CleaningRobotService.Common.Dtos.Input;
+using CleaningRobotService.Common.Enums;
+using CleaningRobotService.Common.Interfaces;
+using CleaningRobotService.Common.Objects;
 using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Enums;
-using CleaningRobotService.Web.Interfaces;
-using CleaningRobotService.Web.Objects;
 
 namespace CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
 
@@ -11,11 +12,11 @@ namespace CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
 [MemoryDiagnoser(displayGenColumns: false)]
 public class RobotBenchmarks
 {
-    private List<Command> _commands = new();
+    private List<CommandDto> _commands = new();
 
-    private List<Command> GenerateCommands_LoopCommands()
+    private List<CommandDto> GenerateCommands_LoopCommands()
     {
-        List<Command> commands = new();
+        List<CommandDto> commands = new();
 
         int directionInt = 0;
         for (int i = 0; i < 10000; i++)
@@ -26,7 +27,7 @@ public class RobotBenchmarks
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new Command
+            commands.Add(new CommandDto
             {
                 Direction = direction,
                 Steps = 3,
@@ -36,9 +37,9 @@ public class RobotBenchmarks
         return commands;
     }
     
-    private List<Command> GenerateCommands_LoopOffset()
+    private List<CommandDto> GenerateCommands_LoopOffset()
     {
-        List<Command> commands = new();
+        List<CommandDto> commands = new();
 
         int directionInt = 0;
         for (int i = 0; i < 10000; i++)
@@ -49,7 +50,7 @@ public class RobotBenchmarks
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new Command
+            commands.Add(new CommandDto
             {
                 Direction = direction,
                 // Step one less south/west so the robot goes in circles but slightly up right each command loop.
@@ -63,9 +64,9 @@ public class RobotBenchmarks
         return commands;
     }
     
-    private List<Command> GenerateCommands_SpiralIn()
+    private List<CommandDto> GenerateCommands_SpiralIn()
     {
-        List<Command> commands = new();
+        List<CommandDto> commands = new();
 
         int width = 500;
         int directionInt = 0;
@@ -81,7 +82,7 @@ public class RobotBenchmarks
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new Command
+            commands.Add(new CommandDto
             {
                 Direction = direction,
                 Steps = i == 0
@@ -97,8 +98,8 @@ public class RobotBenchmarks
     public void GlobalSetup()
     {
         // _commands = GenerateCommands_LoopCommands();
-        // _commands = GenerateCommands_LoopOffset();
-        _commands = GenerateCommands_SpiralIn();
+        _commands = GenerateCommands_LoopOffset();
+        // _commands = GenerateCommands_SpiralIn();
     }
 
     [Benchmark(Baseline = true)]

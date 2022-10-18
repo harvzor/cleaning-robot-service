@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web.Benchmarks", "CleaningRobotService.Web.Benchmarks\CleaningRobotService.Web.Benchmarks.csproj", "{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Console", "CleaningRobotService.Console\CleaningRobotService.Console.csproj", "{3A120CC0-61B8-4183-85C0-11389894566E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Common", "CleaningRobotService.Common\CleaningRobotService.Common.csproj", "{4C47C09E-C75A-4FFA-80A3-B096BADE8E66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A120CC0-61B8-4183-85C0-11389894566E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A120CC0-61B8-4183-85C0-11389894566E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A120CC0-61B8-4183-85C0-11389894566E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A120CC0-61B8-4183-85C0-11389894566E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C47C09E-C75A-4FFA-80A3-B096BADE8E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C47C09E-C75A-4FFA-80A3-B096BADE8E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C47C09E-C75A-4FFA-80A3-B096BADE8E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C47C09E-C75A-4FFA-80A3-B096BADE8E66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

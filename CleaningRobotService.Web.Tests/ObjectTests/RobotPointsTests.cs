@@ -1,5 +1,4 @@
-using CleaningRobotService.Web.Objects;
-using Xunit;
+using CleaningRobotService.Common.Objects;
 
 namespace CleaningRobotService.Web.Tests.ObjectTests;
 

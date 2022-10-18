@@ -1,9 +1,9 @@
 using System.Drawing;
-using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Enums;
-using CleaningRobotService.Web.Interfaces;
+using CleaningRobotService.Common.Dtos.Input;
+using CleaningRobotService.Common.Enums;
+using CleaningRobotService.Common.Interfaces;
 
-namespace CleaningRobotService.Web.Objects;
+namespace CleaningRobotService.Common.Objects;
 
 /// <summary>
 /// Simulated robot which cleans the office.
@@ -14,7 +14,7 @@ public class RobotLines : IRobot
     private List<Line> _lines = new();
     
     public Point StartPoint { get; set; }
-    public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
+    public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
 
     private struct Line
     {
@@ -50,7 +50,7 @@ public class RobotLines : IRobot
                         currentPoint.X -= 1;
                         break;
                     default:
-                        throw new Exception("Command direction of {command.Direction} not covered.");
+                        throw new Exception("CommandDto direction of {command.Direction} not covered.");
                 }
 
                 points.Add(currentPoint);
@@ -92,7 +92,7 @@ public class RobotLines : IRobot
         
         AddPoint();
 
-        foreach (Command command in Commands.Where(command => command.Steps != 0))
+        foreach (CommandDto command in Commands.Where(command => command.Steps != 0))
         {
             Point start = currentPoint;
             
@@ -118,7 +118,7 @@ public class RobotLines : IRobot
                         break;
                     default:
                         throw new ArgumentException(
-                            message: $"Command direction of {command.Direction} not covered.",
+                            message: $"CommandDto direction of {command.Direction} not covered.",
                             paramName: nameof(Commands)
                         );
                 }

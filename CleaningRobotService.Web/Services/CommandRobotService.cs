@@ -1,8 +1,9 @@
+using CleaningRobotService.Common.Helpers;
+using CleaningRobotService.Common.Interfaces;
+using CleaningRobotService.Common.Objects;
 using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Helpers;
-using CleaningRobotService.Web.Interfaces;
+using CleaningRobotService.Web.Mappers;
 using CleaningRobotService.Web.Models;
-using CleaningRobotService.Web.Objects;
 
 namespace CleaningRobotService.Web.Services;
 
@@ -23,7 +24,7 @@ public class CommandRobotService : BaseService
         // IRobot robot = new RobotSwarm
         {
             StartPoint = body.Start,
-            Commands = body.Commands,
+            Commands = body.Commands.ToCommonCommandDtos(),
         };
         
         double calculationTime = MethodTimer.Measure(() =>

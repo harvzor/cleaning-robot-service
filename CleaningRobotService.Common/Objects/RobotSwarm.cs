@@ -1,8 +1,8 @@
 using System.Drawing;
-using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Interfaces;
+using CleaningRobotService.Common.Dtos.Input;
+using CleaningRobotService.Common.Interfaces;
 
-namespace CleaningRobotService.Web.Objects;
+namespace CleaningRobotService.Common.Objects;
 
 /// <summary>
 /// Simulate lots of robots cleaning an office.
@@ -13,7 +13,7 @@ namespace CleaningRobotService.Web.Objects;
 public class RobotSwarm : IRobot
 {
     public Point StartPoint { get; set; }
-    public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
+    public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
     
     private int _count = 0;
     private readonly int _chunkCommands = 1000;
@@ -32,7 +32,7 @@ public class RobotSwarm : IRobot
     {
         _pointsVisited.Add(StartPoint);
         
-        List<Command[]> commandChunks = Commands
+        List<CommandDto[]> commandChunks = Commands
             .Chunk(_chunkCommands)
             .ToList();
 

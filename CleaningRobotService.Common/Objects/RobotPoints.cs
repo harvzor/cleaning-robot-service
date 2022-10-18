@@ -1,9 +1,9 @@
 using System.Drawing;
-using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Enums;
-using CleaningRobotService.Web.Interfaces;
+using CleaningRobotService.Common.Dtos.Input;
+using CleaningRobotService.Common.Enums;
+using CleaningRobotService.Common.Interfaces;
 
-namespace CleaningRobotService.Web.Objects;
+namespace CleaningRobotService.Common.Objects;
 
 /// <summary>
 /// Simulated robot which cleans the office.
@@ -15,7 +15,7 @@ public class RobotPoints : IRobot
     private readonly HashSet<Point> _pointsVisited = new();
     
     public Point StartPoint { get; set; }
-    public IEnumerable<Command> Commands { get; set; } = Enumerable.Empty<Command>();
+    public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
 
     public void CalculatePointsVisited()
     {
@@ -29,7 +29,7 @@ public class RobotPoints : IRobot
         
         AddPoint();
 
-        foreach (Command command in Commands.Where(command => command.Steps != 0))
+        foreach (CommandDto command in Commands.Where(command => command.Steps != 0))
         {
             for (int i = 0; i < command.Steps; i++)
             {
@@ -53,7 +53,7 @@ public class RobotPoints : IRobot
                         break;
                     default:
                         throw new ArgumentException(
-                            message: $"Command direction of {command.Direction} not covered.",
+                            message: $"CommandDto direction of {command.Direction} not covered.",
                             paramName: nameof(Commands)
                         );
                 }

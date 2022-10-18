@@ -1,4 +1,4 @@
-namespace CleaningRobotService.Web.Enums;
+namespace CleaningRobotService.Common.Enums;
 
 /// <summary>
 /// Cardinal directions the robot could take.

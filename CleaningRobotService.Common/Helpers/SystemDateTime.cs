@@ -1,4 +1,4 @@
-namespace CleaningRobotService.Web.Helpers;
+namespace CleaningRobotService.Common.Helpers;
 
 /// <summary>
 /// Reference this to get the current time so time can be frozen in testing.

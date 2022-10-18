@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace CleaningRobotService.Web.Helpers;
+namespace CleaningRobotService.Common.Helpers;
 
 public class MethodTimer
 {

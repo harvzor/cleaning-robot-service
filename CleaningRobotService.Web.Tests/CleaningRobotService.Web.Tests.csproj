@@ -34,4 +34,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="ObjectTests\RobotSwarmTests.cs" />
+    </ItemGroup>
+
 </Project>

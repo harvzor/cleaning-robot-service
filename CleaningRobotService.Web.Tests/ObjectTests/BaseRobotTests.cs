@@ -1,7 +1,7 @@
 using System.Drawing;
-using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Enums;
-using CleaningRobotService.Web.Interfaces;
+using CleaningRobotService.Common.Dtos.Input;
+using CleaningRobotService.Common.Enums;
+using CleaningRobotService.Common.Interfaces;
 using Shouldly;
 using Xunit;
 
@@ -21,14 +21,14 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
             X = 10,
             Y = 22,
         };
-        robot.Commands = new List<Command>()
+        robot.Commands = new List<CommandDto>()
         {
-            new Command
+            new CommandDto
             {
                 Direction = DirectionEnum.east,
                 Steps = 2,
             },
-            new Command
+            new CommandDto
             {
                 Direction = DirectionEnum.north,
                 Steps = 1,
@@ -65,15 +65,15 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
             X = 0,
             Y = 0,
         };
-        robot.Commands = new List<Command>()
+        robot.Commands = new List<CommandDto>()
         {
-            new Command
+            new CommandDto
             {
                 Direction = DirectionEnum.west,
                 Steps = 1,
             },
             // Go back on itself.
-            new Command
+            new CommandDto
             {
                 Direction = DirectionEnum.south,
                 Steps = 1,
@@ -109,15 +109,15 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
             X = 0,
             Y = 0,
         };
-        robot.Commands = new List<Command>()
+        robot.Commands = new List<CommandDto>()
         {
-            new Command
+            new CommandDto
             {
                 Direction = DirectionEnum.east,
                 Steps = 1,
             },
             // Go back on itself.
-            new Command
+            new CommandDto
             {
                 Direction = DirectionEnum.west,
                 Steps = 1,
@@ -153,7 +153,7 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
             Y = 0,
         };
         
-        List<Command> commands = new();
+        List<CommandDto> commands = new();
 
         uint steps = 1000;
 
@@ -166,7 +166,7 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new Command
+            commands.Add(new CommandDto
             {
                 Direction = direction,
                 Steps = steps,
@@ -206,7 +206,7 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
             Y = 0,
         };
         
-        List<Command> commands = new();
+        List<CommandDto> commands = new();
         int width = 10;
         
         // [4][4][4][4][4]
@@ -240,7 +240,7 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new Command
+            commands.Add(new CommandDto
             {
                 Direction = direction,
                 Steps = i == 0
