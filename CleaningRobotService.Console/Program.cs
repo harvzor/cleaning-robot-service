@@ -3,7 +3,6 @@ using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Interfaces;
-using CleaningRobotService.Common.Objects;
 using CleaningRobotService.Console.Enums;
 
 // 2

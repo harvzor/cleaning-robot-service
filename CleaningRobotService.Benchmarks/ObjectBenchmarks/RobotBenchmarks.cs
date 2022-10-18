@@ -4,7 +4,6 @@ using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Interfaces;
 using CleaningRobotService.Common.Objects;
-using CleaningRobotService.Web.Dtos.Input;
 
 namespace CleaningRobotService.Benchmarks.ObjectBenchmarks;
 
