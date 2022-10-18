@@ -1,7 +1,7 @@
 using System.Drawing;
 using CleaningRobotService.Common.Dtos.Input;
 
-namespace CleaningRobotService.Common.Interfaces;
+namespace CleaningRobotService.Common.Robots;
 
 public interface IRobot
 {

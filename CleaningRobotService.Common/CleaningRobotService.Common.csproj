@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Objects\RobotSwarm.cs" />
+      <Compile Remove="Robots\RobotSwarm.cs" />
     </ItemGroup>
 
 </Project>

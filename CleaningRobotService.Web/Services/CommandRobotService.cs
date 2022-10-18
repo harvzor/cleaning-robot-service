@@ -1,6 +1,6 @@
 using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Helpers;
-using CleaningRobotService.Common.Interfaces;
+using CleaningRobotService.Common.Robots;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Mappers;
 using CleaningRobotService.Web.Models;

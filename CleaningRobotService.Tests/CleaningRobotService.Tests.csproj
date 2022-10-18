@@ -36,6 +36,7 @@
 
     <ItemGroup>
       <Compile Remove="ObjectTests\RobotSwarmTests.cs" />
+      <Compile Remove="RobotTests\RobotSwarmTests.cs" />
     </ItemGroup>
 
 </Project>

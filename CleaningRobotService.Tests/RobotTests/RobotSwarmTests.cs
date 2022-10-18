@@ -1,6 +1,6 @@
-using CleaningRobotService.Common.Objects;
+using CleaningRobotService.Common.Robots;
 
-namespace CleaningRobotService.Web.Tests.ObjectTests;
+namespace CleaningRobotService.Tests.RobotTests;
 
 public class RobotSwarmTests : BaseRobotTests<RobotSwarm>
 {

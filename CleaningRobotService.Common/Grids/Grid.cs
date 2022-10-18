@@ -1,13 +1,13 @@
 using System.Drawing;
 
-namespace CleaningRobotService.Common.Objects;
+namespace CleaningRobotService.Common.Grids;
 
 /// <summary>
-/// A 2D square grid of points which have been visited at least once.
+/// <inheritdoc cref="IGrid"/>
 /// </summary>
 // TODO: implement IEnumerable?
 // TODO: make sure the memory is freed once it goes out of scope?
-public class Grid
+public class Grid : IGrid
 {
     private readonly int _gridWidth;
     private readonly List<List<bool>> _pointsVisited;

@@ -1,9 +1,9 @@
 using System.Drawing;
-using CleaningRobotService.Common.Objects;
+using CleaningRobotService.Common.Grids;
 using Shouldly;
 using Xunit;
 
-namespace CleaningRobotService.Tests.ObjectTests;
+namespace CleaningRobotService.Tests.GridTests;
 
 public class GridTests
 {

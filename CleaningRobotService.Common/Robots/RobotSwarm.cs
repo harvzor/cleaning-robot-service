@@ -1,8 +1,7 @@
 using System.Drawing;
 using CleaningRobotService.Common.Dtos.Input;
-using CleaningRobotService.Common.Interfaces;
 
-namespace CleaningRobotService.Common.Objects;
+namespace CleaningRobotService.Common.Robots;
 
 /// <summary>
 /// Simulate lots of robots cleaning an office.

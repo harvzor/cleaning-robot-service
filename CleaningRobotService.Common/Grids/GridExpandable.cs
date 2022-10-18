@@ -1,13 +1,13 @@
 using System.Drawing;
 
-namespace CleaningRobotService.Common.Objects;
+namespace CleaningRobotService.Common.Grids;
 
 /// <summary>
-/// A 2D square grid of points which have been visited at least once. Similar to <see cref="Grid"/> but you can add
-/// any Point without worrying about <see cref="Grid"/> size constraints..
+/// <inheritdoc cref="IGrid"/>
+/// Similar to <see cref="Grid"/> but you can add any Point without worrying about <see cref="Grid"/> size constraints..
 /// </summary>
 // TODO: implement IEnumerable?
-public class GridExpandable
+public class GridExpandable : IGrid
 {
     private readonly int _gridWidth;
     private readonly Dictionary<Point, Grid> _grids = new();

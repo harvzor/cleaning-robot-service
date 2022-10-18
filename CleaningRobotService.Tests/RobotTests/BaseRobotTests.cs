@@ -1,11 +1,11 @@
 using System.Drawing;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
-using CleaningRobotService.Common.Interfaces;
+using CleaningRobotService.Common.Robots;
 using Shouldly;
 using Xunit;
 
-namespace CleaningRobotService.Tests.ObjectTests;
+namespace CleaningRobotService.Tests.RobotTests;
 
 public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
 {

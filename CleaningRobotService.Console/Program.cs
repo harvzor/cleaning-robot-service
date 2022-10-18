@@ -2,7 +2,7 @@
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Factories;
-using CleaningRobotService.Common.Interfaces;
+using CleaningRobotService.Common.Robots;
 using CleaningRobotService.Console.Enums;
 
 // 2
