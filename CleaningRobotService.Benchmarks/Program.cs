@@ -1,4 +1,4 @@
 ﻿using BenchmarkDotNet.Running;
-using CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
+using CleaningRobotService.Benchmarks.ObjectBenchmarks;
 
 BenchmarkRunner.Run<RobotBenchmarks>();

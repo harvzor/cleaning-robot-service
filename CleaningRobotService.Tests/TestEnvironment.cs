@@ -1,7 +1,8 @@
+using CleaningRobotService.Tests.Fixtures;
+using CleaningRobotService.Web;
 using CleaningRobotService.Web.Services;
-using CleaningRobotService.Web.Tests.Fixtures;
 
-namespace CleaningRobotService.Web.Tests;
+namespace CleaningRobotService.Tests;
 
 public class TestEnvironment
 {

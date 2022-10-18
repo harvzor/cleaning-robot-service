@@ -3,7 +3,7 @@ using CleaningRobotService.Common.Objects;
 using Shouldly;
 using Xunit;
 
-namespace CleaningRobotService.Web.Tests.ObjectTests;
+namespace CleaningRobotService.Tests.ObjectTests;
 
 public class GridTests
 {

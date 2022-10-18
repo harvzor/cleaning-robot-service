@@ -6,7 +6,7 @@ using CleaningRobotService.Common.Interfaces;
 using CleaningRobotService.Common.Objects;
 using CleaningRobotService.Web.Dtos.Input;
 
-namespace CleaningRobotService.Web.Benchmarks.ObjectBenchmarks;
+namespace CleaningRobotService.Benchmarks.ObjectBenchmarks;
 
 [SimpleJob(warmupCount: 3, targetCount: 10)]
 [MemoryDiagnoser(displayGenColumns: false)]

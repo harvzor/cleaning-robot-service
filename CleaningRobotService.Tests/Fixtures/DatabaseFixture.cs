@@ -1,9 +1,10 @@
 using System.Data.Common;
+using CleaningRobotService.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace CleaningRobotService.Web.Tests.Fixtures;
+namespace CleaningRobotService.Tests.Fixtures;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 // This is used in a ICollectionFixture, probably instantiated by DI.

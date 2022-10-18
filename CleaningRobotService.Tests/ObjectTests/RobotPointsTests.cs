@@ -1,6 +1,6 @@
 using CleaningRobotService.Common.Objects;
 
-namespace CleaningRobotService.Web.Tests.ObjectTests;
+namespace CleaningRobotService.Tests.ObjectTests;
 
 public class RobotPointsTests : BaseRobotTests<RobotPoints>
 {

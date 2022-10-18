@@ -5,7 +5,7 @@ using CleaningRobotService.Common.Interfaces;
 using Shouldly;
 using Xunit;
 
-namespace CleaningRobotService.Web.Tests.ObjectTests;
+namespace CleaningRobotService.Tests.ObjectTests;
 
 public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
 {

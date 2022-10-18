@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace CleaningRobotService.Web.Tests.Fixtures;
+namespace CleaningRobotService.Tests.Fixtures;
 
 [CollectionDefinition(nameof(DefaultFixtureCollection))]
 public class DefaultFixtureCollection : ICollectionFixture<DatabaseFixture>

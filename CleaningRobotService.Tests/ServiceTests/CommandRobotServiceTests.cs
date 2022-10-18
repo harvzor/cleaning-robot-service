@@ -1,14 +1,15 @@
 using System.Drawing;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Helpers;
+using CleaningRobotService.Tests.Fixtures;
+using CleaningRobotService.Web;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Models;
 using CleaningRobotService.Web.Services;
-using CleaningRobotService.Web.Tests.Fixtures;
 using Shouldly;
 using Xunit;
 
-namespace CleaningRobotService.Web.Tests.ServiceTests;
+namespace CleaningRobotService.Tests.ServiceTests;
 
 [Collection(nameof(DefaultFixtureCollection))]
 public class CommandRobotServiceTests

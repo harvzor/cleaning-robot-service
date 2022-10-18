@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web", "CleaningRobotService.Web\CleaningRobotService.Web.csproj", "{FC00661B-5976-4C24-82D3-1BE798DE9C38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web.Tests", "CleaningRobotService.Web.Tests\CleaningRobotService.Web.Tests.csproj", "{F3555886-E5CB-44B6-B8B0-2DE011002815}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Tests", "CleaningRobotService.Tests\CleaningRobotService.Tests.csproj", "{F3555886-E5CB-44B6-B8B0-2DE011002815}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Web.Benchmarks", "CleaningRobotService.Web.Benchmarks\CleaningRobotService.Web.Benchmarks.csproj", "{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Benchmarks", "CleaningRobotService.Benchmarks\CleaningRobotService.Benchmarks.csproj", "{0E9716EE-8EDD-4A06-B96E-033F7C406EBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Console", "CleaningRobotService.Console\CleaningRobotService.Console.csproj", "{3A120CC0-61B8-4183-85C0-11389894566E}"
 EndProject
