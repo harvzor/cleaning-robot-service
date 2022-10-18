@@ -47,6 +47,7 @@ API output is:
 
 - DotNet 6.0
 - Postgres 10.8 (for running the API)
+- Docker Engine 17.09.0+ (if you want to build from the `docker-compose.yml`)
 
 ## Running
 
@@ -90,7 +91,33 @@ These will be run automatically if you run any services that depend on them.
 docker compose up -d postgres
 ```
 
+### Testing
+
+```
+dotnet test
+```
+
+or
+
+```
+docker compose run --rm test
+```
+
+### Benchmarking
+
+```
+dotnet run --configuration Release --project CleaningRobotService.Benchmarks
+```
+
+or
+
+```
+docker compose run --rm benchmark
+```
+
 ## Robot algorithms
+
+Methods like `RobotGrid_CalculatePointsVisited_10` indicate that the grid size is 10. Different grid sizes will impact memory usage.
 
 ### Robot algorithms benchmarks
 
@@ -212,24 +239,6 @@ Cons:
 - a good Grid width needs to be used to reduce memory usage
   - in my tests, I found a width of 30 to fit well
 - still wastes memory for storing unvisited points
-
-### Testing
-
-```
-docker compose run --rm test
-```
-
-### Benchmarking
-
-```
-docker compose run --rm benchmark
-```
-
-## Benchmarking
-
-```
-dotnet run --configuration Release --project CleaningRobotService.Web.Benchmarks
-```
 
 ## Migrations
 
