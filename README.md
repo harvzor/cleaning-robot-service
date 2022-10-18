@@ -33,12 +33,50 @@ The robot covers 4 coordinates on its route.
 
 ## Requirements
 
-- Postgres 10.8
 - DotNet 6.0
+- Postgres 10.8 (for running the API)
 
-## Env vars
+## Running
+
+Either run natively if you have dotnet installed or use Docker:
+
+### Console application
+
+```
+dotnet run --configuration Release --project CleaningRobotService.Console 
+```
+
+or:
+
+```
+docker compose run --rm console
+```
+
+### Web application
+
+This will also run any dependencies such as Postgres if you haven't already separately ran that service. You can comment out the `depends_on` section in the compose file if need be.
+
+```
+dotnet run --configuration Release --project CleaningRobotService.Web 
+```
+
+or
+
+```
+docker compose up web
+```
+
+#### Web env vars
 
 - `App__DatabaseConnectionString` - configure the Postgres connection string
+
+### Run dependencies
+
+These will be run automatically if you run any services that depend on them.
+
+```
+docker compose up -d postgres
+```
 
 ## Robot algorithms
 
@@ -162,22 +200,6 @@ Cons:
 - a good Grid width needs to be used to reduce memory usage
   - in my tests, I found a width of 30 to fit well
 - still wastes memory for storing unvisited points
-
-## Docker
-
-### Run dependencies
-
-```
-docker compose up -d postgres
-```
-
-### Running
-
-This will also run any dependencies such as Postgres if you haven't already separately ran that service. You can comment out the `depends_on` section in the compose file if need be.
-
-```
-docker compose up runtime 
-```
 
 ### Testing
 
@@ -304,18 +326,3 @@ https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspne
 ### Add some CI to build images and deploy to a container library
 
 Personally I like Drone CI but Travis CI is okay too.
-
-## Todo
-
-- ~~make sure API is camelcase~~
-- ~~make sure db is stored camel case~~
-- ~~make sure enums are displayed in API as strings~~
-- ~~put timing code in a different method~~
-- ~~make direction code more dry (with lambda?)~~
-- ~~double check that Point comparison really works like a value type~~
-- ~~make sure all paths begin with tibber-developer-test~~
-- ~~improve docs~~
-- ~~test db~~
-- ~~create dockerfile for building service~~
-- ~~test performance with larger dataset~~
-- ~~change CommandRobotService to only deal with the database and create an object which is the actual robot~~

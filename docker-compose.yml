@@ -1,16 +1,23 @@
 version: "3.4"
 
 services:
-  runtime:
+  web:
     build:
       context: .
-      target: runtime
+      target: web
     environment:
       App__DatabaseConnectionString: "Host=postgres;Port=5432;Database=cleaning-robot-service;Username=admin;Password=password;PersistSecurityInfo=true"
     ports:
       - "5000:80"
     depends_on:
       - postgres
+
+  console:
+    build:
+      context: .
+      target: console
+    stdin_open: true
+    tty: true
   
   test:
     build:
