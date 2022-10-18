@@ -4,7 +4,7 @@
 
 > This service simulates a robot moving around a space.
 
-Given this input:
+Given this input to the web API:
 
 ```json
 {
@@ -30,6 +30,18 @@ The robot should move like this:
 ![Visual example path](.github/visual-example-path.png)
 
 The robot covers 4 coordinates on its route.
+
+API output is:
+
+```json
+{
+  "id": 19,
+  "timestamp": "2022-10-18T13:05:48.8732354+00:00",
+  "commands": 2,
+  "result": 4,
+  "duration": 0.0000258
+}
+```
 
 ## Requirements
 
