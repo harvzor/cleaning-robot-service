@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
+using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Interfaces;
 using CleaningRobotService.Common.Objects;
 using CleaningRobotService.Console.Enums;
@@ -39,14 +40,8 @@ for (int i = 0; i < numberOfCommands; i++)
     });
 }
 
-// IRobot robot = new RobotPoints
-// IRobot robot = new RobotLines
-IRobot robot = new RobotGrid
-// IRobot robot = new RobotSwarm
-{
-    StartPoint = startPoint,
-    Commands = commands,
-};
+IRobot robot = new RobotFactory()
+    .GetRobot(startPoint: startPoint, commands: commands);
 
 robot.CalculatePointsVisited();
 int uniqueStepsCounted = robot.CountPointsVisited();
