@@ -4,6 +4,12 @@ using CleaningRobotService.Common.Enums;
 
 namespace CleaningRobotService.Common.Robots;
 
+public enum Plane
+{
+    Horizontal = 0,
+    Vertical = 1,
+}
+
 /// <summary>
 /// Simulated robot which cleans the office.
 /// </summary>
@@ -12,13 +18,9 @@ public class RobotDictionaryLines : IRobot
     private int _count = 0;
     
     /// <summary>
-    /// Key is Y coordinate. 
+    /// Second Key is the x or y coordinate.
     /// </summary>
-    private readonly Dictionary<int, List<Line>> _horizontalLines = new();
-    /// <summary>
-    /// Key is X coordinate. 
-    /// </summary>
-    private readonly Dictionary<int, List<Line>> _verticalLines = new();
+    private readonly Dictionary<(Plane, int), List<Line>> _lines = new();
     
     public Point StartPoint { get; set; }
     public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
@@ -75,30 +77,38 @@ public class RobotDictionaryLines : IRobot
         {
             bool pointAlreadyOnLine = false;
 
-            if (_horizontalLines.Any(x => x.Key == currentPoint.Y))
+            if (_lines.Any(x
+                    => x.Key == (Plane.Horizontal, currentPoint.Y)
+                    || x.Key == (Plane.Vertical, currentPoint.X)
+                )
+            )
             {
-                List<Line> matchingHorizontalLines = _horizontalLines
-                    .First(x => x.Key == currentPoint.Y)
-                    .Value;
+                pointAlreadyOnLine = _lines
+                    .Any(x =>
+                    {
+                        if (x.Key == (Plane.Horizontal, currentPoint.Y))
+                        {
+                            List<Line> matchingLines = x.Value;
+                            
+                            return matchingLines
+                                .Any(line => line.Start.X < line.End.X
+                                    ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
+                                    : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X
+                                );
+                        }
+                        
+                        if (x.Key == (Plane.Vertical, currentPoint.X))
+                        {
+                            List<Line> matchingLines = x.Value;
+                            
+                            return matchingLines.Any(line => line.Start.Y < line.End.Y
+                                ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
+                                : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y
+                            );
+                        }
 
-                pointAlreadyOnLine = matchingHorizontalLines
-                    .Any(line => line.Start.X < line.End.X
-                        ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
-                        : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X
-                    );
-            }
-            
-            if (!pointAlreadyOnLine && _verticalLines.Any(x => x.Key == currentPoint.X))
-            {
-                List<Line> matchingHorizontalLines = _verticalLines
-                    .First(x => x.Key == currentPoint.X)
-                    .Value;
-
-                pointAlreadyOnLine = matchingHorizontalLines
-                    .Any(line => line.Start.Y < line.End.Y
-                        ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
-                        : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y
-                    );
+                        return false;
+                    });
             }
 
             // foreach (Line line in _lines)
@@ -163,31 +173,23 @@ public class RobotDictionaryLines : IRobot
                 Direction = command.Direction,
             };
 
-            if (command.Direction is DirectionEnum.west or DirectionEnum.east)
+            // TODO: move to different class
             {
-                int key = line.Start.Y;
-                if (!_horizontalLines.ContainsKey(key))
+                Plane plane = command.Direction is DirectionEnum.west or DirectionEnum.east
+                    ? Plane.Horizontal
+                    : Plane.Vertical;
+                int key = plane == Plane.Horizontal
+                    ? line.Start.Y
+                    : line.Start.X;
+            
+                if (!_lines.ContainsKey((plane, key)))
                 {
-                    _horizontalLines
-                        .Add(key, new List<Line>());
+                    _lines
+                        .Add((plane, key), new List<Line>());
                 }
-                
-                _horizontalLines
-                    .First(x => x.Key == key)
-                    .Value
-                    .Add(line);
-            }
-            else
-            {
-                int key = line.Start.X;
-                if (!_verticalLines.ContainsKey(key))
-                {
-                    _verticalLines
-                        .Add(key, new List<Line>());
-                }
-                
-                _verticalLines
-                    .First(x => x.Key == key)
+            
+                _lines
+                    .First(x => x.Key == (plane, key))
                     .Value
                     .Add(line);
             }
@@ -196,19 +198,11 @@ public class RobotDictionaryLines : IRobot
 
     public IEnumerable<Point> GetPointsVisited()
     {
-        List<Point> horizontalLinePoints = _horizontalLines
+        return _lines
             .SelectMany(group => group.Value)
             .SelectMany(line => line.CalculatePoints())
             .Distinct()
             .ToList();
-        
-        List<Point> verticalLinePoints = _verticalLines
-            .SelectMany(group => group.Value)
-            .SelectMany(line => line.CalculatePoints())
-            .Distinct()
-            .ToList();
-
-        return horizontalLinePoints.Union(verticalLinePoints);
     }
 
     public int CountPointsVisited() => _count;
