@@ -14,7 +14,8 @@ public class RobotFactory
     {
         // IRobot robot = new RobotPoints
         // IRobot robot = new RobotLines
-        IRobot robot = new RobotGrid
+        IRobot robot = new RobotDictionaryLines
+        // IRobot robot = new RobotGrid
         // IRobot robot = new RobotSwarm
         {
             StartPoint = startPoint,
