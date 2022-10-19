@@ -1,6 +1,7 @@
 using System.Drawing;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
+using CleaningRobotService.Common.Structures;
 
 namespace CleaningRobotService.Common.Robots;
 
@@ -15,50 +16,6 @@ public class RobotLines : IRobot
     public Point StartPoint { get; set; }
     public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
 
-    private struct Line
-    {
-        public Point Start;
-        public Point End;
-        public DirectionEnum Direction;
-        
-        private int GetLength()
-        {
-            return (int)Math.Sqrt(Math.Pow((End.X - Start.X), 2) + Math.Pow((End.Y - Start.Y), 2));
-        }
-        
-        public List<Point> CalculatePoints()
-        {
-            Point currentPoint = Start;
-
-            List<Point> points = new(GetLength() + 1) { currentPoint, };
-
-            while (currentPoint != End)
-            {
-                switch (Direction)
-                {
-                    case DirectionEnum.north:
-                        currentPoint.Y += 1;
-                        break;
-                    case DirectionEnum.east:
-                        currentPoint.X += 1;
-                        break;
-                    case DirectionEnum.south:
-                        currentPoint.Y -= 1;
-                        break;
-                    case DirectionEnum.west:
-                        currentPoint.X -= 1;
-                        break;
-                    default:
-                        throw new Exception("CommandDto direction of {command.Direction} not covered.");
-                }
-
-                points.Add(currentPoint);
-            }
-
-            return points;
-        }
-    }
-
     public void CalculatePointsVisited()
     {
         _lines = new List<Line>(Commands.Count());
@@ -68,7 +25,7 @@ public class RobotLines : IRobot
         void AddPoint()
         {
             bool pointAlreadyOnLine = false;
-            foreach (var line in _lines)
+            foreach (Line line in _lines)
             {
                 if (
                     // Check the x coordinate is between the 2 lines.
@@ -127,7 +84,6 @@ public class RobotLines : IRobot
             {
                 Start = start,
                 End = currentPoint,
-                Direction = command.Direction,
             };
 
             _lines.Add(line);

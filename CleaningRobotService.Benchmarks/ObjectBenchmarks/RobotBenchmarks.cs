@@ -100,11 +100,11 @@ public class RobotBenchmarks
         // _commands = GenerateCommands_SpiralIn();
     }
 
-    // [Benchmark(Baseline = true)]
-    // public void RobotPoints_CalculatePointsVisited()
-    // {
-    //     CalculatePointsVisited(new RobotPoints());
-    // }
+    [Benchmark(Baseline = true)]
+    public void RobotPoints_CalculatePointsVisited()
+    {
+        CalculatePointsVisited(new RobotPoints());
+    }
     
     [Benchmark]
     public void RobotLines_CalculatePointsVisited()
@@ -123,12 +123,12 @@ public class RobotBenchmarks
     // {
     //     CalculatePointsVisited(new RobotGrid(gridWidth: 10));
     // }
-    //
-    // [Benchmark]
-    // public void RobotGrid_CalculatePointsVisited_30()
-    // {
-    //     CalculatePointsVisited(new RobotGrid(gridWidth: 30));
-    // }
+    
+    [Benchmark]
+    public void RobotGrid_CalculatePointsVisited_30()
+    {
+        CalculatePointsVisited(new RobotGrid(gridWidth: 30));
+    }
     //
     // [Benchmark]
     // public void RobotGrid_CalculatePointsVisited_100()
