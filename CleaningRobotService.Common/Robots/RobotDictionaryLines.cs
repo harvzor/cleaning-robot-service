@@ -71,6 +71,8 @@ public class RobotDictionaryLines : IRobot
 
     public void CalculatePointsVisited()
     {
+        // Capacity here isn't likely the be the same as the number of commands if the commands cause the robot to
+        // travel the same lines.
         _lines = new Dictionary<(Plane, int), List<Line>>(Commands.Count());
         
         Point currentPoint = StartPoint;
