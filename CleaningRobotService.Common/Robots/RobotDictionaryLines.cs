@@ -93,7 +93,7 @@ public class RobotDictionaryLines : IRobot
                 }
             }
             
-            if (_lines.TryGetValue((Plane.Vertical, currentPoint.X), out List<Line>? matchingVerticalLines))
+            if (!pointAlreadyOnLine && _lines.TryGetValue((Plane.Vertical, currentPoint.X), out List<Line>? matchingVerticalLines))
             {
                 foreach (Line line in matchingVerticalLines)
                 {
