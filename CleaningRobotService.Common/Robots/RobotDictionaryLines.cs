@@ -19,9 +19,10 @@ public class RobotDictionaryLines : IRobot
     private int _count = 0;
     
     /// <summary>
-    /// Second Key is the x or y coordinate.
+    /// Second Key is the x or y coordinate. Values are the index of the line in the <see cref="_lines"/>.
     /// </summary>
-    private Dictionary<(Plane, int), List<Line>> _lines = new();
+    private Dictionary<(Plane, int), List<int>> _dictionary = new();
+    private List<Line> _lines = new();
     
     public Point StartPoint { get; set; }
     public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
@@ -30,7 +31,8 @@ public class RobotDictionaryLines : IRobot
     {
         // Capacity here isn't likely the be the same as the number of commands if the commands cause the robot to
         // travel the same lines.
-        _lines = new Dictionary<(Plane, int), List<Line>>(Commands.Count());
+        _dictionary = new Dictionary<(Plane, int), List<int>>(Commands.Count());
+        _lines = new List<Line>(Commands.Count());
         
         Point currentPoint = StartPoint;
 
@@ -38,10 +40,12 @@ public class RobotDictionaryLines : IRobot
         {
             bool pointAlreadyOnLine = false;
 
-            if (_lines.TryGetValue((Plane.Horizontal, currentPoint.Y), out List<Line>? matchingHorizontalLines))
+            if (_dictionary.TryGetValue((Plane.Horizontal, currentPoint.Y), out List<int>? matchingHorizontalLineIndexes))
             {
-                foreach (Line line in matchingHorizontalLines)
+                foreach (int index in matchingHorizontalLineIndexes)
                 {
+                    Line line = _lines[index];
+                    
                     if (line.Start.X < line.End.X
                             ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
                             : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X)
@@ -52,10 +56,12 @@ public class RobotDictionaryLines : IRobot
                 }
             }
             
-            if (!pointAlreadyOnLine && _lines.TryGetValue((Plane.Vertical, currentPoint.X), out List<Line>? matchingVerticalLines))
+            if (!pointAlreadyOnLine && _dictionary.TryGetValue((Plane.Vertical, currentPoint.X), out List<int>? matchingVerticalLineIndexes))
             {
-                foreach (Line line in matchingVerticalLines)
+                foreach (int index in matchingVerticalLineIndexes)
                 {
+                    Line line = _lines[index];
+                    
                     if (line.Start.Y < line.End.Y
                             ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
                             : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y)
@@ -119,30 +125,27 @@ public class RobotDictionaryLines : IRobot
                     ? line.Start.Y
                     : line.Start.X;
 
-                if (_lines.TryGetValue((plane, key), out List<Line>? lines))
+                _lines.Add(line);
+
+                if (_dictionary.TryGetValue((plane, key), out List<int>? lineIndexes))
                 {
-                    lines.Add(line);
+                    lineIndexes.Add(_lines.Count - 1);
                 }
                 else
                 {
-                    _lines
-                        .Add((plane, key), new List<Line>
+                    _dictionary
+                        .Add((plane, key), new List<int>
                         {
-                            line,
+                            _lines.Count - 1,
                         });
                 }
             }
         }
     }
 
-    public IEnumerable<Point> GetPointsVisited()
-    {
-        return _lines
-            .SelectMany(group => group.Value)
-            .SelectMany(line => line.CalculatePoints())
-            .Distinct()
-            .ToList();
-    }
+    public IEnumerable<Point> GetPointsVisited() => _lines
+        .SelectMany(line => line.CalculatePoints())
+        .Distinct();
 
     public int CountPointsVisited() => _count;
 }
