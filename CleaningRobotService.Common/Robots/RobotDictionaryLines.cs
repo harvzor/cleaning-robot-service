@@ -13,6 +13,7 @@ public enum Plane
 
 /// <summary>
 /// This robot works best when many commands are being sent and each command has a lot of steps (>5).
+/// Memory usage only scales by number of commands.
 /// </summary>
 public class RobotDictionaryLines : IRobot
 {
