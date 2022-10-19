@@ -1,5 +1,4 @@
 using System.Drawing;
-using CleaningRobotService.Common.Enums;
 
 namespace CleaningRobotService.Common.Structures;
 
