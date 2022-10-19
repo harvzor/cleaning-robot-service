@@ -163,20 +163,17 @@ public class RobotDictionaryLines : IRobot
                     ? line.Start.Y
                     : line.Start.X;
 
-                if (!_lines.ContainsKey((plane, key)))
+                if (_lines.TryGetValue((plane, key), out List<Line>? lines))
+                {
+                    lines.Add(line);
+                }
+                else
                 {
                     _lines
                         .Add((plane, key), new List<Line>
                         {
                             line,
                         });
-                }
-                else
-                {
-                    _lines
-                        .First(x => x.Key == (plane, key))
-                        .Value
-                        .Add(line);
                 }
             }
         }
