@@ -162,17 +162,22 @@ public class RobotDictionaryLines : IRobot
                 int key = plane == Plane.Horizontal
                     ? line.Start.Y
                     : line.Start.X;
-            
+
                 if (!_lines.ContainsKey((plane, key)))
                 {
                     _lines
-                        .Add((plane, key), new List<Line>());
+                        .Add((plane, key), new List<Line>
+                        {
+                            line,
+                        });
                 }
-            
-                _lines
-                    .First(x => x.Key == (plane, key))
-                    .Value
-                    .Add(line);
+                else
+                {
+                    _lines
+                        .First(x => x.Key == (plane, key))
+                        .Value
+                        .Add(line);
+                }
             }
         }
     }
