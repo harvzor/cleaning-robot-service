@@ -79,44 +79,31 @@ public class RobotDictionaryLines : IRobot
         {
             bool pointAlreadyOnLine = false;
 
-            foreach (KeyValuePair<(Plane, int), List<Line>> x in _lines)
+            if (_lines.TryGetValue((Plane.Horizontal, currentPoint.Y), out List<Line>? matchingHorizontalLines))
             {
-                if (x.Key == (Plane.Horizontal, currentPoint.Y))
+                foreach (Line line in matchingHorizontalLines)
                 {
-                    List<Line> matchingLines = x.Value;
-
-                    foreach (Line line in matchingLines)
+                    if (line.Start.X < line.End.X
+                            ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
+                            : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X)
                     {
-                        if (line.Start.X < line.End.X
-                                ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
-                                : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X)
-                        {
-                            pointAlreadyOnLine = true;
-                            break;
-                        }
-                    }
-
-                    if (pointAlreadyOnLine)
+                        pointAlreadyOnLine = true;
                         break;
+                    }
                 }
-                        
-                if (x.Key == (Plane.Vertical, currentPoint.X))
+            }
+            
+            if (_lines.TryGetValue((Plane.Vertical, currentPoint.X), out List<Line>? matchingVerticalLines))
+            {
+                foreach (Line line in matchingVerticalLines)
                 {
-                    List<Line> matchingLines = x.Value;
-
-                    foreach (var line in matchingLines)
+                    if (line.Start.Y < line.End.Y
+                            ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
+                            : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y)
                     {
-                        if (line.Start.Y < line.End.Y
-                                ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
-                                : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y)
-                        {
-                            pointAlreadyOnLine = true;
-                            break;
-                        }
-                    }
-
-                    if (pointAlreadyOnLine)
+                        pointAlreadyOnLine = true;
                         break;
+                    }
                 }
             }
 
