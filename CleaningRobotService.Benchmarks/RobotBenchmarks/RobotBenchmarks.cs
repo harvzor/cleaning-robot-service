@@ -4,7 +4,7 @@ using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Robots;
 
-namespace CleaningRobotService.Benchmarks.ObjectBenchmarks;
+namespace CleaningRobotService.Benchmarks.RobotBenchmarks;
 
 [SimpleJob(warmupCount: 3, targetCount: 10)]
 [MemoryDiagnoser(displayGenColumns: false)]
@@ -100,17 +100,17 @@ public class RobotBenchmarks
         // _commands = GenerateCommands_SpiralIn();
     }
 
-    [Benchmark(Baseline = true)]
-    public void RobotPoints_CalculatePointsVisited()
-    {
-        CalculatePointsVisited(new RobotPoints());
-    }
-    
-    [Benchmark]
-    public void RobotLines_CalculatePointsVisited()
-    {
-        CalculatePointsVisited(new RobotLines());
-    }
+    // [Benchmark(Baseline = true)]
+    // public void RobotPoints_CalculatePointsVisited()
+    // {
+    //     CalculatePointsVisited(new RobotPoints());
+    // }
+    //
+    // [Benchmark]
+    // public void RobotLines_CalculatePointsVisited()
+    // {
+    //     CalculatePointsVisited(new RobotLines());
+    // }
     
     [Benchmark]
     public void RobotDictionaryLines_CalculatePointsVisited()
@@ -123,12 +123,12 @@ public class RobotBenchmarks
     // {
     //     CalculatePointsVisited(new RobotGrid(gridWidth: 10));
     // }
-    
-    [Benchmark]
-    public void RobotGrid_CalculatePointsVisited_30()
-    {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 30));
-    }
+    //
+    // [Benchmark]
+    // public void RobotGrid_CalculatePointsVisited_30()
+    // {
+    //     CalculatePointsVisited(new RobotGrid(gridWidth: 30));
+    // }
     //
     // [Benchmark]
     // public void RobotGrid_CalculatePointsVisited_100()
