@@ -12,7 +12,7 @@ public enum Plane
 }
 
 /// <summary>
-/// Simulated robot which cleans the office.
+/// This robot works best when many commands are being sent and each command has a lot of steps (>5).
 /// </summary>
 public class RobotDictionaryLines : IRobot
 {
