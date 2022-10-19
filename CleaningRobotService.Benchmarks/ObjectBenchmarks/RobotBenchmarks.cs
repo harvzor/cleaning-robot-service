@@ -100,11 +100,11 @@ public class RobotBenchmarks
         // _commands = GenerateCommands_SpiralIn();
     }
 
-    [Benchmark(Baseline = true)]
-    public void RobotPoints_CalculatePointsVisited()
-    {
-        CalculatePointsVisited(new RobotPoints());
-    }
+    // [Benchmark(Baseline = true)]
+    // public void RobotPoints_CalculatePointsVisited()
+    // {
+    //     CalculatePointsVisited(new RobotPoints());
+    // }
     
     [Benchmark]
     public void RobotLines_CalculatePointsVisited()

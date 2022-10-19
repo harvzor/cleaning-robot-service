@@ -20,7 +20,7 @@ public class RobotDictionaryLines : IRobot
     /// <summary>
     /// Second Key is the x or y coordinate.
     /// </summary>
-    private readonly Dictionary<(Plane, int), List<Line>> _lines = new();
+    private Dictionary<(Plane, int), List<Line>> _lines = new();
     
     public Point StartPoint { get; set; }
     public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
@@ -71,62 +71,54 @@ public class RobotDictionaryLines : IRobot
 
     public void CalculatePointsVisited()
     {
+        _lines = new Dictionary<(Plane, int), List<Line>>(Commands.Count());
+        
         Point currentPoint = StartPoint;
 
         void AddPoint()
         {
             bool pointAlreadyOnLine = false;
 
-            if (_lines.Any(x
-                    => x.Key == (Plane.Horizontal, currentPoint.Y)
-                    || x.Key == (Plane.Vertical, currentPoint.X)
-                )
-            )
+            foreach (KeyValuePair<(Plane, int), List<Line>> x in _lines)
             {
-                pointAlreadyOnLine = _lines
-                    .Any(x =>
+                if (x.Key == (Plane.Horizontal, currentPoint.Y))
+                {
+                    List<Line> matchingLines = x.Value;
+
+                    foreach (Line line in matchingLines)
                     {
-                        if (x.Key == (Plane.Horizontal, currentPoint.Y))
+                        if (line.Start.X < line.End.X
+                                ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
+                                : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X)
                         {
-                            List<Line> matchingLines = x.Value;
-                            
-                            return matchingLines
-                                .Any(line => line.Start.X < line.End.X
-                                    ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
-                                    : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X
-                                );
+                            pointAlreadyOnLine = true;
+                            break;
                         }
+                    }
+
+                    if (pointAlreadyOnLine)
+                        break;
+                }
                         
-                        if (x.Key == (Plane.Vertical, currentPoint.X))
-                        {
-                            List<Line> matchingLines = x.Value;
-                            
-                            return matchingLines.Any(line => line.Start.Y < line.End.Y
+                if (x.Key == (Plane.Vertical, currentPoint.X))
+                {
+                    List<Line> matchingLines = x.Value;
+
+                    foreach (var line in matchingLines)
+                    {
+                        if (line.Start.Y < line.End.Y
                                 ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
-                                : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y
-                            );
+                                : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y)
+                        {
+                            pointAlreadyOnLine = true;
+                            break;
                         }
+                    }
 
-                        return false;
-                    });
+                    if (pointAlreadyOnLine)
+                        break;
+                }
             }
-
-            // foreach (Line line in _lines)
-            // {
-            //     if (
-            //         // Check the x coordinate is between the 2 lines.
-            //         (line.Start.X < line.End.X
-            //             ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
-            //             : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X)
-            //         // Check the y coordinate is between the 2 lines.
-            //         && (line.Start.Y < line.End.Y
-            //             ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
-            //             : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y))
-            //     {
-            //         pointAlreadyOnLine = true;
-            //         break;
-            //     }
-            // }
 
             if (!pointAlreadyOnLine)
                 _count++;
