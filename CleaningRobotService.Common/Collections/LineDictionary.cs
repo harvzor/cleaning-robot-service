@@ -23,12 +23,9 @@ public class LineDictionary : IPointsCollections
         _lines = new List<Line>(numberOfExpectedCommands);
     }
 
-    public void AddLine(Line line, DirectionEnum direction)
+    public void AddLine(Line line)
     {
-        // TODO: Can just calculate the plane based on the start/end.
-        PlaneEnum planeEnum = direction is DirectionEnum.west or DirectionEnum.east
-            ? PlaneEnum.Horizontal
-            : PlaneEnum.Vertical;
+        PlaneEnum planeEnum = line.GetPlane();
         int key = planeEnum == PlaneEnum.Horizontal
             ? line.Start.Y
             : line.Start.X;

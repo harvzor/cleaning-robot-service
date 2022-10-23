@@ -1,4 +1,5 @@
 using System.Drawing;
+using CleaningRobotService.Common.Enums;
 
 namespace CleaningRobotService.Common.Structures;
 
@@ -6,10 +7,28 @@ public struct Line
 {
     public Point Start;
     public Point End;
+
+    public Line()
+    {
+    }
+
+    public Line(Point start, Point end)
+    {
+        Start = start;
+        End = end;
+    }
         
     private int GetLength()
     {
         return (int)Math.Sqrt(Math.Pow((End.X - Start.X), 2) + Math.Pow((End.Y - Start.Y), 2));
+    }
+
+    public PlaneEnum GetPlane()
+    {
+        if (Start.X == End.X)
+            return PlaneEnum.Vertical;
+
+        return PlaneEnum.Horizontal;
     }
         
     public List<Point> CalculatePoints()
@@ -22,8 +41,8 @@ public struct Line
             };
         }
 
-        bool isVertical = Start.X == End.X;
-        bool ascending = isVertical
+        PlaneEnum plane = GetPlane();
+        bool ascending = plane == PlaneEnum.Vertical
             ? Start.Y < End.Y
             : Start.X < End.X;
 
@@ -33,7 +52,7 @@ public struct Line
 
         while (currentPoint != End)
         {
-            if (isVertical)
+            if (plane == PlaneEnum.Vertical)
                 currentPoint.Y += ascending ? 1 : -1;
             else
                 currentPoint.X += ascending ? 1 : -1;

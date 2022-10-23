@@ -68,7 +68,7 @@ public class RobotDictionaryLines : IRobot
                 End = currentPoint,
             };
             
-            _store.AddLine(line: line, direction: command.Direction);
+            _store.AddLine(line: line);
         }
     }
 
