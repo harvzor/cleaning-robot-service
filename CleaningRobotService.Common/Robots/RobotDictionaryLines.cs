@@ -62,11 +62,7 @@ public class RobotDictionaryLines : IRobot
                 }
             }
 
-            Line line = new Line
-            {
-                Start = start,
-                End = currentPoint,
-            };
+            Line line = new Line(start: start, end: currentPoint);
             
             _store.AddLine(line: line);
         }

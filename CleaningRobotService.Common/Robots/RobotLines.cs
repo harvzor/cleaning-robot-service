@@ -80,11 +80,7 @@ public class RobotLines : IRobot
                 }
             }
 
-            Line line = new Line
-            {
-                Start = start,
-                End = currentPoint,
-            };
+            Line line = new Line(start: start, end: currentPoint);
 
             _lines.Add(line);
         }

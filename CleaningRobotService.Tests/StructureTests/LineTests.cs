@@ -12,12 +12,12 @@ public class LineTests
     {
         // Arrange
 
-        Line line = new()
-        {
-            Start = new Point(1, 1),
-            End = new Point(1, 1),
-        };
-        
+        Line line = new
+        (
+            start: new Point(1, 1),
+            end: new Point(1, 1)
+        );
+
         // Act
 
         List<Point> points = line.CalculatePoints();
@@ -32,12 +32,12 @@ public class LineTests
     public void Line_CalculatePoints_VerticalTest()
     {
         // Arrange
-
-        Line line = new()
-        {
-            Start = new Point(1, -1),
-            End = new Point(1, 1),
-        };
+        
+        Line line = new
+        (
+            start: new Point(1, -1),
+            end: new Point(1, 1)
+        );
         
         // Act
 
@@ -55,12 +55,12 @@ public class LineTests
     public void Line_CalculatePoints_HorizontalTest()
     {
         // Arrange
-
-        Line line = new()
-        {
-            Start = new Point(-1, 1),
-            End = new Point(1, 1),
-        };
+        
+        Line line = new
+        (
+            start: new Point(-1, 1),
+            end: new Point(1, 1)
+        );
         
         // Act
 
