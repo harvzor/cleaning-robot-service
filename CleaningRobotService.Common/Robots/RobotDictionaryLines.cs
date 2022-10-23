@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Drawing;
 using CleaningRobotService.Common.Collections;
 using CleaningRobotService.Common.Dtos.Input;

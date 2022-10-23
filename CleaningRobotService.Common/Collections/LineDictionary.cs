@@ -1,5 +1,4 @@
 using System.Drawing;
-using System.Numerics;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Structures;
 
@@ -19,6 +18,7 @@ public class LineDictionary : IPointsCollections
     {
         // Capacity here isn't likely the be the same as the number of commands if the commands cause the robot to
         // travel the same lines.
+        // Actually it would make more sense if this was a lookup as that can contain multiple values for the same key.
         _dictionary = new Dictionary<(PlaneEnum, int), List<int>>(numberOfExpectedCommands);
         _lines = new List<Line>(numberOfExpectedCommands);
     }
@@ -32,7 +32,7 @@ public class LineDictionary : IPointsCollections
         int key = planeEnum == PlaneEnum.Horizontal
             ? line.Start.Y
             : line.Start.X;
-
+        
         _lines.Add(line);
 
         if (_dictionary.TryGetValue((planeEnum, key), out List<int>? lineIndexes))
@@ -51,12 +51,19 @@ public class LineDictionary : IPointsCollections
     
     public void AddPoint(Point point)
     {
+        // Check to see if this Point overlaps any other pre-existing line without calculating each point of every line.
+        // Overlaps are calculates by checking where the Start and End of a line is, and seeing if this Point is between
+        // (or on) them.
+        
+        // Find all horizontal lines that are on the same y-axis at this Point.
         if (_dictionary.TryGetValue((PlaneEnum.Horizontal, point.Y), out List<int>? matchingHorizontalLineIndexes))
         {
             foreach (int index in matchingHorizontalLineIndexes)
             {
                 Line line = _lines[index];
-                    
+                
+                // Since this Point is on the same y-axis, only check if the x value of this Point is on or between the
+                // Line Start and End x points.
                 if (line.Start.X < line.End.X
                         ? point.X >= line.Start.X && point.X <= line.End.X
                         : point.X <= line.Start.X && point.X >= line.End.X)
@@ -66,12 +73,15 @@ public class LineDictionary : IPointsCollections
             }
         }
             
+        // Find all vertical lines that are on the same x-axis at this Point.
         if (_dictionary.TryGetValue((PlaneEnum.Vertical, point.X), out List<int>? matchingVerticalLineIndexes))
         {
             foreach (int index in matchingVerticalLineIndexes)
             {
                 Line line = _lines[index];
-                    
+                
+                // Since this Point is on the same x-axis, only check if the y value of this Point is on or between the
+                // Line Start and End y points.
                 if (line.Start.Y < line.End.Y
                         ? point.Y >= line.Start.Y && point.Y <= line.End.Y
                         : point.Y <= line.Start.Y && point.Y >= line.End.Y)
