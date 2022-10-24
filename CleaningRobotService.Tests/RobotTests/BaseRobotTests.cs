@@ -7,33 +7,38 @@ using Xunit;
 
 namespace CleaningRobotService.Tests.RobotTests;
 
-public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
+public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
 {
+    private IRobot CreateRobot(Point startPoint, IEnumerable<CommandDto> commands)
+    {
+        return (TRobot)Activator.CreateInstance(typeof(TRobot), startPoint, commands)!;
+    }
+    
     [Fact]
     protected void CalculatePointsVisitedTest()
     {
         // Arrange
 
-        IRobot robot = new TRobot();
-
-        robot.StartPoint = new Point
-        {
-            X = 10,
-            Y = 22,
-        };
-        robot.Commands = new List<CommandDto>()
-        {
-            new CommandDto
+        IRobot robot = CreateRobot(
+            startPoint: new Point
             {
-                Direction = DirectionEnum.east,
-                Steps = 2,
+                X = 10,
+                Y = 22,
             },
-            new CommandDto
+            commands: new List<CommandDto>()
             {
-                Direction = DirectionEnum.north,
-                Steps = 1,
-            },
-        };
+                new CommandDto
+                {
+                    Direction = DirectionEnum.east,
+                    Steps = 2,
+                },
+                new CommandDto
+                {
+                    Direction = DirectionEnum.north,
+                    Steps = 1,
+                },
+            }
+        );
         
         // Act
         
@@ -58,27 +63,27 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
     {
         // Arrange
         
-        IRobot robot = new TRobot();
-
-        robot.StartPoint = new Point
-        {
-            X = 0,
-            Y = 0,
-        };
-        robot.Commands = new List<CommandDto>()
-        {
-            new CommandDto
+        IRobot robot = CreateRobot(
+            startPoint: new Point
             {
-                Direction = DirectionEnum.west,
-                Steps = 1,
+                X = 0,
+                Y = 0,
             },
-            // Go back on itself.
-            new CommandDto
+            commands: new List<CommandDto>()
             {
-                Direction = DirectionEnum.south,
-                Steps = 1,
-            },
-        };
+                new CommandDto
+                {
+                    Direction = DirectionEnum.west,
+                    Steps = 1,
+                },
+                // Go back on itself.
+                new CommandDto
+                {
+                    Direction = DirectionEnum.south,
+                    Steps = 1,
+                },
+            }
+        );
         
         // Act
         
@@ -102,27 +107,27 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
     {
         // Arrange
         
-        IRobot robot = new TRobot();
-
-        robot.StartPoint = new Point
-        {
-            X = 0,
-            Y = 0,
-        };
-        robot.Commands = new List<CommandDto>()
-        {
-            new CommandDto
+        IRobot robot = CreateRobot(
+            startPoint: new Point
             {
-                Direction = DirectionEnum.east,
-                Steps = 1,
+                X = 0,
+                Y = 0,
             },
-            // Go back on itself.
-            new CommandDto
+            commands: new List<CommandDto>()
             {
-                Direction = DirectionEnum.west,
-                Steps = 1,
-            },
-        };
+                new CommandDto
+                {
+                    Direction = DirectionEnum.east,
+                    Steps = 1,
+                },
+                // Go back on itself.
+                new CommandDto
+                {
+                    Direction = DirectionEnum.west,
+                    Steps = 1,
+                },
+            }
+        );
         
         // Act
         
@@ -145,14 +150,6 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
     {
         // Arrange
         
-        IRobot robot = new TRobot();
-
-        robot.StartPoint = new Point
-        {
-            X = 0,
-            Y = 0,
-        };
-        
         List<CommandDto> commands = new();
 
         uint steps = 1000;
@@ -172,8 +169,15 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
                 Steps = steps,
             });
         }
-
-        robot.Commands = commands;
+        
+        IRobot robot = CreateRobot(
+            startPoint: new Point
+            {
+                X = 0,
+                Y = 0,
+            },
+            commands: commands
+        );
         
         // Act
         
@@ -197,15 +201,7 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
     protected void CalculatePointsVisitedTest_SpiralIn()
     {
         // Arrange
-        
-        IRobot robot = new TRobot();
 
-        robot.StartPoint = new Point
-        {
-            X = 0,
-            Y = 0,
-        };
-        
         List<CommandDto> commands = new();
         int width = 10;
         
@@ -248,8 +244,15 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot, new()
                     : (uint)(width - directionOddCount),
             });
         }
-        
-        robot.Commands = commands;
+                
+        IRobot robot = CreateRobot(
+            startPoint: new Point
+            {
+                X = 0,
+                Y = 0,
+            },
+            commands: commands
+        );
         
         // Act
         

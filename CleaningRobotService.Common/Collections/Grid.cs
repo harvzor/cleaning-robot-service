@@ -3,7 +3,7 @@ using System.Drawing;
 namespace CleaningRobotService.Common.Collections;
 
 /// <summary>
-/// <inheritdoc cref="IGrid"/>
+/// <inheritdoc cref="IPointsCollections"/>
 /// </summary>
 // TODO: implement IEnumerable?
 // TODO: make sure the memory is freed once it goes out of scope?
@@ -12,7 +12,7 @@ public class Grid : IPointsCollections
     private readonly int _gridWidth;
     private readonly List<List<bool>> _pointsVisited;
     private readonly Point _gridOffset;
-    private int _count = 0;
+    private int _count;
     
     /// <param name="gridWidth">
     /// The width and height of the grid.

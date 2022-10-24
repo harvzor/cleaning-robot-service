@@ -103,80 +103,68 @@ public class RobotBenchmarks
     [Benchmark(Baseline = true)]
     public void RobotPoints_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new RobotPoints());
+        CalculatePointsVisited<RobotPoints>();
     }
     
     [Benchmark]
     public void RobotLines_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new RobotLines());
+        CalculatePointsVisited<RobotLines>();
     }
     
     [Benchmark]
     public void RobotDictionaryLines_CalculatePointsVisited()
     {
-        CalculatePointsVisited(new RobotDictionaryLines());
+        CalculatePointsVisited<RobotDictionaryLines>();
     }
 
     [Benchmark]
     public void RobotGrid_CalculatePointsVisited_10()
     {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 10));
+        CalculatePointsVisited<RobotGrid>(10);
     }
     
     [Benchmark]
     public void RobotGrid_CalculatePointsVisited_30()
     {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 30));
+        CalculatePointsVisited<RobotGrid>(30);
     }
     
     [Benchmark]
     public void RobotGrid_CalculatePointsVisited_100()
     {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 100));
+        CalculatePointsVisited<RobotGrid>(100);
     }
     
     [Benchmark]
     public void RobotGrid_CalculatePointsVisited_500()
     {
-        CalculatePointsVisited(new RobotGrid(gridWidth: 500));
+        CalculatePointsVisited<RobotGrid>(500);
     }
     
-    // [Benchmark]
-    // [Arguments(30)]
-    // [Arguments(500)]
-    // public void RobotGrid_CalculatePointsVisited(int gridWidth)
-    // {
-    //     CalculatePointsVisited(new RobotGrid(gridWidth: gridWidth));
-    // }
-    
-    // [Benchmark]
-    // public void RobotSwarm_CalculatePointsVisited_1000()
-    // {
-    //     CalculatePointsVisited(new RobotSwarm(chunkCommands: 1000));
-    // }
-    //
-    // [Benchmark]
-    // public void RobotSwarm_CalculatePointsVisited_500()
-    // {
-    //     CalculatePointsVisited(new RobotSwarm(chunkCommands: 500));
-    // }
-    //
-    // [Benchmark]
-    // public void RobotSwarm_CalculatePointsVisited_100()
-    // {
-    //     CalculatePointsVisited(new RobotSwarm(chunkCommands: 500));
-    // }
-    
-    private void CalculatePointsVisited(IRobot robot)
+    private IRobot CreateRobot<TRobot>(Point startPoint, IEnumerable<CommandDto> commands, params object?[]? args) where TRobot : IRobot
     {
-        robot.StartPoint = new Point
+        object?[] newArgs = new object[]
+        {
+            startPoint,
+            commands,
+        };
+
+        if (args != null)
+            newArgs = newArgs.Union(args).ToArray();
+
+        return (TRobot)Activator.CreateInstance(typeof(TRobot), newArgs)!;
+    }
+
+    private void CalculatePointsVisited<TRobot>(params object?[]? args) where TRobot : IRobot
+    {
+        Point startPoint = new Point
         {
             X = 0,
             Y = 0,
         };
 
-        robot.Commands = _commands;
+        IRobot robot = CreateRobot<TRobot>(startPoint: startPoint, commands: _commands, args: args);
 
         robot.CalculatePointsVisited();
 

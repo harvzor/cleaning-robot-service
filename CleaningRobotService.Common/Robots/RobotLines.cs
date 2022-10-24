@@ -8,18 +8,19 @@ namespace CleaningRobotService.Common.Robots;
 /// <summary>
 /// Simulated robot which cleans the office.
 /// </summary>
-public class RobotLines : IRobot
+public class RobotLines : BaseRobot, IRobot
 {
-    private int _count = 0;
-    private List<Line> _lines = new();
+    private int _count;
+    private readonly List<Line> _lines;
     
-    public Point StartPoint { get; set; }
-    public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
+    public RobotLines(Point startPoint, IEnumerable<CommandDto> commands)
+        : base(startPoint: startPoint, commands: commands)
+    {
+        _lines = new List<Line>(Commands.Count);
+    }
 
     public void CalculatePointsVisited()
     {
-        _lines = new List<Line>(Commands.Count());
-        
         Point currentPoint = StartPoint;
 
         void AddPoint()

@@ -6,7 +6,7 @@ namespace CleaningRobotService.Common.Robots;
 public interface IRobot
 {
     Point StartPoint { get; set; }
-    IEnumerable<CommandDto> Commands { get; set; }
+    List<CommandDto> Commands { get; set; }
     void CalculatePointsVisited();
     IEnumerable<Point> GetPointsVisited();
     int CountPointsVisited();

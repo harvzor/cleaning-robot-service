@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Drawing;
 using CleaningRobotService.Common.Collections;
 using CleaningRobotService.Common.Dtos.Input;
@@ -11,16 +10,18 @@ namespace CleaningRobotService.Common.Robots;
 /// This robot works best when many commands are being sent and each command has a lot of steps (>5).
 /// Memory usage only scales by number of commands.
 /// </summary>
-public class RobotDictionaryLines : IRobot
+public class RobotDictionaryLines : BaseRobot, IRobot
 {
-    private LineDictionary? _store;
-    public Point StartPoint { get; set; }
-    public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
+    private readonly LineDictionary _store;
+
+    public RobotDictionaryLines(Point startPoint, IEnumerable<CommandDto> commands)
+        : base(startPoint: startPoint, commands: commands)
+    {
+        _store = new LineDictionary(numberOfExpectedCommands: Commands.Count);
+    }
 
     public void CalculatePointsVisited()
     {
-        _store = new LineDictionary(numberOfExpectedCommands: Commands.Count());
-
         Point currentPoint = StartPoint;
 
         void AddPoint()

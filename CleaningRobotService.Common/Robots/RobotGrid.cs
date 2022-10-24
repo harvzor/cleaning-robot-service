@@ -11,18 +11,18 @@ namespace CleaningRobotService.Common.Robots;
 /// <remarks>
 /// <see cref="GetPointsVisited"/> will return the Points unordered.
 /// </remarks>
-public class RobotGrid : IRobot
+public class RobotGrid : BaseRobot, IRobot
 {
     private readonly GridExpandable _gridExpandable;
-    public Point StartPoint { get; set; }
-    public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
-
-    public RobotGrid()
+    
+    public RobotGrid(Point startPoint, IEnumerable<CommandDto> commands)
+        : base(startPoint: startPoint, commands: commands)
     {
         _gridExpandable = new GridExpandable();
     }
     
-    public RobotGrid(int gridWidth)
+    public RobotGrid(Point startPoint, IEnumerable<CommandDto> commands, int gridWidth)
+        : base(startPoint: startPoint, commands: commands)
     {
         _gridExpandable = new GridExpandable(gridWidth: gridWidth);
     }

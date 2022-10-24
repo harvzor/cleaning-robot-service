@@ -17,11 +17,11 @@ public class RobotFactory
         IRobot robot = new RobotDictionaryLines
         // IRobot robot = new RobotGrid
         // IRobot robot = new RobotSwarm
-        {
-            StartPoint = startPoint,
-            Commands = commands,
-        };
-
+        (
+            startPoint: startPoint,
+            commands: commands
+        );
+        
         return robot;
     }
 }

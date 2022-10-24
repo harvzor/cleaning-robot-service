@@ -3,7 +3,7 @@ using System.Drawing;
 namespace CleaningRobotService.Common.Collections;
 
 /// <summary>
-/// <inheritdoc cref="IGrid"/>
+/// <inheritdoc cref="IPointsCollections"/>
 /// Similar to <see cref="Grid"/> but you can add any Point without worrying about <see cref="Grid"/> size constraints..
 /// </summary>
 // TODO: implement IEnumerable?

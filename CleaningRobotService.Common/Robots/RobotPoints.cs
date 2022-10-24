@@ -7,14 +7,16 @@ namespace CleaningRobotService.Common.Robots;
 /// <summary>
 /// Simulated robot which cleans the office.
 /// </summary>
-public class RobotPoints : IRobot
+public class RobotPoints : BaseRobot, IRobot
 {
-    private int _count = 0;
+    private int _count;
     // https://stackoverflow.com/questions/24855615/hashset-memory-overhead
     private readonly HashSet<Point> _pointsVisited = new();
-    
-    public Point StartPoint { get; set; }
-    public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
+
+    public RobotPoints(Point startPoint, IEnumerable<CommandDto> commands)
+        : base(startPoint: startPoint, commands: commands)
+    {
+    }
 
     public void CalculatePointsVisited()
     {
