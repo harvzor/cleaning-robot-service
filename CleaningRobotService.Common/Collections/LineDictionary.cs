@@ -14,14 +14,14 @@ public class LineDictionary : IPointsCollections
     /// <remarks>
     /// A <see cref="Lookup"/> might make more sense here but it isn't mutable.
     /// </remarks>
-    private readonly Dictionary<(PlaneEnum, int), List<Line>> _dictionary;
     private readonly List<Line> _lines;
 
     public LineDictionary(int numberOfExpectedCommands = 0)
     {
         // Capacity here isn't likely the be the same as the number of commands if the commands cause the robot to
         // travel the same lines.
-        _dictionary = new Dictionary<(PlaneEnum, int), List<Line>>(numberOfExpectedCommands);
+        // Actually it would make more sense if this was a lookup as that can contain multiple values for the same key.
+        _dictionary = new Dictionary<(PlaneEnum, int), List<int>>(numberOfExpectedCommands);
         _lines = new List<Line>(numberOfExpectedCommands);
     }
 
@@ -34,16 +34,16 @@ public class LineDictionary : IPointsCollections
         
         _lines.Add(line);
 
-        if (_dictionary.TryGetValue((planeEnum, key), out List<Line>? lineIndexes))
+        if (_dictionary.TryGetValue((planeEnum, key), out List<int>? lineIndexes))
         {
-            lineIndexes.Add(line);
+            lineIndexes.Add(_lines.Count - 1);
         }
         else
         {
             _dictionary
-                .Add((planeEnum, key), new List<Line>
+                .Add((planeEnum, key), new List<int>
                 {
-                    line,
+                    _lines.Count - 1,
                 });
         }
     }
@@ -55,10 +55,12 @@ public class LineDictionary : IPointsCollections
         // (or on) them.
         
         // Find all horizontal lines that are on the same y-axis at this Point.
-        if (_dictionary.TryGetValue((PlaneEnum.Horizontal, point.Y), out List<Line>? matchingHorizontalLines))
+        if (_dictionary.TryGetValue((PlaneEnum.Horizontal, point.Y), out List<int>? matchingHorizontalLineIndexes))
         {
-            foreach (Line line in matchingHorizontalLines)
+            foreach (int index in matchingHorizontalLineIndexes)
             {
+                Line line = _lines[index];
+                
                 // Since this Point is on the same y-axis, only check if the x value of this Point is on or between the
                 // Line Start and End x points.
                 if (line.Start.X < line.End.X
@@ -71,10 +73,12 @@ public class LineDictionary : IPointsCollections
         }
             
         // Find all vertical lines that are on the same x-axis at this Point.
-        if (_dictionary.TryGetValue((PlaneEnum.Vertical, point.X), out List<Line>? matchingVerticalLines))
+        if (_dictionary.TryGetValue((PlaneEnum.Vertical, point.X), out List<int>? matchingVerticalLineIndexes))
         {
-            foreach (Line line in matchingVerticalLines)
+            foreach (int index in matchingVerticalLineIndexes)
             {
+                Line line = _lines[index];
+                
                 // Since this Point is on the same x-axis, only check if the y value of this Point is on or between the
                 // Line Start and End y points.
                 if (line.Start.Y < line.End.Y
