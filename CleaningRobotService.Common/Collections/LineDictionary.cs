@@ -9,7 +9,7 @@ public class LineDictionary : IPointsCollections
     private int _count = 0;
     
     /// <summary>
-    /// Second Key is the x or y coordinate. Values are the index of the line in the <see cref="_lines"/>.
+    /// Second Key is the <see cref="Line.Start"/> X or Y coordinate. Values are the index of the line in the <see cref="_lines"/>.
     /// </summary>
     /// <remarks>
     /// A <see cref="Lookup"/> might make more sense here but it isn't mutable.
