@@ -11,7 +11,9 @@ public class LineDictionary : IPointsCollections
     /// <summary>
     /// Second Key is the x or y coordinate. Values are the index of the line in the <see cref="_lines"/>.
     /// </summary>
-    private readonly Dictionary<(PlaneEnum, int), List<int>> _dictionary;
+    /// <remarks>
+    /// A <see cref="Lookup"/> might make more sense here but it isn't mutable.
+    /// </remarks>
     private readonly List<Line> _lines;
 
     public LineDictionary(int numberOfExpectedCommands = 0)
