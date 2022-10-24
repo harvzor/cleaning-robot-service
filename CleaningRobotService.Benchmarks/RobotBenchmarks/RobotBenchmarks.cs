@@ -4,7 +4,7 @@ using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Robots;
 
-namespace CleaningRobotService.Benchmarks.ObjectBenchmarks;
+namespace CleaningRobotService.Benchmarks.RobotBenchmarks;
 
 [SimpleJob(warmupCount: 3, targetCount: 10)]
 [MemoryDiagnoser(displayGenColumns: false)]
@@ -110,6 +110,12 @@ public class RobotBenchmarks
     public void RobotLines_CalculatePointsVisited()
     {
         CalculatePointsVisited(new RobotLines());
+    }
+    
+    [Benchmark]
+    public void RobotDictionaryLines_CalculatePointsVisited()
+    {
+        CalculatePointsVisited(new RobotDictionaryLines());
     }
 
     [Benchmark]

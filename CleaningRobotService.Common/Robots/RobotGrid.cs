@@ -1,7 +1,7 @@
 using System.Drawing;
+using CleaningRobotService.Common.Collections;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
-using CleaningRobotService.Common.Grids;
 
 namespace CleaningRobotService.Common.Robots;
 
@@ -70,10 +70,7 @@ public class RobotGrid : IRobot
         }
     }
 
-    public IEnumerable<Point> GetPointsVisited()
-    {
-        return _gridExpandable.GetPoints();
-    }
+    public IEnumerable<Point> GetPointsVisited() => _gridExpandable.GetPoints();
 
     public int CountPointsVisited() => _gridExpandable.Count();
 }

@@ -1,13 +1,13 @@
 using System.Drawing;
 
-namespace CleaningRobotService.Common.Grids;
+namespace CleaningRobotService.Common.Collections;
 
 /// <summary>
 /// <inheritdoc cref="IGrid"/>
 /// Similar to <see cref="Grid"/> but you can add any Point without worrying about <see cref="Grid"/> size constraints..
 /// </summary>
 // TODO: implement IEnumerable?
-public class GridExpandable : IGrid
+public class GridExpandable : IPointsCollections
 {
     private readonly int _gridWidth;
     private readonly Dictionary<Point, Grid> _grids = new();

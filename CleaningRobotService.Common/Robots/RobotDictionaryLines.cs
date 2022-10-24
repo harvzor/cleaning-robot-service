@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Drawing;
+using CleaningRobotService.Common.Collections;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Structures;
@@ -6,44 +8,24 @@ using CleaningRobotService.Common.Structures;
 namespace CleaningRobotService.Common.Robots;
 
 /// <summary>
-/// Simulated robot which cleans the office.
+/// This robot works best when many commands are being sent and each command has a lot of steps (>5).
+/// Memory usage only scales by number of commands.
 /// </summary>
-public class RobotLines : IRobot
+public class RobotDictionaryLines : IRobot
 {
-    private int _count = 0;
-    private List<Line> _lines = new();
-    
+    private LineDictionary? _store;
     public Point StartPoint { get; set; }
     public IEnumerable<CommandDto> Commands { get; set; } = Enumerable.Empty<CommandDto>();
 
     public void CalculatePointsVisited()
     {
-        _lines = new List<Line>(Commands.Count());
-        
+        _store = new LineDictionary(numberOfExpectedCommands: Commands.Count());
+
         Point currentPoint = StartPoint;
 
         void AddPoint()
         {
-            bool pointAlreadyOnLine = false;
-            foreach (Line line in _lines)
-            {
-                if (
-                    // Check the x coordinate is between the 2 lines.
-                    (line.Start.X < line.End.X
-                        ? currentPoint.X >= line.Start.X && currentPoint.X <= line.End.X
-                        : currentPoint.X <= line.Start.X && currentPoint.X >= line.End.X)
-                    // Check the y coordinate is between the 2 lines.
-                    && (line.Start.Y < line.End.Y
-                        ? currentPoint.Y >= line.Start.Y && currentPoint.Y <= line.End.Y
-                        : currentPoint.Y <= line.Start.Y && currentPoint.Y >= line.End.Y))
-                {
-                    pointAlreadyOnLine = true;
-                    break;
-                }
-            }
-
-            if (!pointAlreadyOnLine)
-                _count++;
+            _store.AddPoint(point: currentPoint);
         }
         
         AddPoint();
@@ -81,14 +63,12 @@ public class RobotLines : IRobot
             }
 
             Line line = new Line(start: start, end: currentPoint);
-
-            _lines.Add(line);
+            
+            _store.AddLine(line: line);
         }
     }
 
-    public IEnumerable<Point> GetPointsVisited() => _lines
-        .SelectMany(line => line.CalculatePoints())
-        .Distinct();
+    public IEnumerable<Point> GetPointsVisited() => _store.GetPoints();
 
-    public int CountPointsVisited() => _count;
+    public int CountPointsVisited() => _store.Count();
 }

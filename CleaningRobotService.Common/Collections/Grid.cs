@@ -1,13 +1,13 @@
 using System.Drawing;
 
-namespace CleaningRobotService.Common.Grids;
+namespace CleaningRobotService.Common.Collections;
 
 /// <summary>
 /// <inheritdoc cref="IGrid"/>
 /// </summary>
 // TODO: implement IEnumerable?
 // TODO: make sure the memory is freed once it goes out of scope?
-public class Grid : IGrid
+public class Grid : IPointsCollections
 {
     private readonly int _gridWidth;
     private readonly List<List<bool>> _pointsVisited;
@@ -22,7 +22,7 @@ public class Grid : IGrid
     /// Setting this allows you to create a grid which supports Points larger than the <param name="gridWidth"></param>.
     /// e.g. an offset of [-1,-1] and a <param name="gridWidth"></param> of 3 allows you to store from [-3,-3] to [-1,-1].
     /// </param>
-    public Grid(int gridWidth = 500, Point gridOffset = new())
+    public Grid(int gridWidth = 30, Point gridOffset = new())
     {
         _gridWidth = gridWidth;
         _gridOffset = gridOffset;

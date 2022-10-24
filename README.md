@@ -174,7 +174,7 @@ Cons:
 
 #### RobotLines
 
-Rather than  storing each Point, each path is stored as a Line which has a Start and End Point. Each Point the Robot then visits can be checked to see if it's on any other Line.
+Rather than storing each Point, each path is stored as a Line which has a Start and End Point. Each Point the Robot then visits can be checked to see if it's on any other Line.
 
 Pros:
 
@@ -190,6 +190,19 @@ Cons:
 Improvements?
 
 - maybe `List<Line>` is not the best data structure for comparisons
+
+#### RobotDictionaryLines
+
+Similar to `RobotLines` but the search time of finding if a Point is on a pre-existing Line is reduced by putting the Lines into a Dictionary and only searching through Lines that are on the same x-axis or y-axis as this Point.
+
+Pros:
+
+- uses very little memory (same as RobotLines)
+
+Cons:
+
+- reasonably fast speed
+  - each Point only has to be checked against a subset of Lines
 
 #### RobotGrid
 
