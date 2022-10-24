@@ -14,6 +14,7 @@ public class LineDictionary : IPointsCollections
     /// <remarks>
     /// A <see cref="Lookup"/> might make more sense here but it isn't mutable.
     /// </remarks>
+    private readonly Dictionary<(PlaneEnum, int), List<int>> _dictionary;
     private readonly List<Line> _lines;
 
     public LineDictionary(int numberOfExpectedCommands = 0)
