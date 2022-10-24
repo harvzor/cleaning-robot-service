@@ -3,7 +3,7 @@ using CleaningRobotService.Common.Enums;
 
 namespace CleaningRobotService.Common.Structures;
 
-public class Line
+public struct Line
 {
     public Point Start;
     public Point End;
