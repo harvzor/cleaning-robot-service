@@ -52,7 +52,7 @@ public class RobotBenchmarks
             {
                 Direction = direction,
                 // Step one less south/west so the robot goes in circles but slightly up right each command loop.
-                Steps = (uint)(direction is DirectionEnum.south or DirectionEnum.west
+                Steps = (uint)(direction is DirectionEnum.South or DirectionEnum.West
                     ? 2
                     : 3
                 ),

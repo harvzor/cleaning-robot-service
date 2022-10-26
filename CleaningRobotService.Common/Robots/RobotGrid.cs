@@ -44,19 +44,19 @@ public class RobotGrid : BaseRobot, IRobot
             {
                 switch (command.Direction)
                 {
-                    case DirectionEnum.north:
+                    case DirectionEnum.North:
                         currentPoint.Y++;
                         AddPoint();
                         break;
-                    case DirectionEnum.east:
+                    case DirectionEnum.East:
                         currentPoint.X++;
                         AddPoint();
                         break;
-                    case DirectionEnum.south:
+                    case DirectionEnum.South:
                         currentPoint.Y--;
                         AddPoint();
                         break;
-                    case DirectionEnum.west:
+                    case DirectionEnum.West:
                         currentPoint.X--;
                         AddPoint();
                         break;

@@ -1,5 +1,4 @@
 using CleaningRobotService.Common.Services;
-using CleaningRobotService.DataPersistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CleaningRobotService.Common;

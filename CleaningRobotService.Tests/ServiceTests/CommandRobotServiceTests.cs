@@ -17,13 +17,14 @@ public class CommandRobotServiceTests
 {
     private readonly CommandRobotService _commandRobotService;
     private readonly DatabaseFixture _databaseFixture;
-    private readonly TestEnvironment _testEnvironment;
 
     public CommandRobotServiceTests(DatabaseFixture databaseFixture)
     {
         _databaseFixture = databaseFixture;
-        _testEnvironment = new TestEnvironment(databaseFixture: _databaseFixture);
-        _commandRobotService = _testEnvironment.GetCommandRobotService();
+        
+        TestEnvironment testEnvironment = new TestEnvironment(databaseFixture: _databaseFixture);
+        
+        _commandRobotService = testEnvironment.GetCommandRobotService();
     }
 
     /// <summary>
@@ -38,7 +39,7 @@ public class CommandRobotServiceTests
         {
             new()
             {
-                Direction = DirectionEnum.east,
+                Direction = DirectionEnum.East,
                 Steps = 1,
             },
         }

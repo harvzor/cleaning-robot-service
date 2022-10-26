@@ -5,10 +5,10 @@ namespace CleaningRobotService.Common.Enums;
 /// </summary>
 public enum DirectionEnum
 {
-    // TODO: figure out how to have casing as per .NET standard but in the API have it lowercase.
+    // TODO: figure out how to have lowercase in the Swagger document.
     // https://stackoverflow.com/a/59912419/
-    north = 0,
-    east = 1,
-    south = 2,
-    west = 3,
+    North = 0,
+    East = 1,
+    South = 2,
+    West = 3,
 }

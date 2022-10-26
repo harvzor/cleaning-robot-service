@@ -29,12 +29,12 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
             {
                 new CommandDto
                 {
-                    Direction = DirectionEnum.east,
+                    Direction = DirectionEnum.East,
                     Steps = 2,
                 },
                 new CommandDto
                 {
-                    Direction = DirectionEnum.north,
+                    Direction = DirectionEnum.North,
                     Steps = 1,
                 },
             }
@@ -73,13 +73,13 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
             {
                 new CommandDto
                 {
-                    Direction = DirectionEnum.west,
+                    Direction = DirectionEnum.West,
                     Steps = 1,
                 },
                 // Go back on itself.
                 new CommandDto
                 {
-                    Direction = DirectionEnum.south,
+                    Direction = DirectionEnum.South,
                     Steps = 1,
                 },
             }
@@ -117,13 +117,13 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
             {
                 new CommandDto
                 {
-                    Direction = DirectionEnum.east,
+                    Direction = DirectionEnum.East,
                     Steps = 1,
                 },
                 // Go back on itself.
                 new CommandDto
                 {
-                    Direction = DirectionEnum.west,
+                    Direction = DirectionEnum.West,
                     Steps = 1,
                 },
             }
