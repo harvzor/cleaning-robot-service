@@ -294,6 +294,15 @@ Patterns not used:
 
 - Unit of Work - could consider using to allow for transactional updates to the db
 
+### RESTful API
+
+POSTing some commands to the CommandController will store those commands in the database along with an Execution. The actual logic that then runs the robot around the space will then run in a separate thread as it could take some time - the Execution will be updated with the result once finished.
+
+Benefits:
+
+- the API won't hang during any long running logic
+- if there's a bug in the calculations, they can be debugged easier (by looking at what commands were sent), they can then be fixed and a new run can be initiated
+
 ### Using EntityFramework
 
 This ORM isn't the fastest ([being about twice as slow as Dapper](https://github.com/DapperLib/Dapper#performance)) but has some nice features:
@@ -325,15 +334,6 @@ Both of these classes are almost identical, but they're separate because the API
 Mapping between the DTOs and db models is manually done. AutoMapper could be used instead, but I'm not a fan of how AutoMapper magically does this, and this can cause runtime errors rather than issues being caught at compile time.
 
 ## If I had more time I would...
-
-### Make the API more RESTful
-
-I would make the CommandController store the Commands directly in the database. I would then have another controller where the Executions could be retrieved from.
-
-Benefits:
-
-- Commands can be replayed and Executions could be fixed (currently if there's a bug, there's no way to know which Commands were actually run).
-- Executions could be run asynchronously. In the real world, the robot would move quite slowly so the task of it moving around could take a long time.
 
 ### Publish events to a queue
 
