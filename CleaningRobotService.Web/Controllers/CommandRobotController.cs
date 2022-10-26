@@ -24,19 +24,19 @@ public class CommandRobotController : BaseController
     [ProducesDefaultResponseType]
     public ActionResult<CommandRobotDto> CreateCommandRobot([FromBody] CommandRobotPostDto body)
     {
-        Execution execution = _commandRobotService
+        CommandRobot commandRobot = _commandRobotService
             .CreateCommandRobot(
                 startPoint: body.Start,
                 commands: body.Commands
             );
         
-        return Ok(execution.ToDto());
+        return Ok(commandRobot.ToDto());
     }
     
-    [HttpGet]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandRobotDto))]
     [ProducesDefaultResponseType]
-    public ActionResult<CommandRobotDto> GetCommandRobot(Guid id)
+    public ActionResult<CommandRobotDto> GetCommandRobot([FromRoute] Guid id)
     {
         CommandRobot? commandRobot = _commandRobotRepository.GetById(id: id);
 

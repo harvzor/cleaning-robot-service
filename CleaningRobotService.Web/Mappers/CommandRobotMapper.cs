@@ -11,5 +11,9 @@ public static class CommandRobotMapper
         Id = commandRobot.Id,
         StartPoint = commandRobot.StartPoint,
         Commands = commandRobot.Commands.ToDtos().ToList().AsReadOnly(),
+        CreatedAt = commandRobot.CreatedAt,
+        ModifiedAt = commandRobot.ModifiedAt,
+        // TODO: if it's deleted, surely it should be returned.
+        DeletedAt = commandRobot.DeletedAt,
     };
 }

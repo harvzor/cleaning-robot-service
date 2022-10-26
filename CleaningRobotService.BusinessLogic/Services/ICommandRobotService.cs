@@ -6,5 +6,5 @@ namespace CleaningRobotService.BusinessLogic.Services;
 
 public interface ICommandRobotService
 {
-    Execution CreateCommandRobot(Point startPoint, IReadOnlyCollection<CommandDto> commands, bool runExecutionAsync = false);
+    CommandRobot CreateCommandRobot(Point startPoint, IReadOnlyCollection<CommandDto> commands, bool runExecutionAsync = false);
 }

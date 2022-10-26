@@ -50,7 +50,7 @@ public class CommandRobotServiceTests
         
         // Act
         
-        Execution execution = _commandRobotService
+        CommandRobot commandRobot = _commandRobotService
             .CreateCommandRobot(
                 startPoint: new Point
                 {
@@ -65,7 +65,8 @@ public class CommandRobotServiceTests
 
         using (ServiceDbContext context = _databaseFixture.CreateContext())
         {
-            Execution? storedExecution = context.Executions.Find(execution.Id);
+            Execution? storedExecution = context.Executions
+                .FirstOrDefault(x => x.CommandRobotId == commandRobot.Id);
 
             storedExecution.ShouldNotBeNull();
             storedExecution.Commands.ShouldBe(1);

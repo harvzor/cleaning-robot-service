@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace CleaningRobotService.DataPersistence.Models;
 
 public class BaseModel

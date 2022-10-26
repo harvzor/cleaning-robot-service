@@ -11,4 +11,7 @@ public static class ExecutionMapper
         Duration = execution.Duration,
         Result = execution.Result,
     };
+
+    public static IEnumerable<ExecutionDto> ToDtos(this IEnumerable<Execution> executions) =>
+        executions.Select(x => x.ToDto());
 }

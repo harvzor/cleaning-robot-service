@@ -7,4 +7,12 @@ public class ExecutionRepository : BaseRepository<Execution>, IExecutionReposito
     public ExecutionRepository(ServiceDbContext context) : base(context)
     {
     }
+
+    public IReadOnlyCollection<Execution> GetByCommandRobotId(Guid id)
+    {
+        return Context.Executions
+            .Where(x => x.CommandRobotId == id)
+            .ToList()
+            .AsReadOnly();
+    }
 }

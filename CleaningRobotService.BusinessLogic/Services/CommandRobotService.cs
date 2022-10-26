@@ -47,7 +47,7 @@ public class CommandRobotService : ICommandRobotService
         _executionRepository.Save();
     }
 
-    public Execution CreateCommandRobot(
+    public CommandRobot CreateCommandRobot(
         Point startPoint,
         IReadOnlyCollection<CommandDto> commands,
         bool runExecutionAsync = true
@@ -87,6 +87,6 @@ public class CommandRobotService : ICommandRobotService
         else
             RunExecution(executionId: execution.Id);
         
-        return execution;
+        return commandRobot;
     }
 }
