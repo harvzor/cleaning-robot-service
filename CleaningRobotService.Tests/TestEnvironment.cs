@@ -1,7 +1,7 @@
+using CleaningRobotService.Common.Services;
 using CleaningRobotService.DataPersistence;
 using CleaningRobotService.DataPersistence.Repositories;
 using CleaningRobotService.Tests.Fixtures;
-using CleaningRobotService.Web.Services;
 
 namespace CleaningRobotService.Tests;
 

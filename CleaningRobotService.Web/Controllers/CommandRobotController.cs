@@ -1,21 +1,21 @@
+using System.Collections.ObjectModel;
+using CleaningRobotService.Common.Dtos.Input;
+using CleaningRobotService.Common.Services;
 using CleaningRobotService.DataPersistence.Models;
-using CleaningRobotService.DataPersistence.Repositories;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Dtos.Output;
 using CleaningRobotService.Web.Mappers;
-using CleaningRobotService.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleaningRobotService.Web.Controllers;
 
 public class CommandRobotController : BaseController
 {
-    private readonly CommandRobotService _commandRobotService;
+    private readonly ICommandRobotService _commandRobotService;
     
-    // TODO: change this so the service is injected instead.
-    public CommandRobotController(IExecutionRepository executionRepository)
+    public CommandRobotController(ICommandRobotService commandRobotService)
     {
-        _commandRobotService = new CommandRobotService(repository: executionRepository);
+        _commandRobotService = commandRobotService;
     }
 
     [HttpPost]
@@ -23,7 +23,11 @@ public class CommandRobotController : BaseController
     [ProducesDefaultResponseType]
     public ActionResult<CommandRobotDto> CreateCommandRobot([FromBody] CommandRobotPostDto body)
     {
-        Execution execution = _commandRobotService.CreateCommandRobot(body: body);
+        Execution execution = _commandRobotService
+            .CreateCommandRobot(
+                startPoint: body.Start,
+                commands: body.Commands.ToCommonCommandDtos().ToList().AsReadOnly()
+            );
         
         return Ok(execution.ToDto());
     }

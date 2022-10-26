@@ -1,11 +1,12 @@
+using System.Collections.ObjectModel;
 using System.Drawing;
+using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Helpers;
+using CleaningRobotService.Common.Services;
 using CleaningRobotService.DataPersistence;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Tests.Fixtures;
-using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Services;
 using Shouldly;
 using Xunit;
 
@@ -32,31 +33,32 @@ public class CommandRobotServiceTests
     public void CreateCommandRobot()
     {
         // Arrange.
-        
-        CommandRobotPostDto commandRobotPostDto = new()
+
+        ReadOnlyCollection<CommandDto> commands = new List<CommandDto>
         {
-            Start = new Point
+            new()
             {
-                X = 0,
-                Y = 0,
+                Direction = DirectionEnum.east,
+                Steps = 1,
             },
-            Commands = new List<WebCommandDto>
-            {
-                new()
-                {
-                    Direction = DirectionEnum.east,
-                    Steps = 1,
-                },
-            }
-        };
+        }
+        .AsReadOnly();
         
         // Freeze time so I can test it later.
         SystemDateTime.SetConstant();
         
         // Act
         
-        Execution execution = _commandRobotService.CreateCommandRobot(body: commandRobotPostDto);
-        
+        Execution execution = _commandRobotService
+            .CreateCommandRobot(
+                startPoint: new Point
+                {
+                    X = 0,
+                    Y = 0,
+                },
+                commands: new ReadOnlyCollection<CommandDto>(commands)
+            );
+
         // Assert
 
         using (ServiceDbContext context = _databaseFixture.CreateContext())

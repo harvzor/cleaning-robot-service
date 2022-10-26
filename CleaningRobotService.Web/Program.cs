@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using CleaningRobotService.Common;
 using CleaningRobotService.DataPersistence;
 using CleaningRobotService.Web;
 using CleaningRobotService.Web.Filters;
@@ -45,6 +46,8 @@ namespace CleaningRobotService.Web
 
             builder.Services.AddDatabaseServices(connectionString: appConfiguration.DatabaseConnectionString);
             builder.Services.InjectRepositories();
+
+            builder.Services.InjectServices();
         
             return builder;
         }

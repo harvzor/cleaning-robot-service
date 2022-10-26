@@ -1,14 +1,14 @@
+using System.Drawing;
+using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Helpers;
 using CleaningRobotService.Common.Robots;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.DataPersistence.Repositories;
-using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Mappers;
 
-namespace CleaningRobotService.Web.Services;
+namespace CleaningRobotService.Common.Services;
 
-public class CommandRobotService
+public class CommandRobotService : ICommandRobotService
 {
     private readonly IExecutionRepository _repository;
     
@@ -17,13 +17,13 @@ public class CommandRobotService
         _repository = repository;
     }
 
-    public Execution CreateCommandRobot(CommandRobotPostDto body)
+    public Execution CreateCommandRobot(Point startPoint, IReadOnlyCollection<CommandDto> commands)
     {
         DateTimeOffset now = SystemDateTime.UtcNow;
         int? result = null;
         
         IRobot robot = new RobotFactory()
-            .GetRobot(startPoint: body.Start, commands: body.Commands.ToCommonCommandDtos());
+            .GetRobot(startPoint: startPoint, commands: commands);
         
         double calculationTime = MethodTimer.Measure(() =>
         {
@@ -34,7 +34,7 @@ public class CommandRobotService
         Execution execution = new()
         {
             TimeStamp = now,
-            Commands = body.Commands.Count,
+            Commands = commands.Count,
             Result = result!.Value,
             Duration = calculationTime,
         };

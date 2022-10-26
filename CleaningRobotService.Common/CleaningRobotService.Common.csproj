@@ -10,4 +10,8 @@
       <Compile Remove="Robots\RobotSwarm.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\CleaningRobotService.DataPersistence\CleaningRobotService.DataPersistence.csproj" />
+    </ItemGroup>
+
 </Project>
