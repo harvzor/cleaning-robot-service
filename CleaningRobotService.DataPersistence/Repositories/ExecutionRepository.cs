@@ -2,6 +2,7 @@ using CleaningRobotService.DataPersistence.Models;
 
 namespace CleaningRobotService.DataPersistence.Repositories;
 
+// TODO: inherit from base repository since most of these methods will be the same
 public class ExecutionRepository : IExecutionRepository
 {
     private readonly ServiceDbContext _context;

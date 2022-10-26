@@ -368,3 +368,9 @@ https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspne
 ### Add some CI to build images and deploy to a container library
 
 Personally I like Drone CI but Travis CI is okay too.
+
+### More TODOs
+
+- create some kind of system for putting benchmarks in the readme
+- add large dataset for testing to repo
+- add enforced styleguide

@@ -24,7 +24,7 @@ public class CommandRobotController : BaseController
         Execution execution = _commandRobotService
             .CreateCommandRobot(
                 startPoint: body.Start,
-                commands: body.Commands.ToCommonCommandDtos().ToList().AsReadOnly()
+                commands: body.Commands
             );
         
         return Ok(execution.ToDto());
