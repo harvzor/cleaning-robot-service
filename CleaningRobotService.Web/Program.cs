@@ -43,11 +43,8 @@ namespace CleaningRobotService.Web
                 c.DocumentFilter<LowercaseDocumentFilter>();
             });
 
-            builder.Services.AddDbContext<ServiceDbContext>(options =>
-                options
-                    .UseLazyLoadingProxies()
-                    .UseNpgsql(appConfiguration.DatabaseConnectionString)
-            );
+            builder.Services.AddDatabaseServices(connectionString: appConfiguration.DatabaseConnectionString);
+            builder.Services.InjectRepositories();
         
             return builder;
         }

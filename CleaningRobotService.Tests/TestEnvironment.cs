@@ -1,4 +1,5 @@
 using CleaningRobotService.DataPersistence;
+using CleaningRobotService.DataPersistence.Repositories;
 using CleaningRobotService.Tests.Fixtures;
 using CleaningRobotService.Web.Services;
 
@@ -17,6 +18,6 @@ public class TestEnvironment
     {
         context ??= _databaseFixture.CreateContext();
 
-        return new CommandRobotService(context: context);
+        return new CommandRobotService(repository: new ExecutionRepository(context));
     }
 }

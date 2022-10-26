@@ -1,17 +1,20 @@
 using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Helpers;
 using CleaningRobotService.Common.Robots;
-using CleaningRobotService.DataPersistence;
 using CleaningRobotService.DataPersistence.Models;
+using CleaningRobotService.DataPersistence.Repositories;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Mappers;
 
 namespace CleaningRobotService.Web.Services;
 
-public class CommandRobotService : BaseService
+public class CommandRobotService
 {
-    public CommandRobotService(ServiceDbContext context) : base(context)
+    private readonly IExecutionRepository _repository;
+    
+    public CommandRobotService(IExecutionRepository repository)
     {
+        _repository = repository;
     }
 
     public Execution CreateCommandRobot(CommandRobotPostDto body)
@@ -35,10 +38,10 @@ public class CommandRobotService : BaseService
             Result = result!.Value,
             Duration = calculationTime,
         };
-        
-        Context.Executions.Add(execution);
 
-        Context.SaveChanges();
+        _repository.Add(execution);
+
+        _repository.Save();
 
         return execution;
     }

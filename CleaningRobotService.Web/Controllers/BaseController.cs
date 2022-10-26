@@ -1,4 +1,3 @@
-using CleaningRobotService.DataPersistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleaningRobotService.Web.Controllers;
@@ -8,10 +7,4 @@ namespace CleaningRobotService.Web.Controllers;
 [Route("[controller]")]
 public abstract class BaseController : Controller
 {
-    protected readonly ServiceDbContext Context;
-    
-    protected BaseController(ServiceDbContext context)
-    {
-        Context = context;
-    }
 }

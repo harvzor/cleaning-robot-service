@@ -1,5 +1,5 @@
-using CleaningRobotService.DataPersistence;
 using CleaningRobotService.DataPersistence.Models;
+using CleaningRobotService.DataPersistence.Repositories;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Dtos.Output;
 using CleaningRobotService.Web.Mappers;
@@ -12,9 +12,10 @@ public class CommandRobotController : BaseController
 {
     private readonly CommandRobotService _commandRobotService;
     
-    public CommandRobotController(ServiceDbContext context) : base(context)
+    // TODO: change this so the service is injected instead.
+    public CommandRobotController(IExecutionRepository executionRepository)
     {
-        _commandRobotService = new CommandRobotService(context: context);
+        _commandRobotService = new CommandRobotService(repository: executionRepository);
     }
 
     [HttpPost]
