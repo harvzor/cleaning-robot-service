@@ -268,7 +268,7 @@ dotnet tool restore
 To add a new migration:
 
 ```
-dotnet ef migrations add MigrationName --project CleaningRobotService.Web --context ServiceDbContext
+dotnet ef migrations add MigrationName --project CleaningRobotService.DataPersistence --context ServiceDbContext
 ```
 
 ### Running migrations
@@ -282,9 +282,17 @@ If you have multiple instances of this service running at the same time, and the
 
 ## Design decisions
 
-### Controllers and Services
+### Patterns
 
-Services should contain the actual business logic. Controllers are the interaction layer. This allows us to create different interaction layers such as a CLI which makes calls to the Services.
+Patterns used:
+
+- Repository pattern - repositories are exposed from the DataPersistence project so the rest of the application doesn't know which ORM is being used underneath (this is a facade)
+- Service pattern - for business logic
+- Dependency injection - easier developing and testing (if mocking is needed)
+
+Patterns not used:
+
+- Unit of Work - could consider using to allow for transactional updates to the db
 
 ### Using EntityFramework
 

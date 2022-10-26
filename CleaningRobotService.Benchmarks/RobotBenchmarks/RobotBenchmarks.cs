@@ -11,8 +11,6 @@ namespace CleaningRobotService.Benchmarks.RobotBenchmarks;
 public class RobotBenchmarks
 {
     private List<CommandDto> _commands = new();
-
-    
     
     [GlobalSetup]
     public void GlobalSetup()
