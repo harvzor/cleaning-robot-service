@@ -1,8 +1,8 @@
 using System.Drawing;
 using BenchmarkDotNet.Attributes;
 using CleaningRobotService.Common.Dtos.Input;
-using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Robots;
+using CleaningRobotService.Tests;
 
 namespace CleaningRobotService.Benchmarks.RobotBenchmarks;
 
@@ -12,92 +12,14 @@ public class RobotBenchmarks
 {
     private List<CommandDto> _commands = new();
 
-    private List<CommandDto> GenerateCommands_LoopCommands()
-    {
-        List<CommandDto> commands = new();
-
-        int directionInt = 0;
-        for (int i = 0; i < 10000; i++)
-        {
-            DirectionEnum direction = (DirectionEnum)directionInt;
-            directionInt++;
-
-            if (directionInt == 4)
-                directionInt = 0;
-
-            commands.Add(new CommandDto
-            {
-                Direction = direction,
-                Steps = 3,
-            });
-        }
-
-        return commands;
-    }
     
-    private List<CommandDto> GenerateCommands_LoopOffset()
-    {
-        List<CommandDto> commands = new();
-
-        int directionInt = 0;
-        for (int i = 0; i < 10000; i++)
-        {
-            DirectionEnum direction = (DirectionEnum)directionInt;
-            directionInt++;
-
-            if (directionInt == 4)
-                directionInt = 0;
-
-            commands.Add(new CommandDto
-            {
-                Direction = direction,
-                // Step one less south/west so the robot goes in circles but slightly up right each command loop.
-                Steps = (uint)(direction is DirectionEnum.South or DirectionEnum.West
-                    ? 2
-                    : 3
-                ),
-            });
-        }
-
-        return commands;
-    }
-    
-    private List<CommandDto> GenerateCommands_SpiralIn()
-    {
-        List<CommandDto> commands = new();
-
-        int width = 500;
-        int directionInt = 0;
-        int directionOddCount = 0;
-        for (int i = 0; i < width * 2; i++)
-        {
-            if (directionInt == 1 || directionInt == 3)
-                directionOddCount++;
-            
-            DirectionEnum direction = (DirectionEnum)directionInt;
-            directionInt++;
-
-            if (directionInt == 4)
-                directionInt = 0;
-
-            commands.Add(new CommandDto
-            {
-                Direction = direction,
-                Steps = i == 0
-                    ? (uint)(width - 1)
-                    : (uint)(width - directionOddCount),
-            });
-        }
-
-        return commands;
-    }
     
     [GlobalSetup]
     public void GlobalSetup()
     {
-        // _commands = GenerateCommands_LoopCommands();
-        _commands = GenerateCommands_LoopOffset();
-        // _commands = GenerateCommands_SpiralIn();
+        // _commands = CommandGenerator.LoopCommands(steps: 3);
+        _commands = CommandGenerator.LoopOffset();
+        // _commands = CommandGenerator.SpiralIn(width: 500);
     }
 
     [Benchmark(Baseline = true)]
@@ -144,8 +66,7 @@ public class RobotBenchmarks
     
     private IRobot CreateRobot<TRobot>(Point startPoint, IEnumerable<CommandDto> commands, params object?[]? args) where TRobot : IRobot
     {
-        object?[] newArgs = new object[]
-        {
+        object?[] newArgs = {
             startPoint,
             commands,
         };

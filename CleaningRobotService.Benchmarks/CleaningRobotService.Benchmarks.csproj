@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CleaningRobotService.Tests\CleaningRobotService.Tests.csproj" />
       <ProjectReference Include="..\CleaningRobotService.Web\CleaningRobotService.Web.csproj" />
     </ItemGroup>
 
