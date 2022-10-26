@@ -1,7 +1,7 @@
-using CleaningRobotService.Web.Models;
+using CleaningRobotService.DataPersistence.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleaningRobotService.Web;
+namespace CleaningRobotService.DataPersistence;
 
 public class ServiceDbContext : DbContext
 {

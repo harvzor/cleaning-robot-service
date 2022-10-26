@@ -1,5 +1,5 @@
+using CleaningRobotService.DataPersistence;
 using CleaningRobotService.Tests.Fixtures;
-using CleaningRobotService.Web;
 using CleaningRobotService.Web.Services;
 
 namespace CleaningRobotService.Tests;

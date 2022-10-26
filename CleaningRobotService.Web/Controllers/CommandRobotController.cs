@@ -1,6 +1,7 @@
+using CleaningRobotService.DataPersistence;
+using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Dtos.Output;
-using CleaningRobotService.Web.Models;
 using CleaningRobotService.Web.Mappers;
 using CleaningRobotService.Web.Services;
 using Microsoft.AspNetCore.Mvc;

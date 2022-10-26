@@ -1,9 +1,10 @@
 using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Helpers;
 using CleaningRobotService.Common.Robots;
+using CleaningRobotService.DataPersistence;
+using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Mappers;
-using CleaningRobotService.Web.Models;
 
 namespace CleaningRobotService.Web.Services;
 

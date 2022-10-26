@@ -1,10 +1,10 @@
 using System.Drawing;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Helpers;
+using CleaningRobotService.DataPersistence;
+using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Tests.Fixtures;
-using CleaningRobotService.Web;
 using CleaningRobotService.Web.Dtos.Input;
-using CleaningRobotService.Web.Models;
 using CleaningRobotService.Web.Services;
 using Shouldly;
 using Xunit;

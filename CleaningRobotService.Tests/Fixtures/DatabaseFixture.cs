@@ -1,4 +1,5 @@
 using System.Data.Common;
+using CleaningRobotService.DataPersistence;
 using CleaningRobotService.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

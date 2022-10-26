@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using CleaningRobotService.DataPersistence;
 using CleaningRobotService.Web;
 using CleaningRobotService.Web.Filters;
 using Microsoft.EntityFrameworkCore;

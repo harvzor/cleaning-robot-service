@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CleaningRobotService.Web.Models;
+namespace CleaningRobotService.DataPersistence.Models;
 
 /// <summary>
 /// A single task sent to the cleaning robot.

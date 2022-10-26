@@ -1,5 +1,5 @@
+using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Web.Dtos.Output;
-using CleaningRobotService.Web.Models;
 
 namespace CleaningRobotService.Web.Mappers;
 

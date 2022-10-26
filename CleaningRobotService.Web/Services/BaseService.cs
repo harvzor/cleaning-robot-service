@@ -1,3 +1,5 @@
+using CleaningRobotService.DataPersistence;
+
 namespace CleaningRobotService.Web.Services;
 
 public abstract class BaseService
