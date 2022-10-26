@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.Common
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.DataPersistence", "CleaningRobotService.DataPersistence\CleaningRobotService.DataPersistence.csproj", "{BB2C178A-7DA2-4E06-AA5D-218764AB1373}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleaningRobotService.BusinessLogic", "CleaningRobotService.BusinessLogic\CleaningRobotService.BusinessLogic.csproj", "{736124AA-71A1-48B1-BC4C-91924CDA2A89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{BB2C178A-7DA2-4E06-AA5D-218764AB1373}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB2C178A-7DA2-4E06-AA5D-218764AB1373}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB2C178A-7DA2-4E06-AA5D-218764AB1373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{736124AA-71A1-48B1-BC4C-91924CDA2A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736124AA-71A1-48B1-BC4C-91924CDA2A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{736124AA-71A1-48B1-BC4C-91924CDA2A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736124AA-71A1-48B1-BC4C-91924CDA2A89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

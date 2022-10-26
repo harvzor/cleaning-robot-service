@@ -1,34 +1,32 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace CleaningRobotService.DataPersistence.Models;
 
 /// <summary>
 /// A single task sent to the cleaning robot.
 /// </summary>
-public class Execution
+public class Execution : BaseModel
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-    
-    /// <summary>
-    /// When this <see cref="Execution"/> started.
-    /// </summary>
-    public DateTimeOffset TimeStamp { get; set; }
-    
     ///<summary>
     /// How many command elements were received.
     /// </summary>
-    /// <remarks>Documentation tasks says to call this "commmands".</remarks>
     public int Commands { get; set; }
     
     /// <summary>
     /// Number of indices/points cleaned.
     /// </summary>
-    public int Result { get; set; }
+    public int? Result { get; set; }
     
     /// <summary>
     /// How long it took to calculate the <see cref="Result"/>.
     /// </summary>
-    /// <remarks>I would normally go with <see cref="TimeSpan"/> for time but the task says "in seconds".</remarks>
-    public double Duration { get; set; }
+    public TimeSpan? Duration { get; set; }
+    
+    /// <summary>
+    /// Which <see cref="CommandRobot"/> this belongs to.
+    /// </summary>
+    public Guid CommandRobotId { get; set; }
+    
+    /// <summary>
+    /// Which <see cref="CommandRobot"/> this belongs to.
+    /// </summary>
+    public virtual CommandRobot CommandRobot { get; set; }
 }

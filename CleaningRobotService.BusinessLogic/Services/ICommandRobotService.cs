@@ -2,7 +2,7 @@ using System.Drawing;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.DataPersistence.Models;
 
-namespace CleaningRobotService.Common.Services;
+namespace CleaningRobotService.BusinessLogic.Services;
 
 public interface ICommandRobotService
 {

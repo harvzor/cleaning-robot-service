@@ -374,3 +374,6 @@ Personally I like Drone CI but Travis CI is okay too.
 - create some kind of system for putting benchmarks in the readme
 - add large dataset for testing to repo
 - add enforced styleguide
+- better logging
+- implement deletion of models and handle it in repo
+- use async/await for db stuff

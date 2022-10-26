@@ -1,8 +1,10 @@
+using CleaningRobotService.DataPersistence.Models;
+
 namespace CleaningRobotService.DataPersistence.Repositories;
 
-public interface IRepository<TEntity> where TEntity : class
+public interface IRepository<TEntity> where TEntity : BaseModel
 {
-    TEntity? GetById(int id);
+    TEntity? GetById(Guid id);
     
     void Add(TEntity entity);
 

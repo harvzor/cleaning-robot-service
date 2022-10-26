@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Drawing;
+using CleaningRobotService.BusinessLogic.Services;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Helpers;
-using CleaningRobotService.Common.Services;
 using CleaningRobotService.DataPersistence;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Tests.Fixtures;
@@ -69,7 +69,7 @@ public class CommandRobotServiceTests
             storedExecution.ShouldNotBeNull();
             storedExecution.Commands.ShouldBe(1);
             storedExecution.Result.ShouldBe(2);
-            storedExecution.TimeStamp.DateTime
+            storedExecution.CreatedAt.DateTime
                 // Have to set the tolerance because Postgres stores DateTimes slightly less precise than .NET.
                 // https://stackoverflow.com/questions/51103606/storing-datetime-in-postgresql-without-loosing-precision
                 //     should be
@@ -77,7 +77,8 @@ public class CommandRobotServiceTests
                 //    but was
                 // 2022-10-09T16:46:50.0393990
                 .ShouldBe(SystemDateTime.UtcNow, new TimeSpan(0, 0, 0, 0, 1));
-            storedExecution.Duration.ShouldBeGreaterThan(0);
+            storedExecution.Duration.ShouldNotBe(null);
+            storedExecution.Duration!.Value.ShouldBeGreaterThan(TimeSpan.FromTicks(1));
         }
     }
 }

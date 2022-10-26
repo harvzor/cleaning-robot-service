@@ -1,7 +1,7 @@
-using CleaningRobotService.Common.Services;
+using CleaningRobotService.BusinessLogic.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CleaningRobotService.Common;
+namespace CleaningRobotService.BusinessLogic;
 
 public static class ServiceExtensions
 {

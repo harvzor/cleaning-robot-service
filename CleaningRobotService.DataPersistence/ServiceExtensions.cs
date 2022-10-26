@@ -21,6 +21,7 @@ public static class ServiceExtensions
     {
         // TODO: maybe there's some fancy way to auto inject these so they don't have to be manually added.
         services.AddScoped<IExecutionRepository, ExecutionRepository>();
+        services.AddScoped<ICommandRobotRepository, CommandRobotRepository>();
         
         return services;
     }

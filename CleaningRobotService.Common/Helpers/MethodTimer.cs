@@ -9,7 +9,7 @@ public class MethodTimer
     /// </summary>
     /// <param name="action"></param>
     /// <returns></returns>
-    public static double Measure(Action action)
+    public static TimeSpan Measure(Action action)
     {
         Stopwatch stopWatch = new();
         stopWatch.Start();
@@ -18,6 +18,6 @@ public class MethodTimer
 
         stopWatch.Stop();
         
-        return stopWatch.Elapsed.TotalSeconds;
+        return stopWatch.Elapsed;
     }
 }

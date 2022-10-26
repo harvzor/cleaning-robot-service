@@ -1,5 +1,6 @@
-using CleaningRobotService.Common.Services;
+using CleaningRobotService.BusinessLogic.Services;
 using CleaningRobotService.DataPersistence.Models;
+using CleaningRobotService.DataPersistence.Repositories;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Dtos.Output;
 using CleaningRobotService.Web.Mappers;
@@ -10,10 +11,12 @@ namespace CleaningRobotService.Web.Controllers;
 public class CommandRobotController : BaseController
 {
     private readonly ICommandRobotService _commandRobotService;
+    private readonly ICommandRobotRepository _commandRobotRepository;
     
-    public CommandRobotController(ICommandRobotService commandRobotService)
+    public CommandRobotController(ICommandRobotService commandRobotService, ICommandRobotRepository commandRobotRepository)
     {
         _commandRobotService = commandRobotService;
+        _commandRobotRepository = commandRobotRepository;
     }
 
     [HttpPost]
@@ -28,5 +31,18 @@ public class CommandRobotController : BaseController
             );
         
         return Ok(execution.ToDto());
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandRobotDto))]
+    [ProducesDefaultResponseType]
+    public ActionResult<CommandRobotDto> GetCommandRobot(Guid id)
+    {
+        CommandRobot? commandRobot = _commandRobotRepository.GetById(id: id);
+
+        if (commandRobot == null)
+            return NotFound();
+        
+        return Ok(commandRobot.ToDto());
     }
 }

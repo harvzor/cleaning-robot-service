@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using CleaningRobotService.Common;
+using CleaningRobotService.BusinessLogic;
 using CleaningRobotService.DataPersistence;
 using CleaningRobotService.Web;
 using CleaningRobotService.Web.Filters;
