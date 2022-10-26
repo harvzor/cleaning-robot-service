@@ -1,3 +1,4 @@
+using CleaningRobotService.BusinessLogic.Mappers;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Web.Dtos.Output;
 
@@ -9,6 +10,6 @@ public static class CommandRobotMapper
     {
         Id = commandRobot.Id,
         StartPoint = commandRobot.StartPoint,
-        Commands = commandRobot.Commands,
+        Commands = commandRobot.Commands.ToDtos().ToList().AsReadOnly(),
     };
 }

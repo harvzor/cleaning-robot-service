@@ -1,4 +1,5 @@
 using System.Drawing;
+using CleaningRobotService.BusinessLogic.Mappers;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Helpers;
@@ -19,7 +20,7 @@ public class CommandRobotService : ICommandRobotService
         _commandRobotRepository = commandRobotRepository;
     }
 
-    private void RunExecution(Guid executionId)
+    public void RunExecution(Guid executionId)
     {
         int? result = null;
         
@@ -32,7 +33,7 @@ public class CommandRobotService : ICommandRobotService
         CommandRobot commandRobot = execution.CommandRobot;
 
         IRobot robot = new RobotFactory()
-            .GetRobot(startPoint: commandRobot.StartPoint, commands: commandRobot.Commands);
+            .GetRobot(startPoint: commandRobot.StartPoint, commands: commandRobot.Commands.ToDtos());
 
         TimeSpan calculationTime = MethodTimer.Measure(() =>
         {
@@ -46,12 +47,16 @@ public class CommandRobotService : ICommandRobotService
         _executionRepository.Save();
     }
 
-    public Execution CreateCommandRobot(Point startPoint, IReadOnlyCollection<CommandDto> commands)
+    public Execution CreateCommandRobot(
+        Point startPoint,
+        IReadOnlyCollection<CommandDto> commands,
+        bool runExecutionAsync = true
+    )
     {
         CommandRobot commandRobot = new CommandRobot
         {
             StartPoint = startPoint,
-            Commands = commands.ToList(),
+            Commands = commands.ToModels().ToList(),
         };
 
         DateTimeOffset now = SystemDateTime.UtcNow;
@@ -67,6 +72,7 @@ public class CommandRobotService : ICommandRobotService
             Result = null,
             Duration = null,
             CommandRobotId = commandRobot.Id,
+            Commands = commands.Count,
             // Result = result!.Value,
             // Duration = calculationTime,
         };
@@ -74,10 +80,13 @@ public class CommandRobotService : ICommandRobotService
         _executionRepository.Add(execution);
 
         _executionRepository.Save();
-        
-        // Run on a new thread as it might take some time.
-        Task.Run(() => RunExecution(executionId: commandRobot.Id));
 
+        if (runExecutionAsync)
+            // Run on a new thread as it might take some time.
+            Task.Run(() => RunExecution(executionId: execution.Id));
+        else
+            RunExecution(executionId: execution.Id);
+        
         return execution;
     }
 }

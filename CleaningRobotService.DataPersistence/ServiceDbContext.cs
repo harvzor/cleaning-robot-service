@@ -17,9 +17,11 @@ public class ServiceDbContext : DbContext
     }
     
     public virtual DbSet<Execution> Executions => Set<Execution>();
+    
+    public virtual DbSet<CommandRobot> CommandRobots => Set<CommandRobot>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
             .UseNpgsql()
-            .UseLowerCaseNamingConvention();
+            .UseSnakeCaseNamingConvention();
 }

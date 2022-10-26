@@ -375,5 +375,7 @@ Personally I like Drone CI but Travis CI is okay too.
 - add large dataset for testing to repo
 - add enforced styleguide
 - better logging
+- set CreateAt/ModifiedAt before save
 - implement deletion of models and handle it in repo
 - use async/await for db stuff
+- fixing crazy mappings between all types

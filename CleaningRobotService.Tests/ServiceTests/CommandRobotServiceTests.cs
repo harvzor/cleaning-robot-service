@@ -57,7 +57,8 @@ public class CommandRobotServiceTests
                     X = 0,
                     Y = 0,
                 },
-                commands: new ReadOnlyCollection<CommandDto>(commands)
+                commands: new ReadOnlyCollection<CommandDto>(commands),
+                runExecutionAsync: false
             );
 
         // Assert
@@ -68,7 +69,6 @@ public class CommandRobotServiceTests
 
             storedExecution.ShouldNotBeNull();
             storedExecution.Commands.ShouldBe(1);
-            storedExecution.Result.ShouldBe(2);
             storedExecution.CreatedAt.DateTime
                 // Have to set the tolerance because Postgres stores DateTimes slightly less precise than .NET.
                 // https://stackoverflow.com/questions/51103606/storing-datetime-in-postgresql-without-loosing-precision
@@ -77,6 +77,7 @@ public class CommandRobotServiceTests
                 //    but was
                 // 2022-10-09T16:46:50.0393990
                 .ShouldBe(SystemDateTime.UtcNow, new TimeSpan(0, 0, 0, 0, 1));
+            storedExecution.Result.ShouldBe(2);
             storedExecution.Duration.ShouldNotBe(null);
             storedExecution.Duration!.Value.ShouldBeGreaterThan(TimeSpan.FromTicks(1));
         }

@@ -1,15 +1,15 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using CleaningRobotService.Common.Enums;
 
 namespace CleaningRobotService.DataPersistence.Models;
 
-/// <summary>
-/// A single task sent to the cleaning robot.
-/// </summary>
-public class CommandRobotCommands : BaseModel
+[Table("command_robots_commands")]
+public class CommandRobotCommand : BaseModel
 {
     /// <summary>
     /// Which direction the robot should move.
     /// </summary>
+    [Column(TypeName = "text")]
     public DirectionEnum Direction { get; set; }
     
     /// <summary>

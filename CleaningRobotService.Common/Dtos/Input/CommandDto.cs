@@ -7,7 +7,6 @@ public class CommandDto
     /// <summary>
     /// Which direction the robot should move.
     /// </summary>
-    
     public DirectionEnum Direction { get; set; }
     
     /// <summary>

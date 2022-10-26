@@ -1,11 +1,24 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
-using CleaningRobotService.Common.Dtos.Input;
 
 namespace CleaningRobotService.DataPersistence.Models;
 
 public class CommandRobot : BaseModel
 {
-    public Point StartPoint { get; set; }
+    [NotMapped]
+    public Point StartPoint
+    {
+        get => new(x: StartPointX, y: StartPointY);
+        init
+        {
+            StartPointX = value.X;
+            StartPointY = value.Y;
+        }
+    }
 
-    public List<CommandDto> Commands { get; set; } = new();
+    public int StartPointX { get; set; }
+    
+    public int StartPointY { get; set; }
+    
+    public virtual List<CommandRobotCommand> Commands { get; set; } = new();
 }
