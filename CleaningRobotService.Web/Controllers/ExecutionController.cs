@@ -1,4 +1,3 @@
-using CleaningRobotService.BusinessLogic.Services;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.DataPersistence.Repositories;
 using CleaningRobotService.Web.Dtos.Input;
@@ -10,21 +9,14 @@ namespace CleaningRobotService.Web.Controllers;
 
 public class ExecutionController : BaseController
 {
-    private readonly ICommandRobotService _commandRobotService;
-    private readonly ICommandRobotRepository _commandRobotRepository;
     private readonly IExecutionRepository _executionRepository;
     
-    public ExecutionController(
-        ICommandRobotService commandRobotService,
-        ICommandRobotRepository commandRobotRepository,
-        IExecutionRepository executionRepository)
+    public ExecutionController(IExecutionRepository executionRepository)
     {
-        _commandRobotService = commandRobotService;
-        _commandRobotRepository = commandRobotRepository;
         _executionRepository = executionRepository;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExecutionDto))]
     [ProducesDefaultResponseType]
     public ActionResult<CommandRobotDto> GetExecution([FromRoute] Guid id)

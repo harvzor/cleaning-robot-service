@@ -33,7 +33,7 @@ public class CommandRobotController : BaseController
         return Ok(commandRobot.ToDto());
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandRobotDto))]
     [ProducesDefaultResponseType]
     public ActionResult<CommandRobotDto> GetCommandRobot([FromRoute] Guid id)

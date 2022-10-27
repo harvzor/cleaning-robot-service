@@ -24,16 +24,18 @@ public class CommandRobotService : ICommandRobotService
     {
         int? result = null;
         
-        Execution? execution = _executionRepository.GetById(id: executionId);
-        
+        Execution? execution = _executionRepository
+            .QueryObjectGraph(
+                filter: x => x.Id == executionId,
+                includeChildren: x => x.CommandRobot
+            )
+            .FirstOrDefault();
+
         if (execution == null)
             throw new ArgumentException("ID refers to missing database item.", nameof(executionId));
 
-        // TODO: lazy loading occurs here, find a way to include with Repository Pattern?
-        CommandRobot commandRobot = execution.CommandRobot;
-
         IRobot robot = new RobotFactory()
-            .GetRobot(startPoint: commandRobot.StartPoint, commands: commandRobot.Commands.ToDtos());
+            .GetRobot(startPoint: execution.CommandRobot.StartPoint, commands: execution.CommandRobot.Commands.ToDtos());
 
         TimeSpan calculationTime = MethodTimer.Measure(() =>
         {
@@ -63,8 +65,6 @@ public class CommandRobotService : ICommandRobotService
         
         _commandRobotRepository.Add(commandRobot);
 
-        // _executionRepository.Save();
-
         Execution execution = new()
         {
             CreatedAt = now,
@@ -78,7 +78,7 @@ public class CommandRobotService : ICommandRobotService
         };
 
         _executionRepository.Add(execution);
-
+        
         _executionRepository.Save();
 
         if (runExecutionAsync)
