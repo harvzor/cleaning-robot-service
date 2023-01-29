@@ -55,13 +55,15 @@ public class CommandRobotService : ICommandRobotService
         bool runExecutionAsync = true
     )
     {
+        DateTimeOffset now = SystemDateTime.UtcNow;
+        
         CommandRobot commandRobot = new CommandRobot
         {
             StartPoint = startPoint.ToModel(),
             Commands = commands.ToModels().ToList(),
+            CreatedAt = now,
+            ModifiedAt = now,
         };
-
-        DateTimeOffset now = SystemDateTime.UtcNow;
         
         _commandRobotRepository.Add(commandRobot);
 
