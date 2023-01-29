@@ -15,13 +15,13 @@ public class RobotGrid : BaseRobot, IRobot
 {
     private readonly GridExpandable _gridExpandable;
     
-    public RobotGrid(Point startPoint, IEnumerable<CommandDto> commands)
+    public RobotGrid(Point startPoint, IEnumerable<DirectionStep> commands)
         : base(startPoint: startPoint, commands: commands)
     {
         _gridExpandable = new GridExpandable();
     }
     
-    public RobotGrid(Point startPoint, IEnumerable<CommandDto> commands, int gridWidth)
+    public RobotGrid(Point startPoint, IEnumerable<DirectionStep> commands, int gridWidth)
         : base(startPoint: startPoint, commands: commands)
     {
         _gridExpandable = new GridExpandable(gridWidth: gridWidth);
@@ -38,7 +38,7 @@ public class RobotGrid : BaseRobot, IRobot
             _gridExpandable.AddPoint(currentPoint);
         }
 
-        foreach (CommandDto command in Commands.Where(command => command.Steps != 0))
+        foreach (DirectionStep command in Commands.Where(command => command.Steps != 0))
         {
             for (int i = 0; i < command.Steps; i++)
             {
@@ -62,7 +62,7 @@ public class RobotGrid : BaseRobot, IRobot
                         break;
                     default:
                         throw new ArgumentException(
-                            message: $"CommandDto direction of {command.Direction} not covered.",
+                            message: $"DirectionStep direction of {command.Direction} not covered.",
                             paramName: nameof(Commands)
                         );
                 }

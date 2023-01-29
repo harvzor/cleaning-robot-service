@@ -9,7 +9,7 @@ namespace CleaningRobotService.Tests.RobotTests;
 
 public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
 {
-    private IRobot CreateRobot(Point startPoint, IEnumerable<CommandDto> commands)
+    private IRobot CreateRobot(Point startPoint, IEnumerable<DirectionStep> commands)
     {
         return (TRobot)Activator.CreateInstance(typeof(TRobot), startPoint, commands)!;
     }
@@ -25,14 +25,14 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
                 X = 10,
                 Y = 22,
             },
-            commands: new List<CommandDto>()
+            commands: new List<DirectionStep>()
             {
-                new CommandDto
+                new DirectionStep
                 {
                     Direction = DirectionEnum.East,
                     Steps = 2,
                 },
-                new CommandDto
+                new DirectionStep
                 {
                     Direction = DirectionEnum.North,
                     Steps = 1,
@@ -69,15 +69,15 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
                 X = 0,
                 Y = 0,
             },
-            commands: new List<CommandDto>()
+            commands: new List<DirectionStep>()
             {
-                new CommandDto
+                new DirectionStep
                 {
                     Direction = DirectionEnum.West,
                     Steps = 1,
                 },
                 // Go back on itself.
-                new CommandDto
+                new DirectionStep
                 {
                     Direction = DirectionEnum.South,
                     Steps = 1,
@@ -113,15 +113,15 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
                 X = 0,
                 Y = 0,
             },
-            commands: new List<CommandDto>()
+            commands: new List<DirectionStep>()
             {
-                new CommandDto
+                new DirectionStep
                 {
                     Direction = DirectionEnum.East,
                     Steps = 1,
                 },
                 // Go back on itself.
-                new CommandDto
+                new DirectionStep
                 {
                     Direction = DirectionEnum.West,
                     Steps = 1,
@@ -150,7 +150,7 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
     {
         // Arrange
 
-        List<CommandDto> commands = CommandGenerator.LoopCommands(steps: 1000);
+        List<DirectionStep> commands = CommandGenerator.LoopCommands(steps: 1000);
         
         IRobot robot = CreateRobot(
             startPoint: new Point
@@ -185,7 +185,7 @@ public abstract class BaseRobotTests<TRobot> where TRobot : IRobot
         // Arrange
 
         const int width = 10;
-        List<CommandDto> commands = CommandGenerator.SpiralIn(width: width);
+        List<DirectionStep> commands = CommandGenerator.SpiralIn(width: width);
                 
         IRobot robot = CreateRobot(
             startPoint: new Point

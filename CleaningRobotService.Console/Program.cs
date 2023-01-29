@@ -20,7 +20,7 @@ int[] xAndY = Console
     .ToArray();
 
 Point startPoint = new Point(x: xAndY[0], y: xAndY[1]);
-List<CommandDto> commands = new();
+List<DirectionStep> commands = new();
 
 for (int i = 0; i < numberOfCommands; i++)
 {
@@ -31,7 +31,7 @@ for (int i = 0; i < numberOfCommands; i++)
         .Split(' ')
         .ToArray();
     
-    commands.Add(new CommandDto
+    commands.Add(new DirectionStep
     {
         // TODO: write a test to ensure LetterDirectionEnum is mapped correctly to DirectionEnum.
         Direction = (DirectionEnum)Enum.Parse<LetterDirectionEnum>(directionAndSteps[0]),

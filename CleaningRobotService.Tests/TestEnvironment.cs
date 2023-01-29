@@ -19,7 +19,7 @@ public class TestEnvironment
         context ??= _databaseFixture.CreateContext();
 
         return new CommandRobotService(
-            commandRobotRepository: new CommandRobotRepository(context),
+            commandRepository: new CommandRepository(context),
             executionRepository: new ExecutionRepository(context)
         );
     }

@@ -11,7 +11,7 @@ public class ExecutionRepository : BaseRepository<Execution>, IExecutionReposito
     public IReadOnlyCollection<Execution> GetByCommandRobotId(Guid id)
     {
         return Query()
-            .Where(x => x.CommandRobotId == id)
+            .Where(x => x.CommandId == id)
             .ToList()
             .AsReadOnly();
     }

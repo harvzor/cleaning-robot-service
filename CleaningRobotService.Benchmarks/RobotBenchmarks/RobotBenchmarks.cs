@@ -10,7 +10,7 @@ namespace CleaningRobotService.Benchmarks.RobotBenchmarks;
 [MemoryDiagnoser(displayGenColumns: false)]
 public class RobotBenchmarks
 {
-    private List<CommandDto> _commands = new();
+    private List<DirectionStep> _commands = new();
     
     [GlobalSetup]
     public void GlobalSetup()
@@ -62,7 +62,7 @@ public class RobotBenchmarks
         CalculatePointsVisited<RobotGrid>(500);
     }
     
-    private IRobot CreateRobot<TRobot>(Point startPoint, IEnumerable<CommandDto> commands, params object?[]? args) where TRobot : IRobot
+    private IRobot CreateRobot<TRobot>(Point startPoint, IEnumerable<DirectionStep> commands, params object?[]? args) where TRobot : IRobot
     {
         object?[] newArgs = {
             startPoint,

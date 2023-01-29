@@ -6,18 +6,19 @@ using CleaningRobotService.Common.Helpers;
 using CleaningRobotService.Common.Robots;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.DataPersistence.Repositories;
+using DirectionStep = CleaningRobotService.Common.Dtos.Input.DirectionStep;
 
 namespace CleaningRobotService.BusinessLogic.Services;
 
 public class CommandRobotService : ICommandRobotService
 {
     private readonly IExecutionRepository _executionRepository;
-    private readonly ICommandRobotRepository _commandRobotRepository;
+    private readonly ICommandRepository _commandRepository;
 
-    public CommandRobotService(ICommandRobotRepository commandRobotRepository, IExecutionRepository executionRepository)
+    public CommandRobotService(ICommandRepository commandRepository, IExecutionRepository executionRepository)
     {
         _executionRepository = executionRepository;
-        _commandRobotRepository = commandRobotRepository;
+        _commandRepository = commandRepository;
     }
 
     public void RunExecution(Guid executionId)
@@ -27,7 +28,7 @@ public class CommandRobotService : ICommandRobotService
         Execution? execution = _executionRepository
             .QueryObjectGraph(
                 filter: x => x.Id == executionId,
-                includeChildren: x => x.CommandRobot
+                includeChildren: x => x.Command
             )
             .FirstOrDefault();
 
@@ -35,7 +36,7 @@ public class CommandRobotService : ICommandRobotService
             throw new ArgumentException("ID refers to missing database item.", nameof(executionId));
 
         IRobot robot = new RobotFactory()
-            .GetRobot(startPoint: execution.CommandRobot.StartPoint, commands: execution.CommandRobot.Commands.ToDtos());
+            .GetRobot(startPoint: execution.Command.StartPoint, commands: execution.Command.DirectionSteps.ToDtos());
 
         TimeSpan calculationTime = MethodTimer.Measure(() =>
         {
@@ -49,23 +50,25 @@ public class CommandRobotService : ICommandRobotService
         _executionRepository.Save();
     }
 
-    public CommandRobot CreateCommandRobot(
+    public Command CreateCommandRobot(
         PointDto startPoint,
-        IReadOnlyCollection<CommandDto> commands,
+        IReadOnlyCollection<DirectionStep> commands,
         bool runExecutionAsync = true
     )
     {
         DateTimeOffset now = SystemDateTime.UtcNow;
         
-        CommandRobot commandRobot = new CommandRobot
+        Command command = new Command
         {
             StartPoint = startPoint.ToModel(),
-            Commands = commands.ToModels().ToList(),
+            DirectionSteps = commands.ToModels().ToList(),
             CreatedAt = now,
             ModifiedAt = now,
         };
         
-        _commandRobotRepository.Add(commandRobot);
+        _commandRepository.Add(command);
+        
+        _commandRepository.Save();
 
         Execution execution = new()
         {
@@ -73,7 +76,7 @@ public class CommandRobotService : ICommandRobotService
             ModifiedAt = now,
             Result = null,
             Duration = null,
-            CommandRobotId = commandRobot.Id,
+            CommandId = command.Id,
             Commands = commands.Count,
             // Result = result!.Value,
             // Duration = calculationTime,
@@ -89,6 +92,6 @@ public class CommandRobotService : ICommandRobotService
         else
             RunExecution(executionId: execution.Id);
         
-        return commandRobot;
+        return command;
     }
 }

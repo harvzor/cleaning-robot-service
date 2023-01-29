@@ -10,7 +10,7 @@ namespace CleaningRobotService.Common.Factories;
 /// </remarks>
 public class RobotFactory
 {
-    public IRobot GetRobot(Point startPoint, IEnumerable<CommandDto> commands)
+    public IRobot GetRobot(Point startPoint, IEnumerable<DirectionStep> commands)
     {
         // IRobot robot = new RobotPoints
         // IRobot robot = new RobotLines

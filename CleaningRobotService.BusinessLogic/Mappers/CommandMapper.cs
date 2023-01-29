@@ -1,25 +1,26 @@
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.DataPersistence.Models;
+using DirectionStep = CleaningRobotService.Common.Dtos.Input.DirectionStep;
 
 namespace CleaningRobotService.BusinessLogic.Mappers;
 
 public static class CommandMapper
 {
-    public static CommandDto ToDto(this CommandRobotCommand commandRobotCommand) => new()
+    public static DirectionStep ToDto(this DataPersistence.Models.DirectionStep directionStep) => new()
     {
-        Direction = commandRobotCommand.Direction,
-        Steps = commandRobotCommand.Steps,
+        Direction = directionStep.Direction,
+        Steps = directionStep.Steps,
     };
 
-    public static IEnumerable<CommandDto> ToDtos(this IEnumerable<CommandRobotCommand> commands)
+    public static IEnumerable<DirectionStep> ToDtos(this IEnumerable<DataPersistence.Models.DirectionStep> commands)
         => commands.Select(x => x.ToDto());
     
-    public static CommandRobotCommand ToModel(this CommandDto command) => new()
+    public static DataPersistence.Models.DirectionStep ToModel(this DirectionStep command) => new()
     {
         Direction = command.Direction,
         Steps = command.Steps,
     };
 
-    public static IEnumerable<CommandRobotCommand> ToModels(this IEnumerable<CommandDto> commands)
+    public static IEnumerable<DataPersistence.Models.DirectionStep> ToModels(this IEnumerable<DirectionStep> commands)
         => commands.Select(x => x.ToModel());
 }

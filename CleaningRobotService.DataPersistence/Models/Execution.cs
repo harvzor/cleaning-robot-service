@@ -21,12 +21,12 @@ public class Execution : BaseModel
     public TimeSpan? Duration { get; set; }
     
     /// <summary>
-    /// Which <see cref="CommandRobot"/> this belongs to.
+    /// Which <see cref="Command"/> this belongs to.
     /// </summary>
-    public Guid CommandRobotId { get; set; }
+    public Guid CommandId { get; set; }
     
     /// <summary>
-    /// Which <see cref="CommandRobot"/> this belongs to.
+    /// Which <see cref="Command"/> this belongs to.
     /// </summary>
-    public virtual CommandRobot CommandRobot { get; set; }
+    public virtual Command Command { get; set; }
 }

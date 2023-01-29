@@ -10,6 +10,7 @@ using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Tests.Fixtures;
 using Shouldly;
 using Xunit;
+using DirectionStep = CleaningRobotService.Common.Dtos.Input.DirectionStep;
 
 namespace CleaningRobotService.Tests.ServiceTests;
 
@@ -36,7 +37,7 @@ public class CommandRobotServiceTests
     {
         // Arrange.
 
-        ReadOnlyCollection<CommandDto> commands = new List<CommandDto>
+        ReadOnlyCollection<DirectionStep> commands = new List<DirectionStep>
         {
             new()
             {
@@ -51,14 +52,14 @@ public class CommandRobotServiceTests
         
         // Act
         
-        CommandRobot commandRobot = _commandRobotService
+        Command command = _commandRobotService
             .CreateCommandRobot(
                 startPoint: new PointDto
                 {
                     X = 0,
                     Y = 0,
                 },
-                commands: new ReadOnlyCollection<CommandDto>(commands),
+                commands: new ReadOnlyCollection<DirectionStep>(commands),
                 runExecutionAsync: false
             );
 
@@ -67,7 +68,7 @@ public class CommandRobotServiceTests
         using (ServiceDbContext context = _databaseFixture.CreateContext())
         {
             Execution? storedExecution = context.Executions
-                .FirstOrDefault(x => x.CommandRobotId == commandRobot.Id);
+                .FirstOrDefault(x => x.CommandId == command.Id);
 
             storedExecution.ShouldNotBeNull();
             storedExecution.Commands.ShouldBe(1);

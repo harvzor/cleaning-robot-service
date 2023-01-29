@@ -18,7 +18,9 @@ public class ServiceDbContext : DbContext
     
     public virtual DbSet<Execution> Executions => Set<Execution>();
     
-    public virtual DbSet<CommandRobot> CommandRobots => Set<CommandRobot>();
+    public virtual DbSet<Command> Commands => Set<Command>();
+    
+    public virtual DbSet<DirectionStep> DirectionSteps => Set<DirectionStep>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder

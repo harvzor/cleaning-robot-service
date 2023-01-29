@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleaningRobotService.DataPersistence.Migrations
 {
     [DbContext(typeof(ServiceDbContext))]
-    [Migration("20221026221907_Initial")]
+    [Migration("20230129222500_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace CleaningRobotService.DataPersistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.CommandRobot", b =>
+            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.Command", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,21 +52,21 @@ namespace CleaningRobotService.DataPersistence.Migrations
                         .HasColumnName("start_point_y");
 
                     b.HasKey("Id")
-                        .HasName("pk_command_robots");
+                        .HasName("pk_commands");
 
-                    b.ToTable("command_robots", (string)null);
+                    b.ToTable("commands", (string)null);
                 });
 
-            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.CommandRobotCommand", b =>
+            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.DirectionStep", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("CommandRobotId")
+                    b.Property<Guid?>("CommandId")
                         .HasColumnType("uuid")
-                        .HasColumnName("command_robot_id");
+                        .HasColumnName("command_id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -90,12 +90,12 @@ namespace CleaningRobotService.DataPersistence.Migrations
                         .HasColumnName("steps");
 
                     b.HasKey("Id")
-                        .HasName("pk_command_robots_commands");
+                        .HasName("pk_direction_steps");
 
-                    b.HasIndex("CommandRobotId")
-                        .HasDatabaseName("ix_command_robots_commands_command_robot_id");
+                    b.HasIndex("CommandId")
+                        .HasDatabaseName("ix_direction_steps_command_id");
 
-                    b.ToTable("command_robots_commands", (string)null);
+                    b.ToTable("direction_steps", (string)null);
                 });
 
             modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.Execution", b =>
@@ -105,9 +105,9 @@ namespace CleaningRobotService.DataPersistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("CommandRobotId")
+                    b.Property<Guid>("CommandId")
                         .HasColumnType("uuid")
-                        .HasColumnName("command_robot_id");
+                        .HasColumnName("command_id");
 
                     b.Property<int>("Commands")
                         .HasColumnType("integer")
@@ -136,35 +136,35 @@ namespace CleaningRobotService.DataPersistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_executions");
 
-                    b.HasIndex("CommandRobotId")
-                        .HasDatabaseName("ix_executions_command_robot_id");
+                    b.HasIndex("CommandId")
+                        .HasDatabaseName("ix_executions_command_id");
 
                     b.ToTable("executions", (string)null);
                 });
 
-            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.CommandRobotCommand", b =>
+            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.DirectionStep", b =>
                 {
-                    b.HasOne("CleaningRobotService.DataPersistence.Models.CommandRobot", null)
-                        .WithMany("Commands")
-                        .HasForeignKey("CommandRobotId")
-                        .HasConstraintName("fk_command_robots_commands_command_robots_command_robot_id");
+                    b.HasOne("CleaningRobotService.DataPersistence.Models.Command", null)
+                        .WithMany("DirectionSteps")
+                        .HasForeignKey("CommandId")
+                        .HasConstraintName("fk_direction_steps_commands_command_id");
                 });
 
             modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.Execution", b =>
                 {
-                    b.HasOne("CleaningRobotService.DataPersistence.Models.CommandRobot", "CommandRobot")
+                    b.HasOne("CleaningRobotService.DataPersistence.Models.Command", "Command")
                         .WithMany()
-                        .HasForeignKey("CommandRobotId")
+                        .HasForeignKey("CommandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_executions_command_robots_command_robot_id");
+                        .HasConstraintName("fk_executions_commands_command_id");
 
-                    b.Navigation("CommandRobot");
+                    b.Navigation("Command");
                 });
 
-            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.CommandRobot", b =>
+            modelBuilder.Entity("CleaningRobotService.DataPersistence.Models.Command", b =>
                 {
-                    b.Navigation("Commands");
+                    b.Navigation("DirectionSteps");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,7 +14,7 @@ public class RobotDictionaryLines : BaseRobot, IRobot
 {
     private readonly LineDictionary _store;
 
-    public RobotDictionaryLines(Point startPoint, IEnumerable<CommandDto> commands)
+    public RobotDictionaryLines(Point startPoint, IEnumerable<DirectionStep> commands)
         : base(startPoint: startPoint, commands: commands)
     {
         _store = new LineDictionary(numberOfExpectedCommands: Commands.Count);
@@ -31,7 +31,7 @@ public class RobotDictionaryLines : BaseRobot, IRobot
         
         AddPoint();
 
-        foreach (CommandDto command in Commands.Where(command => command.Steps != 0))
+        foreach (DirectionStep command in Commands.Where(command => command.Steps != 0))
         {
             Point start = currentPoint;
             
@@ -57,7 +57,7 @@ public class RobotDictionaryLines : BaseRobot, IRobot
                         break;
                     default:
                         throw new ArgumentException(
-                            message: $"CommandDto direction of {command.Direction} not covered.",
+                            message: $"DirectionStep direction of {command.Direction} not covered.",
                             paramName: nameof(Commands)
                         );
                 }

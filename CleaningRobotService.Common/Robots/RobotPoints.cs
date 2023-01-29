@@ -13,7 +13,7 @@ public class RobotPoints : BaseRobot, IRobot
     // https://stackoverflow.com/questions/24855615/hashset-memory-overhead
     private readonly HashSet<Point> _pointsVisited = new();
 
-    public RobotPoints(Point startPoint, IEnumerable<CommandDto> commands)
+    public RobotPoints(Point startPoint, IEnumerable<DirectionStep> commands)
         : base(startPoint: startPoint, commands: commands)
     {
     }
@@ -30,7 +30,7 @@ public class RobotPoints : BaseRobot, IRobot
         
         AddPoint();
 
-        foreach (CommandDto command in Commands.Where(command => command.Steps != 0))
+        foreach (DirectionStep command in Commands.Where(command => command.Steps != 0))
         {
             for (int i = 0; i < command.Steps; i++)
             {
@@ -54,7 +54,7 @@ public class RobotPoints : BaseRobot, IRobot
                         break;
                     default:
                         throw new ArgumentException(
-                            message: $"CommandDto direction of {command.Direction} not covered.",
+                            message: $"DirectionStep direction of {command.Direction} not covered.",
                             paramName: nameof(Commands)
                         );
                 }

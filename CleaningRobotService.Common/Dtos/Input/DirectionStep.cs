@@ -1,15 +1,12 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using CleaningRobotService.Common.Enums;
 
-namespace CleaningRobotService.DataPersistence.Models;
+namespace CleaningRobotService.Common.Dtos.Input;
 
-[Table("command_robots_commands")]
-public class CommandRobotCommand : BaseModel
+public class DirectionStep
 {
     /// <summary>
     /// Which direction the robot should move.
     /// </summary>
-    [Column(TypeName = "text")]
     public DirectionEnum Direction { get; set; }
     
     /// <summary>

@@ -3,8 +3,11 @@ using System.Drawing;
 
 namespace CleaningRobotService.DataPersistence.Models;
 
-public class CommandRobot : BaseModel
+public class Command : BaseModel
 {
+    /// <remarks>
+    /// Mapped to columns as Postgres doesn't support complex objects.
+    /// </remarks>
     [NotMapped]
     public Point StartPoint
     {
@@ -20,5 +23,5 @@ public class CommandRobot : BaseModel
     
     public int StartPointY { get; set; }
     
-    public virtual List<CommandRobotCommand> Commands { get; set; } = new();
+    public virtual List<DirectionStep> DirectionSteps { get; set; } = new();
 }

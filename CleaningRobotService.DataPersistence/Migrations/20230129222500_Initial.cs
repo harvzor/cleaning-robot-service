@@ -10,7 +10,7 @@ namespace CleaningRobotService.DataPersistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "command_robots",
+                name: "commands",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -22,28 +22,28 @@ namespace CleaningRobotService.DataPersistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_command_robots", x => x.id);
+                    table.PrimaryKey("pk_commands", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "command_robots_commands",
+                name: "direction_steps",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     direction = table.Column<string>(type: "text", nullable: false),
                     steps = table.Column<long>(type: "bigint", nullable: false),
-                    command_robot_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    command_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_command_robots_commands", x => x.id);
+                    table.PrimaryKey("pk_direction_steps", x => x.id);
                     table.ForeignKey(
-                        name: "fk_command_robots_commands_command_robots_command_robot_id",
-                        column: x => x.command_robot_id,
-                        principalTable: "command_robots",
+                        name: "fk_direction_steps_commands_command_id",
+                        column: x => x.command_id,
+                        principalTable: "commands",
                         principalColumn: "id");
                 });
 
@@ -55,7 +55,7 @@ namespace CleaningRobotService.DataPersistence.Migrations
                     commands = table.Column<int>(type: "integer", nullable: false),
                     result = table.Column<int>(type: "integer", nullable: true),
                     duration = table.Column<TimeSpan>(type: "interval", nullable: true),
-                    command_robot_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    command_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
@@ -64,34 +64,34 @@ namespace CleaningRobotService.DataPersistence.Migrations
                 {
                     table.PrimaryKey("pk_executions", x => x.id);
                     table.ForeignKey(
-                        name: "fk_executions_command_robots_command_robot_id",
-                        column: x => x.command_robot_id,
-                        principalTable: "command_robots",
+                        name: "fk_executions_commands_command_id",
+                        column: x => x.command_id,
+                        principalTable: "commands",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_command_robots_commands_command_robot_id",
-                table: "command_robots_commands",
-                column: "command_robot_id");
+                name: "ix_direction_steps_command_id",
+                table: "direction_steps",
+                column: "command_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_executions_command_robot_id",
+                name: "ix_executions_command_id",
                 table: "executions",
-                column: "command_robot_id");
+                column: "command_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "command_robots_commands");
+                name: "direction_steps");
 
             migrationBuilder.DropTable(
                 name: "executions");
 
             migrationBuilder.DropTable(
-                name: "command_robots");
+                name: "commands");
         }
     }
 }

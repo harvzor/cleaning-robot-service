@@ -1,17 +1,17 @@
 using CleaningRobotService.Common.Dtos;
 using CleaningRobotService.Common.Dtos.Input;
 
-namespace CleaningRobotService.Web.Dtos.Output;
+namespace CleaningRobotService.Web.Dtos.Input;
 
-public class CommandRobotDto : BaseDto
+public class CommandsPostDto
 {
     /// <summary>
     /// Starting location of the robot.
     /// </summary>
-    public PointDto StartPoint { get; set; }
+    public PointDto Start { get; set; }
 
     /// <summary>
     /// Actual commands the robot should follow.
     /// </summary>
-    public IReadOnlyCollection<CommandDto> Commands { get; set; } = Array.Empty<CommandDto>();
+    public IReadOnlyCollection<DirectionStep> Commands { get; set; } = Array.Empty<DirectionStep>();
 }

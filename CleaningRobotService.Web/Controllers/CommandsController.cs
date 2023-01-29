@@ -11,40 +11,40 @@ namespace CleaningRobotService.Web.Controllers;
 public class CommandsController : BaseController
 {
     private readonly ICommandRobotService _commandRobotService;
-    private readonly ICommandRobotRepository _commandRobotRepository;
+    private readonly ICommandRepository _commandRepository;
     private readonly IExecutionRepository _executionRepository;
     
     public CommandsController(
         ICommandRobotService commandRobotService,
-        ICommandRobotRepository commandRobotRepository,
+        ICommandRepository commandRepository,
         IExecutionRepository executionRepository
     )
     {
         _commandRobotService = commandRobotService;
-        _commandRobotRepository = commandRobotRepository;
+        _commandRepository = commandRepository;
         _executionRepository = executionRepository;
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandRobotDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandDto))]
     [ProducesDefaultResponseType]
-    public ActionResult<CommandRobotDto> CreateCommandRobot([FromBody] CommandRobotPostDto body)
+    public ActionResult<CommandDto> CreateCommand([FromBody] CommandsPostDto body)
     {
-        CommandRobot commandRobot = _commandRobotService
+        Command command = _commandRobotService
             .CreateCommandRobot(
                 startPoint: body.Start,
                 commands: body.Commands
             );
         
-        return Ok(commandRobot.ToDto());
+        return Ok(command.ToDto());
     }
     
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandRobotDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandDto))]
     [ProducesDefaultResponseType]
-    public ActionResult<CommandRobotDto> GetCommandRobots([FromRoute] Guid id)
+    public ActionResult<CommandDto> GetCommands([FromRoute] Guid id)
     {
-        CommandRobot? commandRobot = _commandRobotRepository.GetById(id: id);
+        Command? commandRobot = _commandRepository.GetById(id: id);
 
         if (commandRobot == null)
             return NotFound();
@@ -57,9 +57,9 @@ public class CommandsController : BaseController
     [HttpGet("{id:guid}/executions")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExecutionDto>))]
     [ProducesDefaultResponseType]
-    public ActionResult<IEnumerable<CommandRobotDto>> GetExecutions([FromRoute] Guid id)
+    public ActionResult<IEnumerable<ExecutionDto>> GetExecutions([FromRoute] Guid id)
     {
-        // TODO: check if the dto.CommandRobotId even matches a record?
+        // TODO: check if the dto.CommandId even matches a record?
         IReadOnlyCollection<Execution> executions = _executionRepository.GetByCommandRobotId(id);
 
         return Ok(executions.ToDtos());

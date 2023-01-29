@@ -19,7 +19,7 @@ public class ExecutionsController : BaseController
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExecutionDto))]
     [ProducesDefaultResponseType]
-    public ActionResult<CommandRobotDto> GetExecution([FromRoute] Guid id)
+    public ActionResult<ExecutionDto> GetExecution([FromRoute] Guid id)
     {
         Execution? execution = _executionRepository.GetById(id: id);
 
@@ -32,9 +32,9 @@ public class ExecutionsController : BaseController
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExecutionDto>))]
     [ProducesDefaultResponseType]
-    public ActionResult<IEnumerable<CommandRobotDto>> QueryExecutions([FromQuery] ExecutionGetDto dto)
+    public ActionResult<IEnumerable<ExecutionDto>> QueryExecutions([FromQuery] ExecutionGetDto dto)
     {
-        // TODO: check if the dto.CommandRobotId even matches a record?
+        // TODO: check if the dto.CommandId even matches a record?
         IReadOnlyCollection<Execution> executions = _executionRepository.GetByCommandRobotId(dto.CommandRobotId);
 
         return Ok(executions.ToDtos());

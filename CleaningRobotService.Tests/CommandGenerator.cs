@@ -5,9 +5,9 @@ namespace CleaningRobotService.Tests;
 
 public static class CommandGenerator
 {
-    public static List<CommandDto> LoopCommands(uint steps)
+    public static List<DirectionStep> LoopCommands(uint steps)
     {
-        List<CommandDto> commands = new();
+        List<DirectionStep> commands = new();
 
         int directionInt = 0;
         for (int i = 0; i < 10000; i++)
@@ -18,7 +18,7 @@ public static class CommandGenerator
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new CommandDto
+            commands.Add(new DirectionStep
             {
                 Direction = direction,
                 Steps = steps,
@@ -28,9 +28,9 @@ public static class CommandGenerator
         return commands;
     }
     
-    public static List<CommandDto> LoopOffset()
+    public static List<DirectionStep> LoopOffset()
     {
-        List<CommandDto> commands = new();
+        List<DirectionStep> commands = new();
 
         int directionInt = 0;
         for (int i = 0; i < 10000; i++)
@@ -41,7 +41,7 @@ public static class CommandGenerator
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new CommandDto
+            commands.Add(new DirectionStep
             {
                 Direction = direction,
                 // Step one less south/west so the robot goes in circles but slightly up right each command loop.
@@ -55,9 +55,9 @@ public static class CommandGenerator
         return commands;
     }
     
-    public static List<CommandDto> SpiralIn(uint width)
+    public static List<DirectionStep> SpiralIn(uint width)
     {
-        List<CommandDto> commands = new();
+        List<DirectionStep> commands = new();
 
         int directionInt = 0;
         int directionOddCount = 0;
@@ -72,7 +72,7 @@ public static class CommandGenerator
             if (directionInt == 4)
                 directionInt = 0;
 
-            commands.Add(new CommandDto
+            commands.Add(new DirectionStep
             {
                 Direction = direction,
                 Steps = i == 0

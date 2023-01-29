@@ -13,7 +13,7 @@ public class RobotLines : BaseRobot, IRobot
     private int _count;
     private readonly List<Line> _lines;
     
-    public RobotLines(Point startPoint, IEnumerable<CommandDto> commands)
+    public RobotLines(Point startPoint, IEnumerable<DirectionStep> commands)
         : base(startPoint: startPoint, commands: commands)
     {
         _lines = new List<Line>(Commands.Count);
@@ -49,7 +49,7 @@ public class RobotLines : BaseRobot, IRobot
         
         AddPoint();
 
-        foreach (CommandDto command in Commands.Where(command => command.Steps != 0))
+        foreach (DirectionStep command in Commands.Where(command => command.Steps != 0))
         {
             Point start = currentPoint;
             
@@ -75,7 +75,7 @@ public class RobotLines : BaseRobot, IRobot
                         break;
                     default:
                         throw new ArgumentException(
-                            message: $"CommandDto direction of {command.Direction} not covered.",
+                            message: $"DirectionStep direction of {command.Direction} not covered.",
                             paramName: nameof(Commands)
                         );
                 }
