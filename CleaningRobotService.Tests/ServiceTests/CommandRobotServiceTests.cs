@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Drawing;
 using CleaningRobotService.BusinessLogic.Services;
+using CleaningRobotService.Common.Dtos;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Enums;
 using CleaningRobotService.Common.Helpers;
@@ -52,7 +53,7 @@ public class CommandRobotServiceTests
         
         CommandRobot commandRobot = _commandRobotService
             .CreateCommandRobot(
-                startPoint: new Point
+                startPoint: new PointDto
                 {
                     X = 0,
                     Y = 0,

@@ -9,7 +9,7 @@ public static class CommandRobotMapper
     public static CommandRobotDto ToDto(this CommandRobot commandRobot) => new()
     {
         Id = commandRobot.Id,
-        StartPoint = commandRobot.StartPoint,
+        StartPoint = commandRobot.StartPoint.ToDto(),
         Commands = commandRobot.Commands.ToDtos().ToList().AsReadOnly(),
         CreatedAt = commandRobot.CreatedAt,
         ModifiedAt = commandRobot.ModifiedAt,

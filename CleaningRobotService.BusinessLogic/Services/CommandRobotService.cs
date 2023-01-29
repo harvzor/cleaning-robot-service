@@ -1,5 +1,5 @@
-using System.Drawing;
 using CleaningRobotService.BusinessLogic.Mappers;
+using CleaningRobotService.Common.Dtos;
 using CleaningRobotService.Common.Dtos.Input;
 using CleaningRobotService.Common.Factories;
 using CleaningRobotService.Common.Helpers;
@@ -50,14 +50,14 @@ public class CommandRobotService : ICommandRobotService
     }
 
     public CommandRobot CreateCommandRobot(
-        Point startPoint,
+        PointDto startPoint,
         IReadOnlyCollection<CommandDto> commands,
         bool runExecutionAsync = true
     )
     {
         CommandRobot commandRobot = new CommandRobot
         {
-            StartPoint = startPoint,
+            StartPoint = startPoint.ToModel(),
             Commands = commands.ToModels().ToList(),
         };
 
