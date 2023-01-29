@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CleaningRobotService.Web.Controllers;
 
-public class ExecutionController : BaseController
+public class ExecutionsController : BaseController
 {
     private readonly IExecutionRepository _executionRepository;
     
-    public ExecutionController(IExecutionRepository executionRepository)
+    public ExecutionsController(IExecutionRepository executionRepository)
     {
         _executionRepository = executionRepository;
     }

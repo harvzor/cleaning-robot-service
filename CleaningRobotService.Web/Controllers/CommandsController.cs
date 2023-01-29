@@ -8,15 +8,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CleaningRobotService.Web.Controllers;
 
-public class CommandRobotController : BaseController
+public class CommandsController : BaseController
 {
     private readonly ICommandRobotService _commandRobotService;
     private readonly ICommandRobotRepository _commandRobotRepository;
+    private readonly IExecutionRepository _executionRepository;
     
-    public CommandRobotController(ICommandRobotService commandRobotService, ICommandRobotRepository commandRobotRepository)
+    public CommandsController(
+        ICommandRobotService commandRobotService,
+        ICommandRobotRepository commandRobotRepository,
+        IExecutionRepository executionRepository
+    )
     {
         _commandRobotService = commandRobotService;
         _commandRobotRepository = commandRobotRepository;
+        _executionRepository = executionRepository;
     }
 
     [HttpPost]
@@ -36,7 +42,7 @@ public class CommandRobotController : BaseController
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CommandRobotDto))]
     [ProducesDefaultResponseType]
-    public ActionResult<CommandRobotDto> GetCommandRobot([FromRoute] Guid id)
+    public ActionResult<CommandRobotDto> GetCommandRobots([FromRoute] Guid id)
     {
         CommandRobot? commandRobot = _commandRobotRepository.GetById(id: id);
 
@@ -44,5 +50,18 @@ public class CommandRobotController : BaseController
             return NotFound();
         
         return Ok(commandRobot.ToDto());
+    }
+    
+    
+    
+    [HttpGet("{id:guid}/executions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExecutionDto>))]
+    [ProducesDefaultResponseType]
+    public ActionResult<IEnumerable<CommandRobotDto>> GetExecutions([FromRoute] Guid id)
+    {
+        // TODO: check if the dto.CommandRobotId even matches a record?
+        IReadOnlyCollection<Execution> executions = _executionRepository.GetByCommandRobotId(id);
+
+        return Ok(executions.ToDtos());
     }
 }

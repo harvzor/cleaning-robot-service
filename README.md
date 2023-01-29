@@ -6,6 +6,10 @@
 
 Given this input to the web API:
 
+```
+POST /robots/commands/
+```
+
 ```json
 {
   "start": {
@@ -25,22 +29,53 @@ Given this input to the web API:
 }
 ```
 
+Response:
+
+```json
+{
+  "startPoint": {
+    "x": 10,
+    "y": 22
+  },
+  "commands": [
+    {
+      "direction": "East",
+      "steps": 2
+    },
+    {
+      "direction": "North",
+      "steps": 1
+    }
+  ],
+  "id": "7450e353-6f62-403b-b7f4-fc5a9f22a603",
+  "createdAt": "2023-01-29T20:58:12.765874+00:00",
+  "modifiedAt": "2023-01-29T20:58:12.765874+00:00",
+  "deletedAt": null
+}
+```
+
 The robot should move like this:
 
 ![Visual example path](.github/visual-example-path.png)
 
 The robot covers 4 coordinates on its route.
 
-API output is:
+You can then get result of the execution with:
+
+```
+GET /robots/commands/7450e353-6f62-403b-b7f4-fc5a9f22a603/executions
+```
+
+Response:
 
 ```json
-{
-  "id": 19,
-  "timestamp": "2022-10-18T13:05:48.8732354+00:00",
-  "commands": 2,
-  "result": 4,
-  "duration": 0.0000258
-}
+[
+  {
+    "id": "e60ffb2a-017b-45b9-aab0-1752f5a2572f",
+    "result": 4,
+    "duration": "00:00:00.0064170"
+  }
+]
 ```
 
 ## Requirements
