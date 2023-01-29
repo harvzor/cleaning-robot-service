@@ -1,6 +1,6 @@
 namespace CleaningRobotService.Common.Dtos;
 
-public class PointDto
+public struct PointDto
 {
     public int X { get; set; }
     public int Y { get; set; }
