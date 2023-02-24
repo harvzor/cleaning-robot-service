@@ -1,11 +1,11 @@
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.DataPersistence.Repositories;
+using CleaningRobotService.Web.ControllerGroups.Base;
 using CleaningRobotService.Web.Dtos.Input;
 using CleaningRobotService.Web.Dtos.Output;
-using CleaningRobotService.Web.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CleaningRobotService.Web.Controllers;
+namespace CleaningRobotService.Web.ControllerGroups.Executions;
 
 public class ExecutionsController : BaseController
 {

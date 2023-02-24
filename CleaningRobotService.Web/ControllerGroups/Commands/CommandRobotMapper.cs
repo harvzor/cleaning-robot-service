@@ -2,7 +2,7 @@ using CleaningRobotService.BusinessLogic.Mappers;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.Web.Dtos.Output;
 
-namespace CleaningRobotService.Web.Mappers;
+namespace CleaningRobotService.Web.ControllerGroups.Commands;
 
 public static class CommandRobotMapper
 {
