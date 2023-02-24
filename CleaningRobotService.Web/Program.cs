@@ -80,13 +80,8 @@ namespace CleaningRobotService.Web
 
             app.MapControllers();
 
-            app
-                .UseHealthChecks(path: "/health-check", options: new HealthCheckOptions()
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
-                });
-        
+            app.UseHealth();
+
             return app;
         }
     
@@ -100,6 +95,20 @@ namespace CleaningRobotService.Web
             app.Logger.LogInformation("Running database migrations.");
             database.Migrate();
             app.Logger.LogInformation("Finished running database migrations.");
+        }
+
+        private static void UseHealth(this WebApplication app)
+        {
+            var options = new HealthCheckOptions();
+
+            // Hide detailed information unless in development.
+            if (app.Environment.IsDevelopment())
+            {
+                options.Predicate = _ => true;
+                options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;
+            }
+            
+            app.UseHealthChecks(path: "/health-check", options: options);
         }
     }
 }
