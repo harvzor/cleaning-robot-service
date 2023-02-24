@@ -3,6 +3,8 @@ using CleaningRobotService.BusinessLogic;
 using CleaningRobotService.DataPersistence;
 using CleaningRobotService.Web;
 using CleaningRobotService.Web.Filters;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
 WebApplication
@@ -48,8 +50,18 @@ namespace CleaningRobotService.Web
             builder.Services.InjectRepositories();
 
             builder.Services.InjectServices();
+
+            builder.Services
+                .AddHealth(appConfiguration: appConfiguration);
         
             return builder;
+        }
+
+        private static void AddHealth(this IServiceCollection services, AppConfiguration appConfiguration)
+        {
+            services
+                .AddHealthChecks()
+                .AddNpgSql(name: "postgres", npgsqlConnectionString: appConfiguration.DatabaseConnectionString);
         }
     }
 
@@ -67,7 +79,9 @@ namespace CleaningRobotService.Web
             app.UseAuthorization();
 
             app.MapControllers();
-        
+
+            app.UseHealth();
+
             return app;
         }
     
@@ -81,6 +95,20 @@ namespace CleaningRobotService.Web
             app.Logger.LogInformation("Running database migrations.");
             database.Migrate();
             app.Logger.LogInformation("Finished running database migrations.");
+        }
+
+        private static void UseHealth(this WebApplication app)
+        {
+            var options = new HealthCheckOptions();
+
+            // Hide detailed information unless in development.
+            if (app.Environment.IsDevelopment())
+            {
+                options.Predicate = _ => true;
+                options.ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse;
+            }
+            
+            app.UseHealthChecks(path: "/health-check", options: options);
         }
     }
 }
