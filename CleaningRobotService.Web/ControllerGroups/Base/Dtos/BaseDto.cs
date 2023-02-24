@@ -1,4 +1,4 @@
-namespace CleaningRobotService.Web.Dtos.Output;
+namespace CleaningRobotService.Web.ControllerGroups.Base.Dtos;
 
 // TODO: super similar to BaseModel, maybe refactor to DRY this up?
 public class BaseDto

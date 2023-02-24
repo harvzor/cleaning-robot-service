@@ -1,5 +1,6 @@
 using CleaningRobotService.Common.Dtos;
 using CleaningRobotService.Common.Dtos.Input;
+using CleaningRobotService.Web.ControllerGroups.Base.Dtos;
 
 namespace CleaningRobotService.Web.Dtos.Output;
 
