@@ -17,6 +17,7 @@
       <ProjectReference Include="..\CleaningRobotService.BusinessLogic\CleaningRobotService.BusinessLogic.csproj" />
       <ProjectReference Include="..\CleaningRobotService.Common\CleaningRobotService.Common.csproj" />
       <ProjectReference Include="..\CleaningRobotService.DataPersistence\CleaningRobotService.DataPersistence.csproj" />
+      <ProjectReference Include="..\CleaningRobotService.RobotCommander.Messages\CleaningRobotService.RobotCommander.Messages.csproj" />
     </ItemGroup>
 
 </Project>
