@@ -6,11 +6,11 @@ public class Producer<TMessage> where TMessage : IMessage
 {
     private readonly ProducerConfig _producerConfig;
     
-    public Producer()
+    public Producer(KafkaConfiguration kafkaConfiguration)
     {
         _producerConfig = new ProducerConfig
         {
-            BootstrapServers = "localhost:9092",
+            BootstrapServers = kafkaConfiguration.BootstrapServers,
         };
     }
 

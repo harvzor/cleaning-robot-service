@@ -9,6 +9,8 @@
     <ItemGroup>
       <ProjectReference Include="..\CleaningRobotService.Common\CleaningRobotService.Common.csproj" />
       <ProjectReference Include="..\CleaningRobotService.DataPersistence\CleaningRobotService.DataPersistence.csproj" />
+      <ProjectReference Include="..\CleaningRobotService.Messenger\CleaningRobotService.Messenger.csproj" />
+      <ProjectReference Include="..\CleaningRobotService.Web.Messages\CleaningRobotService.Web.Messages.csproj" />
     </ItemGroup>
 
     <ItemGroup>

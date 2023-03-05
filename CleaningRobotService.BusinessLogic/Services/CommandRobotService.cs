@@ -6,6 +6,8 @@ using CleaningRobotService.Common.Helpers;
 using CleaningRobotService.Common.Robots;
 using CleaningRobotService.DataPersistence.Models;
 using CleaningRobotService.DataPersistence.Repositories;
+using CleaningRobotService.Messenger;
+using CleaningRobotService.Web.Messages;
 using DirectionStep = CleaningRobotService.Common.Dtos.Input.DirectionStep;
 
 namespace CleaningRobotService.BusinessLogic.Services;
@@ -38,8 +40,24 @@ public class CommandRobotService : ICommandRobotService
         
         _commandRepository.Save();
 
-        // Publish message.
+        // TODO: get configuration properly.
+        Producer<CommandMessage> producer = new(new KafkaConfiguration()
+        {
+            BootstrapServers = "localhost:9092"
+        });
         
+        // TODO: map message
+        // TODO: handle async
+        producer.Produce(new CommandMessage
+        {
+            Id = command.Id,
+            StartPoint = command.StartPoint,
+            Commands = commands,
+            CreatedAt = command.CreatedAt,
+            ModifiedAt = command.ModifiedAt,
+            DeletedAt = command.DeletedAt,
+        });
+
         return command;
     }
 }

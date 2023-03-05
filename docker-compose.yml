@@ -59,3 +59,46 @@ services:
       traefik.http.services.pgadmin.loadbalancer.server.port: 1111
     depends_on:
       - postgres
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    labels:
+      # Fix for LazyDocker https://github.com/jesseduffield/lazydocker/issues/399
+      name: cleaning-robot-service-zookeeper-1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    ports:
+      # To learn about configuring Kafka for access across networks see
+      # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      - "9092:9092"
+      # UI metrics port:
+      - "9997:9997"
+    labels:
+      # Fix for LazyDocker https://github.com/jesseduffield/lazydocker/issues/399
+      name: cleaning-robot-service-kafka-1
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:19092,CONNECTIONS_FROM_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.5.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:19092
+      KAFKA_CLUSTERS_0_METRICS_PORT: 9997
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181

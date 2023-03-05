@@ -9,11 +9,11 @@ public class Consumer<TMessage, TMessageHandler>
     private readonly ConsumerConfig _consumerConfig;
     private readonly TMessageHandler _messageHandler;
     
-    public Consumer()
+    public Consumer(KafkaConfiguration kafkaConfiguration)
     {
         _consumerConfig = new ConsumerConfig
         {
-            BootstrapServers = "localhost:9092,localhost:9092",
+            BootstrapServers = kafkaConfiguration.BootstrapServers,
             GroupId = "foo",
             AutoOffsetReset = AutoOffsetReset.Earliest
         };

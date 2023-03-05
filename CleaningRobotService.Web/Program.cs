@@ -3,6 +3,7 @@ using CleaningRobotService.BusinessLogic;
 using CleaningRobotService.DataPersistence;
 using CleaningRobotService.Web;
 using CleaningRobotService.Web.Filters;
+using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
 
 WebApplication
@@ -59,7 +60,12 @@ namespace CleaningRobotService.Web
         {
             services
                 .AddHealthChecks()
-                .AddNpgSql(name: "postgres", npgsqlConnectionString: appConfiguration.DatabaseConnectionString);
+                .AddNpgSql(name: "postgres", npgsqlConnectionString: appConfiguration.DatabaseConnectionString)
+                .AddKafka(config: new ProducerConfig()
+                {
+                    BootstrapServers = appConfiguration.Kafka.BootstrapServers,
+                    MessageSendMaxRetries = 0,
+                });
         }
     }
 
